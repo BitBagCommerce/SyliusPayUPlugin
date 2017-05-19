@@ -1,12 +1,8 @@
 bitbag:
-    form:
-        gateway_configuration:
-            payu:
-                environment: Środowisko
-                secure: Produkcyjne
-                sandbox: Testowe
-                signature_key: OAuthClientSecret
-                pos_id: Identyfikator punktu płatności
-    payum:
-        gateway_factory:
-            payu: PayU Express
+    payu_plugin:
+        environment: Środowisko
+        secure: Produkcyjne
+        sandbox: Testowe
+        signature_key: OAuthClientSecret
+        pos_id: Identyfikator punktu płatności
+        gateway_label: PayU
