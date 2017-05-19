@@ -1,0 +1,10 @@
+/vendor
+/.idea
+.DS_STORE
+
+tests/Application/web
+!tests/Application/web/app_test.php
+
+tests/Application/var/*
+
+tests/Application/node_modules

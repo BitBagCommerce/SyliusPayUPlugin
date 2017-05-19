@@ -1,0 +1,19 @@
+{
+    "name": "bitbag/payu-plugin",
+    "type": "sylius-plugin",
+    "description": "PayU payment plugin for Sylius applications",
+    "license": "MIT",
+    "require": {
+        "php": "^5.6|^7.0",
+        "openpayu/openpayu": "^2.2"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^3.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "BitBag\\PayUPlugin\\": "src/",
+            "Tests\\BitBag\\PayUPlugin\\": "tests/"
+        }
+    }
+}
