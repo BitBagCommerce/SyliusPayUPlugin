@@ -1,4 +1,4 @@
-# Sylius MailChimpPlugin 
+# Sylius PayU payment gateway plugin  
 
 ## Installation
 
@@ -24,11 +24,5 @@ public function registerBundles()
 In order to run tests, execute following commands:
 
 ```bash
-$ composer install
-$ cd tests/Application
-$ yarn install
-$ yarn run gulp
-$ bin/console doctrine:database:create --env test
-$ bin/console doctrine:schema:create --env test
 $ vendor/bin/phpspec
 ```
