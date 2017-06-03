@@ -3,6 +3,7 @@
 namespace BitBag\PayUPlugin\Action;
 
 use BitBag\PayUPlugin\OpenPayUWrapper;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Action\ActionInterface;
@@ -27,10 +28,11 @@ final class ConvertPaymentAction implements ActionInterface, GatewayAwareInterfa
          * @var $payment PaymentInterface
          */
         $payment = $request->getSource();
+        $details = ArrayObject::ensureArrayObject($payment->getDetails());
 
         $details['totalAmount'] = $payment->getTotalAmount();
         $details['currencyCode'] = $payment->getCurrencyCode();
-        $details['extOrderId'] = $payment->getNumber();
+        $details['extOrderId'] = uniqid($payment->getNumber());
         $details['description'] = $payment->getDescription();
         $details['client_email'] = $payment->getClientEmail();
         $details['client_id'] = $payment->getClientId();

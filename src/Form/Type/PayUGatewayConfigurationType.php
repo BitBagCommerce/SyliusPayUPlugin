@@ -2,7 +2,6 @@
 
 namespace BitBag\PayUPlugin\Form\Type;
 
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -19,24 +18,24 @@ final class PayUGatewayConfigurationType extends AbstractType
         $builder
             ->add('environment', ChoiceType::class, [
                 'choices' => [
-                    'bitbag.form.gateway_configuration.payu.secure' => 'secure',
-                    'bitbag.form.gateway_configuration.payu.sandbox' => 'sandbox',
+                    'bitbag.payu_plugin.secure' => 'secure',
+                    'bitbag.payu_plugin.sandbox' => 'sandbox',
                 ],
-                'label' => 'bitbag.form.gateway_configuration.payu.environment',
+                'label' => 'bitbag.payu_plugin.environment',
             ])
             ->add('signature_key', TextType::class, [
-                'label' => 'bitbag.form.gateway_configuration.payu.signature_key',
+                'label' => 'bitbag.payu_plugin.signature_key',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'bitbag.gateway_configuration.payu.signature_key.not_blank',
+                        'message' => 'bitbag.payu_plugin.gateway_configuration.signature_key.not_blank',
                     ])
                 ],
             ])
             ->add('pos_id', TextType::class, [
-                'label' => 'bitbag.form.gateway_configuration.payu.pos_id',
+                'label' => 'bitbag.payu_plugin.pos_id',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'bitbag.gateway_configuration.payu.pos_id.not_blank',
+                        'message' => 'bitbag.payu_plugin.gateway_configuration.pos_id.not_blank',
                     ])
                 ],
             ])

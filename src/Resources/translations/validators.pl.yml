@@ -1,6 +1,6 @@
 bitbag:
-    gateway_configuration:
-        payu:
+    payu_plugin:
+        gateway_configuration:
             pos_id:
                 not_blank: Nie podano identyfikatora punktu płatności.
             signature_key:
