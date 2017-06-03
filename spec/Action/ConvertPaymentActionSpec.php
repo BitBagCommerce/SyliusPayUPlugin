@@ -9,7 +9,7 @@ use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
 use PhpSpec\ObjectBehavior;
 
-class ConvertPaymentActionSpec extends ObjectBehavior
+final class ConvertPaymentActionSpec extends ObjectBehavior
 {
     function it_is_initializable()
     {
@@ -21,7 +21,7 @@ class ConvertPaymentActionSpec extends ObjectBehavior
         $this->shouldImplement(ActionInterface::class);
     }
 
-    function it_executes_request(
+    function it_executes(
         Convert $request,
         PaymentInterface $payment
     )

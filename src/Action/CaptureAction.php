@@ -29,7 +29,7 @@ final class CaptureAction implements ActionInterface, GatewayAwareInterface
 
         $payUAction = $this->getPayUAction($request->getToken(), $model);
 
-        $this->gateway->execute($payUAction);
+        $this->getGateway()->execute($payUAction);
     }
 
     /**
@@ -41,6 +41,14 @@ final class CaptureAction implements ActionInterface, GatewayAwareInterface
             $request instanceof Capture &&
             $request->getModel() instanceof \ArrayAccess
             ;
+    }
+
+    /**
+     * @return \Payum\Core\GatewayInterface
+     */
+    public function getGateway()
+    {
+        return $this->gateway;
     }
 
     /**

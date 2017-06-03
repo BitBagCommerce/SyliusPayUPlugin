@@ -25,12 +25,20 @@ final class NotifyAction implements ActionInterface, GatewayAwareInterface
         RequestNotSupportedException::assertSupports($this, $request);
         $setPayU = new SetPayU($request->getToken());
         $setPayU->setModel($request->getModel());;
-        $this->gateway->execute($setPayU);
+        $this->getGateway()->execute($setPayU);
+
         $status = new GetHumanStatus($request->getToken());
         $status->setModel($request->getModel());
-        $this->gateway->execute($status);
+        $this->getGateway()->execute($status);
     }
 
+    /**
+     * @return \Payum\Core\GatewayInterface
+     */
+    public function getGateway()
+    {
+        return $this->gateway;
+    }
 
     /**
      * {@inheritDoc}
