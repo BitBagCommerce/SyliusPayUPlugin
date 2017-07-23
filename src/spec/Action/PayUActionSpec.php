@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * This file was created by the developers from BitBag.
+ * Feel free to contact us once you face any issues or want to start
+ * another great project.
+ * You can find more information about us on https://bitbag.shop and write us
+ * an email on kontakt@bitbag.pl.
+ */
+
 namespace spec\BitBag\PayUPlugin\Action;
 
 use BitBag\PayUPlugin\Action\PayUAction;
@@ -12,6 +20,9 @@ use Payum\Core\Security\TokenInterface;
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Core\Model\CustomerInterface;
 
+/**
+ * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
+ */
 final class PayUActionSpec extends ObjectBehavior
 {
     function let()
@@ -28,17 +39,13 @@ final class PayUActionSpec extends ObjectBehavior
         SetPayU $request,
         TokenInterface $token,
         CustomerInterface $customer,
-        ArrayObject $model,
-        SetPayU $setPayU,
-        GetHumanStatus $status,
-        GatewayInterface $gateway
+        ArrayObject $model
 
     )
     {
         $request->getModel()->willReturn($model);
         $request->getToken()->willReturn($token);
         $request->getFirstModel()->willReturn($customer);
-
 
         $this->execute($request);
     }
@@ -49,6 +56,7 @@ final class PayUActionSpec extends ObjectBehavior
 
         $this
             ->shouldThrow(RequestNotSupportedException::class)
-            ->during('execute', [$request]);
+            ->during('execute', [$request])
+        ;
     }
 }

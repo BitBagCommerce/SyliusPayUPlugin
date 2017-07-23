@@ -1,5 +1,0 @@
-suites:
-    main:
-        namespace: BitBag\PayUPlugin
-        psr4_prefix: BitBag\PayUPlugin
-        src_path: .

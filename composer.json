@@ -3,6 +3,12 @@
     "type": "sylius-plugin",
     "description": "PayU payment plugin for Sylius applications",
     "license": "MIT",
+    "authors": [
+        {
+            "name": "Mikołaj Król",
+            "email": "mikolaj.krol@bitbag.pl"
+        }
+    ],
     "require": {
         "php": "^5.6|^7.0",
         "sylius/sylius": "^1.0.0@beta",
