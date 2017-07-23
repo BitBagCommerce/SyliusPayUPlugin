@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-$ composer require bitbag/mailchimp-plugin
+$ composer require bitbag/payu-plugin
 ```
     
 Add plugin dependencies to your AppKernel.php file:
