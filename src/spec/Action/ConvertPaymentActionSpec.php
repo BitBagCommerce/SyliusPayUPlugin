@@ -33,14 +33,13 @@ final class ConvertPaymentActionSpec extends ObjectBehavior
     }
 
     function it_executes(
-        \ArrayObject $arrayObject,
         Convert $request,
         PaymentInterface $payment
     )
     {
-        $request->getSource()->willReturn($payment);
+        $request->getSource()->willReturn($payment)->shouldBeCalled();
         $request->getTo()->willReturn('array');
-
+        $payment->getDetails()->willReturn([]);
         $payment->getTotalAmount()->willReturn(88000);
         $payment->getCurrencyCode()->willReturn('PLN');
         $payment->getNumber()->willReturn(123456);
@@ -58,7 +57,16 @@ final class ConvertPaymentActionSpec extends ObjectBehavior
         $details['customerIp'] = '69.65.13.216';
         $details['status'] = 'NEW';
 
-        $request->setResult($details)->shouldBeCalled();
+        $request->setResult([
+            "totalAmount" => 88000,
+            "currencyCode" => "PLN",
+            "extOrderId" => 123456,
+            "description" => "Lamborghini Huracan",
+            "client_email" => "mikolaj.krol@bitbag.pl",
+            "client_id" => 1,
+            "customerIp" => "69.65.13.216",
+            "status" => "NEW"
+        ])->shouldBeCalled();
 
         $this->execute($request);
     }

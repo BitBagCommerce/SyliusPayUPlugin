@@ -10,3 +10,12 @@ services:
         arguments: [BitBag\PayUPlugin\PayUGatewayFactory]
         tags:
             - { name: payum.gateway_factory_builder, factory: payu }
+
+    bitbag.payu.open_payu_wrapper:
+        class: BitBag\PayUPlugin\OpenPayUWrapper
+
+    bitbag.payu.payu_action:
+        class: BitBag\PayUPlugin\Action\PayUAction
+        arguments: ['@bitbag.payu.open_payu_wrapper']
+        tags:
+            - { name: payum.action, factory: payu, alias: payum.action.set_payu }

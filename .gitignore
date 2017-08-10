@@ -5,6 +5,9 @@
 tests/Application/web
 !tests/Application/web/app_test.php
 
+/etc/build/*
+!/etc/build/.gitkeep
+
 tests/Application/var/*
 
 tests/Application/node_modules

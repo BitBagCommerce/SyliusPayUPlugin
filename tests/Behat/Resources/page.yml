@@ -1,0 +1,7 @@
+services:
+    bitbag.payu_plugin.page.external:
+        class: Tests\BitBag\PayUPlugin\Behat\Page\External\PayUCheckoutPage
+        parent: 'sylius.behat.page'
+        public: 'false'
+        arguments:
+            - '@__symfony__.sylius.repository.payment_security_token'

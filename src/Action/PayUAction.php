@@ -12,6 +12,7 @@ namespace BitBag\PayUPlugin\Action;
 
 use BitBag\PayUPlugin\Exception\PayUException;
 use BitBag\PayUPlugin\OpenPayUWrapper;
+use BitBag\PayUPlugin\OpenPayUWrapperInterface;
 use BitBag\PayUPlugin\SetPayU;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
@@ -31,7 +32,7 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
     private $api = [];
 
     /**
-     * @var OpenPayUWrapper
+     * @var OpenPayUWrapperInterface
      */
     private $openPayUWrapper;
 
@@ -48,6 +49,14 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
     }
 
     /**
+     * @param OpenPayUWrapperInterface $openPayUWrapper
+     */
+    public function __construct(OpenPayUWrapperInterface $openPayUWrapper)
+    {
+        $this->setOpenPayUWrapper($openPayUWrapper);
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function execute($request)
@@ -57,7 +66,9 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
         $signature = $this->api['signature_key'];
         $posId = $this->api['pos_id'];
 
-        $openPayU = $this->getOpenPayUWrapper() ? $this->getOpenPayUWrapper() : new OpenPayUWrapper($environment, $signature, $posId);
+        $openPayU = $this->getOpenPayUWrapper();
+        $openPayU->setAuthorizationDataApi($environment, $signature, $posId);
+
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         if ($model['orderId'] !== null) {
@@ -70,7 +81,9 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
                 $request->setModel($model);
             }
 
-            return;
+            if ($response->orders[0]->status !== OpenPayUWrapper::NEW_API_STATUS) {
+                return;
+            }
         }
 
         /**
@@ -102,7 +115,7 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
     }
 
     /**
-     * @return OpenPayUWrapper
+     * @return OpenPayUWrapperInterface
      */
     public function getOpenPayUWrapper()
     {
@@ -110,7 +123,7 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
     }
 
     /**
-     * @param OpenPayUWrapper $openPayUWrapper
+     * @param OpenPayUWrapperInterface $openPayUWrapper
      */
     public function setOpenPayUWrapper($openPayUWrapper)
     {

@@ -12,8 +12,9 @@ namespace BitBag\PayUPlugin;
 
 /**
  * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
+ * @author Patryk Drapik <patryk.drapik@bitbag.pl>
  */
-final class OpenPayUWrapper
+final class OpenPayUWrapper implements OpenPayUWrapperInterface
 {
     const NEW_API_STATUS = 'NEW';
     const PENDING_API_STATUS = 'PENDING';
@@ -21,18 +22,27 @@ final class OpenPayUWrapper
     const SUCCESS_API_STATUS = 'SUCCESS';
     const CANCELED_API_STATUS = 'CANCELED';
 
-    public function __construct($environment, $signatureKey, $posId)
+    /**
+     * {@inheritDoc}
+     */
+    public function setAuthorizationDataApi($environment, $signatureKey, $posId)
     {
         \OpenPayU_Configuration::setEnvironment($environment);
         \OpenPayU_Configuration::setMerchantPosId($posId);
         \OpenPayU_Configuration::setSignatureKey($signatureKey);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function create($order)
     {
         return \OpenPayU_Order::create($order);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function retrieve($orderId)
     {
         return \OpenPayU_Order::retrieve($orderId);
