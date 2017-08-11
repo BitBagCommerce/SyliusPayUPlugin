@@ -16,6 +16,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 
 /**
  * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
@@ -37,6 +38,7 @@ final class ConvertPaymentActionSpec extends ObjectBehavior
         PaymentInterface $payment
     )
     {
+
         $request->getSource()->willReturn($payment)->shouldBeCalled();
         $request->getTo()->willReturn('array');
         $payment->getDetails()->willReturn([]);
@@ -57,16 +59,16 @@ final class ConvertPaymentActionSpec extends ObjectBehavior
         $details['customerIp'] = '69.65.13.216';
         $details['status'] = 'NEW';
 
-        $request->setResult([
-            "totalAmount" => 88000,
-            "currencyCode" => "PLN",
-            "extOrderId" => 123456,
-            "description" => "Lamborghini Huracan",
-            "client_email" => "mikolaj.krol@bitbag.pl",
-            "client_id" => 1,
-            "customerIp" => "69.65.13.216",
-            "status" => "NEW"
-        ])->shouldBeCalled();
+
+        $request->setResult(Argument::that(function ($value) use ($details) {
+            foreach ($value as $key => $value) {
+                if ($details[$key] != $value && $key !== 'extOrderId') {
+                    return false;
+                }
+            }
+
+            return true;
+        }))->shouldBeCalled();
 
         $this->execute($request);
     }
