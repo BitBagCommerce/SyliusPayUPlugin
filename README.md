@@ -1,9 +1,10 @@
-# Sylius PayU payment gateway plugin  
+![BitBag](https://bitbag.pl/static/bitbag-logo.png)
 
 ## Installation
 
 ```bash
 $ composer require bitbag/payu-plugin
+
 ```
     
 Add plugin dependencies to your AppKernel.php file:
@@ -18,11 +19,14 @@ public function registerBundles()
     ]);
 }
 ```
- 
-## Testing & Development
+
+## Testing
 
 In order to run tests, execute following commands:
 
 ```bash
 $ vendor/bin/phpspec
 ```
+## Contribution
+
+Learn more about our contribution workflow on http://docs.sylius.org/en/latest/contributing/
