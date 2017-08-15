@@ -65,6 +65,7 @@ final class CaptureAction implements ActionInterface, GatewayAwareInterface
     /**
      * @param TokenInterface $token
      * @param ArrayObject $model
+     *
      * @return SetPayU
      */
     private function getPayUAction(TokenInterface $token, ArrayObject $model)
