@@ -1,2 +1,2 @@
 suites:
-    Addressing: { namespace: BitBag\PayUPlugin, psr4_prefix: BitBag\PayUPlugin, spec_path: src, src_path: src }
+    PayUPlugin: { namespace: BitBag\PayUPlugin, psr4_prefix: BitBag\PayUPlugin, spec_path: src, src_path: src }
