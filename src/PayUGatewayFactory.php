@@ -13,7 +13,6 @@ namespace BitBag\PayUPlugin;
 use BitBag\PayUPlugin\Action\CaptureAction;
 use BitBag\PayUPlugin\Action\ConvertPaymentAction;
 use BitBag\PayUPlugin\Action\NotifyAction;
-use BitBag\PayUPlugin\Action\PayUAction;
 use BitBag\PayUPlugin\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
