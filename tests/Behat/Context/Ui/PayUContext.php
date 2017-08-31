@@ -27,6 +27,11 @@ final class PayUContext implements Context
     private $payUApiMocker;
 
     /**
+     * @var ShowPageInterface
+     */
+    private $orderDetails;
+
+    /**
      * @var CompletePageInterface
      */
     private $summaryPage;
@@ -35,28 +40,23 @@ final class PayUContext implements Context
      * @var PayUCheckoutPageInterface
      */
     private $payUCheckoutPage;
-
+    
     /**
-     * @var ShowPageInterface
-     */
-    private $orderDetails;
-
-    /**
-     * @param CompletePageInterface $summaryPage
      * @param PayUApiMocker $payUApiMocker
-     * @param PayUCheckoutPageInterface $payUCheckoutPage
      * @param ShowPageInterface $orderDetails
+     * @param CompletePageInterface $summaryPage
+     * @param PayUCheckoutPageInterface $payUCheckoutPage
      */
     public function __construct(
         PayUApiMocker $payUApiMocker,
+        ShowPageInterface $orderDetails,
         CompletePageInterface $summaryPage,
-        PayUCheckoutPageInterface $payUCheckoutPage,
-        ShowPageInterface $orderDetails
+        PayUCheckoutPageInterface $payUCheckoutPage
     )
     {
         $this->orderDetails = $orderDetails;
-        $this->payUCheckoutPage = $payUCheckoutPage;
         $this->summaryPage = $summaryPage;
+        $this->payUCheckoutPage = $payUCheckoutPage;
         $this->payUApiMocker = $payUApiMocker;
     }
 
@@ -64,7 +64,7 @@ final class PayUContext implements Context
      * @When I confirm my order with PayU payment
      * @Given I have confirmed my order with PayU payment
      */
-    public function iConfirmMyOrderWithPayuPayment()
+    public function iConfirmMyOrderWithPayUPayment()
     {
         $this->payUApiMocker->mockApiSuccessfulPaymentResponse(function (){
             $this->summaryPage->confirmOrder();
@@ -74,7 +74,7 @@ final class PayUContext implements Context
     /**
      * @When I sign in to PayU and pay successfully
      */
-    public function iSignInToPayuAndPaySuccessfully()
+    public function iSignInToPayUAndPaySuccessfully()
     {
         $this->payUApiMocker->completedPayment(function (){
             $this->payUCheckoutPage->pay();
@@ -85,7 +85,7 @@ final class PayUContext implements Context
      * @When I cancel my PayU payment
      * @Given I have cancelled PayU payment
      */
-    public function iCancelMyPayuPayment()
+    public function iCancelMyPayUPayment()
     {
         $this->payUApiMocker->canceledPayment(function (){
             $this->payUCheckoutPage->cancel();
@@ -93,9 +93,9 @@ final class PayUContext implements Context
     }
 
     /**
-     * @When I try to pay again PayU payment
+     * @When I try to pay again with PayU payment
      */
-    public function iTryToPayAgainPayuPayment()
+    public function iTryToPayAgainWithPayUPayment()
     {
         $this->payUApiMocker->mockApiSuccessfulPaymentResponse(function (){
             $this->orderDetails->pay();

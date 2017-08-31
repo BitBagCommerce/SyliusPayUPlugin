@@ -10,8 +10,6 @@ imports:
 
     - { resource: "../../../../vendor/sylius/sylius/app/config/security.yml" }
 
-    - { resource: '@PayUPlugin/Resources/config/config.yml' }
-
 framework:
     translator: { fallbacks: ["%locale%", "en"] }
     secret: "%secret"

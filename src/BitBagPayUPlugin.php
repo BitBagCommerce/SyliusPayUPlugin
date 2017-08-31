@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 /**
  * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
  */
-final class PayUPlugin extends Bundle
+final class BitBagPayUPlugin extends Bundle
 {
     use SyliusPluginTrait;
 }

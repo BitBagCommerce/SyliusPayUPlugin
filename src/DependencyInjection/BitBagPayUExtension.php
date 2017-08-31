@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\Loader;
 /**
  * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
  */
-final class PayUExtension extends Extension
+final class BitBagPayUExtension extends Extension
 {
     /**
      * {@inheritdoc}
@@ -26,6 +26,7 @@ final class PayUExtension extends Extension
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+
         $loader->load('services.yml');
     }
 }
