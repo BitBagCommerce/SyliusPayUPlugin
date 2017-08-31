@@ -37,8 +37,6 @@ final class PayUException extends HttpException
 
         $message = implode(PHP_EOL, $parts);
 
-        $e = new static($message);
-
-        return $e;
+        return new static($message);
     }
 }

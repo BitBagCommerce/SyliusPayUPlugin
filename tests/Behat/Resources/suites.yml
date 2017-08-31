@@ -43,4 +43,4 @@ default:
 
                 - bitbag.payu_plugin.context.ui.payu
             filters:
-                tags: "@paying_with_payu_for_order && @ui"
+                tags: "@paying_for_order_with_payu && @ui"

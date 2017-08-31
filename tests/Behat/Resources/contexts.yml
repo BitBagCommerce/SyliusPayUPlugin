@@ -15,8 +15,8 @@ services:
         class: Tests\BitBag\PayUPlugin\Behat\Context\Ui\PayUContext
         arguments:
             - '@bitbag.payu_plugin.mocker.payu_api'
+            - '@sylius.behat.page.shop.order.show'
             - '@sylius.behat.page.shop.checkout.complete'
             - '@bitbag.payu_plugin.page.external'
-            - '@sylius.behat.page.shop.order.show'
         tags:
             - { name: fob.context_service }
