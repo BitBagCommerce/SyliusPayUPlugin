@@ -16,6 +16,6 @@ services:
 
     bitbag.payu.payu_action:
         class: BitBag\PayUPlugin\Action\PayUAction
-        arguments: ['@bitbag.payu.open_payu_wrapper']
+        arguments: ['@bitbag.payu.open_payu_wrapper', '@payum']
         tags:
             - { name: payum.action, factory: payu, alias: payum.action.set_payu }

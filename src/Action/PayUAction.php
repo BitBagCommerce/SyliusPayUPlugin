@@ -23,6 +23,7 @@ use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Security\TokenInterface;
 use Sylius\Component\Core\Model\CustomerInterface;
 use Webmozart\Assert\Assert;
+use Payum\Core\Payum;
 
 /**
  * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
@@ -35,6 +36,11 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
      * @var OpenPayUWrapperInterface
      */
     private $openPayUWrapper;
+
+    /**
+     * @var Payum
+     */
+    private $payum;
 
     /**
      * {@inheritDoc}
@@ -50,9 +56,11 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
 
     /**
      * @param OpenPayUWrapperInterface $openPayUWrapper
+     * @param Payum $payum
      */
-    public function __construct(OpenPayUWrapperInterface $openPayUWrapper)
+    public function __construct(OpenPayUWrapperInterface $openPayUWrapper, Payum $payum)
     {
+        $this->payum = $payum;
         $this->setOpenPayUWrapper($openPayUWrapper);
     }
 
@@ -132,8 +140,11 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
 
     private function prepareOrder(TokenInterface $token, $model, $posId)
     {
+        $notifyToken = $this->createNotifyToken($token->getGatewayName(), $token->getDetails());
+
         $order = [];
         $order['continueUrl'] = $token->getTargetUrl();
+        $order['notifyUrl'] = $notifyToken->getTargetUrl();
         $order['customerIp'] = $model['customerIp'];
         $order['merchantPosId'] = $posId;
         $order['description'] = $model['description'];
@@ -182,5 +193,19 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
         }
 
         return $model['products'];
+    }
+
+    /**
+     * @param string $gatewayName
+     * @param object $model
+     *
+     * @return TokenInterface
+     */
+    private function createNotifyToken($gatewayName, $model)
+    {
+        return $this->payum->getTokenFactory()->createNotifyToken(
+            $gatewayName,
+            $model
+        );
     }
 }

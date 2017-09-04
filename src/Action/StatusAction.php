@@ -39,7 +39,7 @@ final class StatusAction implements ActionInterface
         }
 
         if (OpenPayUWrapper::PENDING_API_STATUS === $status) {
-            $request->markPending();
+            $request->markCaptured();
 
             return;
         }
