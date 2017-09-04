@@ -10,8 +10,8 @@
 
 namespace BitBag\PayUPlugin\Action;
 
-use BitBag\PayUPlugin\Bridge\OpenPayUBridgeInterface;
 use BitBag\PayUPlugin\Exception\PayUException;
+use BitBag\PayUPlugin\Bridge\OpenPayUBridgeInterface;
 use BitBag\PayUPlugin\SetPayU;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
@@ -40,7 +40,7 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
      */
     public function setApi($api)
     {
-        if (false === is_array($api)) {
+        if (!is_array($api)) {
             throw new UnsupportedApiException('Not supported.');
         }
 
@@ -67,22 +67,32 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
 
         $openPayU = $this->getOpenPayUBridge();
         $openPayU->setAuthorizationDataApi($environment, $signature, $posId);
+
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         if (null !== $model['orderId']) {
+            /** @var mixed $response */
             $response = $openPayU->retrieve($model['orderId'])->getResponse();
-            $statusCode = $response->status->statusCode;
-            $model['status'] = $statusCode;
+            Assert::keyExists($response->orders, 0);
 
-            return;
+            if (OpenPayUBridgeInterface::SUCCESS_API_STATUS === $response->status->statusCode) {
+                $model['status'] = $response->orders[0]->status;
+                $request->setModel($model);
+            }
+
+            if (OpenPayUBridgeInterface::NEW_API_STATUS !== $response->orders[0]->status) {
+                return;
+            }
         }
 
-        /** @var TokenInterface $token */
+        /**
+         * @var TokenInterface $token
+         */
         $token = $request->getToken();
         $order = $this->prepareOrder($token, $model, $posId);
         $response = $openPayU->create($order)->getResponse();
 
-        if (true === (bool)$response) {
+        if ($response && OpenPayUBridgeInterface::SUCCESS_API_STATUS === $response->status->statusCode) {
             $model['orderId'] = $response->orderId;
             $request->setModel($model);
 
@@ -97,8 +107,10 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
      */
     public function supports($request)
     {
-        return $request instanceof SetPayU &&
-            $request->getModel() instanceof \ArrayObject;
+        return
+            $request instanceof SetPayU &&
+            $request->getModel() instanceof \ArrayObject
+            ;
     }
 
     /**
@@ -164,7 +176,7 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
                     'name' => $model['description'],
                     'unitPrice' => $model['totalAmount'],
                     'quantity' => 1
-                ],
+                ]
             ];
         }
 
