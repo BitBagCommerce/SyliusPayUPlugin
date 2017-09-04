@@ -8,20 +8,14 @@
  * an email on kontakt@bitbag.pl.
  */
 
-namespace BitBag\PayUPlugin;
+namespace BitBag\PayUPlugin\Bridge;
 
 /**
  * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
  * @author Patryk Drapik <patryk.drapik@bitbag.pl>
  */
-final class OpenPayUWrapper implements OpenPayUWrapperInterface
+final class OpenPayUBridge implements OpenPayUBridgeInterface
 {
-    const NEW_API_STATUS = 'NEW';
-    const PENDING_API_STATUS = 'PENDING';
-    const COMPLETED_API_STATUS = 'COMPLETED';
-    const SUCCESS_API_STATUS = 'SUCCESS';
-    const CANCELED_API_STATUS = 'CANCELED';
-
     /**
      * {@inheritDoc}
      */

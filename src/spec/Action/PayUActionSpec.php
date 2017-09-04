@@ -11,8 +11,8 @@
 namespace spec\BitBag\PayUPlugin\Action;
 
 use BitBag\PayUPlugin\Action\PayUAction;
-use BitBag\PayUPlugin\OpenPayUWrapper;
-use BitBag\PayUPlugin\OpenPayUWrapperInterface;
+use BitBag\PayUPlugin\Bridge\OpenPayUBridge;
+use BitBag\PayUPlugin\Bridge\OpenPayUBridgeInterface;
 use BitBag\PayUPlugin\SetPayU;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -27,9 +27,9 @@ use Sylius\Component\Core\Model\CustomerInterface;
  */
 final class PayUActionSpec extends ObjectBehavior
 {
-    function let(OpenPayUWrapperInterface $openPayUWrapper)
+    function let(OpenPayUBridgeInterface $openPayUBridge)
     {
-        $this->beConstructedWith($openPayUWrapper);
+        $this->beConstructedWith($openPayUBridge);
 
         $this->setApi(['environment' => 'secure', 'signature_key' => '123', 'pos_id' => '123']);
     }
@@ -44,7 +44,7 @@ final class PayUActionSpec extends ObjectBehavior
         TokenInterface $token,
         CustomerInterface $customer,
         ArrayObject $model,
-        OpenPayUWrapperInterface $openPayUWrapper,
+        OpenPayUBridgeInterface $openPayUBridge,
         \OpenPayU_Result $openPayUResult
     )
     {
@@ -57,9 +57,9 @@ final class PayUActionSpec extends ObjectBehavior
         $model->offsetSet("orderId", 1)->shouldBeCalled();
         $model->offsetGet("customer")->willReturn($customer);
 
-        $openPayUResult->getResponse()->willReturn((object)['status' => (object)['statusCode' => OpenPayUWrapper::SUCCESS_API_STATUS], 'orderId' => 1, 'redirectUri' => '/']);
+        $openPayUResult->getResponse()->willReturn((object)['status' => (object)['statusCode' => OpenPayUBridge::SUCCESS_API_STATUS], 'orderId' => 1, 'redirectUri' => '/']);
 
-        $openPayUWrapper->setAuthorizationDataApi("secure", "123", "123")->shouldBeCalled();
+        $openPayUBridge->setAuthorizationDataApi("secure", "123", "123")->shouldBeCalled();
 
         $dataApi = [
             "continueUrl" => null,
@@ -83,7 +83,7 @@ final class PayUActionSpec extends ObjectBehavior
             ]
         ];
 
-        $openPayUWrapper->create($dataApi)->willReturn($openPayUResult);
+        $openPayUBridge->create($dataApi)->willReturn($openPayUResult);
 
         $request->getModel()->willReturn($model);
         $request->getToken()->willReturn($token);

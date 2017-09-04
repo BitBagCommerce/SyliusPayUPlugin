@@ -11,8 +11,8 @@
 namespace BitBag\PayUPlugin\Action;
 
 use BitBag\PayUPlugin\Exception\PayUException;
-use BitBag\PayUPlugin\OpenPayUWrapper;
-use BitBag\PayUPlugin\OpenPayUWrapperInterface;
+use BitBag\PayUPlugin\Bridge\OpenPayUBridge;
+use BitBag\PayUPlugin\Bridge\OpenPayUBridgeInterface;
 use BitBag\PayUPlugin\SetPayU;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
@@ -32,16 +32,16 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
     private $api = [];
 
     /**
-     * @var OpenPayUWrapperInterface
+     * @var OpenPayUBridgeInterface
      */
-    private $openPayUWrapper;
+    private $openPayUBridge;
 
     /**
      * {@inheritDoc}
      */
     public function setApi($api)
     {
-        if (!is_array($api)) {
+        if (false === is_array($api)) {
             throw new UnsupportedApiException('Not supported.');
         }
 
@@ -49,11 +49,11 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
     }
 
     /**
-     * @param OpenPayUWrapperInterface $openPayUWrapper
+     * @param OpenPayUBridgeInterface $openPayUBridge
      */
-    public function __construct(OpenPayUWrapperInterface $openPayUWrapper)
+    public function __construct(OpenPayUBridgeInterface $openPayUBridge)
     {
-        $this->setOpenPayUWrapper($openPayUWrapper);
+        $this->setOpenPayUBridge($openPayUBridge);
     }
 
     /**
@@ -66,34 +66,32 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
         $signature = $this->api['signature_key'];
         $posId = $this->api['pos_id'];
 
-        $openPayU = $this->getOpenPayUWrapper();
+        $openPayU = $this->getOpenPayUBridge();
         $openPayU->setAuthorizationDataApi($environment, $signature, $posId);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if ($model['orderId'] !== null) {
-            /** @var mixed $response */
+        if (null !== $model['orderId']) {
             $response = $openPayU->retrieve($model['orderId'])->getResponse();
             Assert::keyExists($response->orders, 0);
 
-            if ($response->status->statusCode === OpenPayUWrapper::SUCCESS_API_STATUS) {
-                $model['status'] = $response->orders[0]->status;
+            if (OpenPayUBridge::SUCCESS_API_STATUS === $response->status->statusCode) {
+                $model['status'] = OpenPayUBridge::SUCCESS_API_STATUS;
                 $request->setModel($model);
             }
 
-            if ($response->orders[0]->status !== OpenPayUWrapper::NEW_API_STATUS) {
+            if (OpenPayUBridge::NEW_API_STATUS !== $response->orders[0]->status) {
+
                 return;
             }
         }
 
-        /**
-         * @var TokenInterface $token
-         */
+        /** @var TokenInterface $token */
         $token = $request->getToken();
         $order = $this->prepareOrder($token, $model, $posId);
         $response = $openPayU->create($order)->getResponse();
 
-        if ($response && $response->status->statusCode === OpenPayUWrapper::SUCCESS_API_STATUS) {
+        if ($response && $response->status->statusCode === OpenPayUBridge::SUCCESS_API_STATUS) {
             $model['orderId'] = $response->orderId;
             $request->setModel($model);
 
@@ -108,26 +106,24 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof SetPayU &&
-            $request->getModel() instanceof \ArrayObject
-        ;
+        return $request instanceof SetPayU &&
+            $request->getModel() instanceof \ArrayObject;
     }
 
     /**
-     * @return OpenPayUWrapperInterface
+     * @return OpenPayUBridgeInterface
      */
-    public function getOpenPayUWrapper()
+    public function getOpenPayUBridge()
     {
-        return $this->openPayUWrapper;
+        return $this->openPayUBridge;
     }
 
     /**
-     * @param OpenPayUWrapperInterface $openPayUWrapper
+     * @param OpenPayUBridgeInterface $openPayUBridge
      */
-    public function setOpenPayUWrapper($openPayUWrapper)
+    public function setOpenPayUBridge($openPayUBridge)
     {
-        $this->openPayUWrapper = $openPayUWrapper;
+        $this->openPayUBridge = $openPayUBridge;
     }
 
     private function prepareOrder(TokenInterface $token, $model, $posId)
