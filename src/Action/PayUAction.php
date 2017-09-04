@@ -10,9 +10,8 @@
 
 namespace BitBag\PayUPlugin\Action;
 
-use BitBag\PayUPlugin\Exception\PayUException;
-use BitBag\PayUPlugin\Bridge\OpenPayUBridge;
 use BitBag\PayUPlugin\Bridge\OpenPayUBridgeInterface;
+use BitBag\PayUPlugin\Exception\PayUException;
 use BitBag\PayUPlugin\SetPayU;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
@@ -68,22 +67,14 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
 
         $openPayU = $this->getOpenPayUBridge();
         $openPayU->setAuthorizationDataApi($environment, $signature, $posId);
-
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         if (null !== $model['orderId']) {
             $response = $openPayU->retrieve($model['orderId'])->getResponse();
-            Assert::keyExists($response->orders, 0);
+            $statusCode = $response->status->statusCode;
+            $model['status'] = $statusCode;
 
-            if (OpenPayUBridge::SUCCESS_API_STATUS === $response->status->statusCode) {
-                $model['status'] = OpenPayUBridge::SUCCESS_API_STATUS;
-                $request->setModel($model);
-            }
-
-            if (OpenPayUBridge::NEW_API_STATUS !== $response->orders[0]->status) {
-
-                return;
-            }
+            return;
         }
 
         /** @var TokenInterface $token */
@@ -91,7 +82,7 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
         $order = $this->prepareOrder($token, $model, $posId);
         $response = $openPayU->create($order)->getResponse();
 
-        if ($response && $response->status->statusCode === OpenPayUBridge::SUCCESS_API_STATUS) {
+        if (true === (bool)$response) {
             $model['orderId'] = $response->orderId;
             $request->setModel($model);
 
@@ -173,7 +164,7 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
                     'name' => $model['description'],
                     'unitPrice' => $model['totalAmount'],
                     'quantity' => 1
-                ]
+                ],
             ];
         }
 
