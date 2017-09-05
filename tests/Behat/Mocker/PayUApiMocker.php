@@ -10,8 +10,8 @@
 
 namespace Tests\BitBag\PayUPlugin\Behat\Mocker;
 
-use BitBag\PayUPlugin\OpenPayUWrapper;
-use BitBag\PayUPlugin\OpenPayUWrapperInterface;
+use BitBag\PayUPlugin\Bridge\OpenPayUBridge;
+use BitBag\PayUPlugin\Bridge\OpenPayUBridgeInterface;
 use Sylius\Behat\Service\Mocker\Mocker;
 
 /**
@@ -38,7 +38,7 @@ final class PayUApiMocker
     public function mockApiSuccessfulPaymentResponse(callable $action)
     {
         $service = $this->mocker
-            ->mockService('bitbag.payu.open_payu_wrapper', OpenPayUWrapperInterface::class);
+            ->mockService('bitbag.payu_plugin.bridge.open_payu', OpenPayUBridgeInterface::class);
 
         $service->shouldReceive('create')->andReturn($this->createResponseSuccessfulApi());
         $service->shouldReceive('setAuthorizationDataApi');
@@ -54,10 +54,10 @@ final class PayUApiMocker
     public function completedPayment(callable $action)
     {
         $service = $this->mocker
-            ->mockService('bitbag.payu.open_payu_wrapper', OpenPayUWrapperInterface::class);
+            ->mockService('bitbag.payu_plugin.bridge.open_payu', OpenPayUBridgeInterface::class);
 
         $service->shouldReceive('retrieve')->andReturn(
-            $this->getDataRetrieve(OpenPayUWrapper::COMPLETED_API_STATUS)
+            $this->getDataRetrieve(OpenPayUBridge::COMPLETED_API_STATUS)
         );
         $service->shouldReceive('create')->andReturn($this->createResponseSuccessfulApi());
         $service->shouldReceive('setAuthorizationDataApi');
@@ -73,10 +73,10 @@ final class PayUApiMocker
     public function canceledPayment(callable $action)
     {
         $service = $this->mocker
-            ->mockService('bitbag.payu.open_payu_wrapper', OpenPayUWrapperInterface::class);
+            ->mockService('bitbag.payu_plugin.bridge.open_payu', OpenPayUBridgeInterface::class);
 
         $service->shouldReceive('retrieve')->andReturn(
-            $this->getDataRetrieve(OpenPayUWrapper::CANCELED_API_STATUS)
+            $this->getDataRetrieve(OpenPayUBridge::CANCELED_API_STATUS)
         );
         $service->shouldReceive('create')->andReturn($this->createResponseSuccessfulApi());
         $service->shouldReceive('setAuthorizationDataApi');
@@ -97,7 +97,7 @@ final class PayUApiMocker
 
         $data = (object)[
             'status' => (object)[
-                'statusCode' => OpenPayUWrapper::SUCCESS_API_STATUS
+                'statusCode' => OpenPayUBridge::SUCCESS_API_STATUS
             ],
             'orderId' => 1,
             'orders' => [
@@ -121,7 +121,7 @@ final class PayUApiMocker
 
         $data = (object)[
             'status' => (object)[
-                'statusCode' => OpenPayUWrapper::SUCCESS_API_STATUS
+                'statusCode' => OpenPayUBridge::SUCCESS_API_STATUS
             ],
             'orderId' => 1,
             'redirectUri' => '/'

@@ -11,14 +11,17 @@
 namespace spec\BitBag\PayUPlugin\Action;
 
 use BitBag\PayUPlugin\Action\PayUAction;
-use BitBag\PayUPlugin\OpenPayUWrapper;
-use BitBag\PayUPlugin\OpenPayUWrapperInterface;
+use BitBag\PayUPlugin\Bridge\OpenPayUBridge;
+use BitBag\PayUPlugin\Bridge\OpenPayUBridgeInterface;
 use BitBag\PayUPlugin\SetPayU;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Payum;
 use Payum\Core\Reply\HttpRedirect;
+use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\TokenInterface;
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 use Sylius\Component\Core\Model\CustomerInterface;
 
 /**
@@ -27,9 +30,9 @@ use Sylius\Component\Core\Model\CustomerInterface;
  */
 final class PayUActionSpec extends ObjectBehavior
 {
-    function let(OpenPayUWrapperInterface $openPayUWrapper)
+    function let(OpenPayUBridgeInterface $openPayUBridge, Payum $payum)
     {
-        $this->beConstructedWith($openPayUWrapper);
+        $this->beConstructedWith($openPayUBridge, $payum);
 
         $this->setApi(['environment' => 'secure', 'signature_key' => '123', 'pos_id' => '123']);
     }
@@ -44,46 +47,49 @@ final class PayUActionSpec extends ObjectBehavior
         TokenInterface $token,
         CustomerInterface $customer,
         ArrayObject $model,
-        OpenPayUWrapperInterface $openPayUWrapper,
-        \OpenPayU_Result $openPayUResult
+        OpenPayUBridgeInterface $openPayUBridge,
+        \OpenPayU_Result $openPayUResult,
+        Payum $payum,
+        GenericTokenFactoryInterface $tokenFactory
     )
     {
-        $model->offsetGet("orderId")->willReturn(null);
-        $model->offsetGet("customerIp")->willReturn(null);
-        $model->offsetGet("description")->willReturn(null);
-        $model->offsetGet("currencyCode")->willReturn(null);
-        $model->offsetGet("totalAmount")->willReturn(null);
-        $model->offsetGet("extOrderId")->willReturn(null);
-        $model->offsetSet("orderId", 1)->shouldBeCalled();
-        $model->offsetGet("customer")->willReturn($customer);
-
-        $openPayUResult->getResponse()->willReturn((object)['status' => (object)['statusCode' => OpenPayUWrapper::SUCCESS_API_STATUS], 'orderId' => 1, 'redirectUri' => '/']);
-
-        $openPayUWrapper->setAuthorizationDataApi("secure", "123", "123")->shouldBeCalled();
+        $model->offsetGet('orderId')->willReturn(null);
+        $model->offsetGet('customerIp')->willReturn(null);
+        $model->offsetGet('description')->willReturn(null);
+        $model->offsetGet('currencyCode')->willReturn(null);
+        $model->offsetGet('totalAmount')->willReturn(null);
+        $model->offsetGet('extOrderId')->willReturn(null);
+        $model->offsetSet('orderId', 1)->shouldBeCalled();
+        $model->offsetGet('customer')->willReturn($customer);
+        $payum->getTokenFactory()->willReturn($tokenFactory);
+        $tokenFactory->createNotifyToken(Argument::any(), Argument::any())->willReturn($token);
+        $openPayUResult->getResponse()->willReturn((object)['status' => (object)['statusCode' => OpenPayUBridgeInterface::SUCCESS_API_STATUS], 'orderId' => 1, 'redirectUri' => '/']);
+        $openPayUBridge->setAuthorizationDataApi('secure', '123', '123')->shouldBeCalled();
 
         $dataApi = [
-            "continueUrl" => null,
-            "customerIp" => null,
-            "merchantPosId" => "123",
-            "description" => null,
-            "currencyCode" => null,
-            "totalAmount" => null,
-            "extOrderId" => null,
-            "buyer" => [
-                "email" => "",
-                "firstName" => "",
-                "lastName" => ""
+            'continueUrl' => null,
+            'notifyUrl' => null,
+            'customerIp' => null,
+            'merchantPosId' => '123',
+            'description' => null,
+            'currencyCode' => null,
+            'totalAmount' => null,
+            'extOrderId' => null,
+            'buyer' => [
+                'email' => '',
+                'firstName' => '',
+                'lastName' => ''
             ],
-            "products" => [
+            'products' => [
                 [
-                    "name" => null,
-                    "unitPrice" => null,
-                    "quantity" => 1
+                    'name' => null,
+                    'unitPrice' => null,
+                    'quantity' => 1
                 ]
             ]
         ];
 
-        $openPayUWrapper->create($dataApi)->willReturn($openPayUResult);
+        $openPayUBridge->create($dataApi)->willReturn($openPayUResult);
 
         $request->getModel()->willReturn($model);
         $request->getToken()->willReturn($token);
