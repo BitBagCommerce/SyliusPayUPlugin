@@ -38,7 +38,7 @@ final class PayUApiMocker
     public function mockApiSuccessfulPaymentResponse(callable $action)
     {
         $service = $this->mocker
-            ->mockService('bitbag.payu.open_payu_wrapper', OpenPayUBridgeInterface::class);
+            ->mockService('bitbag.payu_plugin.bridge.open_payu', OpenPayUBridgeInterface::class);
 
         $service->shouldReceive('create')->andReturn($this->createResponseSuccessfulApi());
         $service->shouldReceive('setAuthorizationDataApi');
@@ -54,7 +54,7 @@ final class PayUApiMocker
     public function completedPayment(callable $action)
     {
         $service = $this->mocker
-            ->mockService('bitbag.payu.open_payu_wrapper', OpenPayUBridgeInterface::class);
+            ->mockService('bitbag.payu_plugin.bridge.open_payu', OpenPayUBridgeInterface::class);
 
         $service->shouldReceive('retrieve')->andReturn(
             $this->getDataRetrieve(OpenPayUBridge::COMPLETED_API_STATUS)
@@ -73,7 +73,7 @@ final class PayUApiMocker
     public function canceledPayment(callable $action)
     {
         $service = $this->mocker
-            ->mockService('bitbag.payu.open_payu_wrapper', OpenPayUBridgeInterface::class);
+            ->mockService('bitbag.payu_plugin.bridge.open_payu', OpenPayUBridgeInterface::class);
 
         $service->shouldReceive('retrieve')->andReturn(
             $this->getDataRetrieve(OpenPayUBridge::CANCELED_API_STATUS)

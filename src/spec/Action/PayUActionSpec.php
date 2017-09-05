@@ -68,6 +68,7 @@ final class PayUActionSpec extends ObjectBehavior
 
         $dataApi = [
             'continueUrl' => null,
+            'notifyUrl' => null,
             'customerIp' => null,
             'merchantPosId' => '123',
             'description' => null,
