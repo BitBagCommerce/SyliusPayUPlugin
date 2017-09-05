@@ -3,6 +3,6 @@ bitbag:
         environment: Środowisko
         secure: Produkcyjne
         sandbox: Testowe
-        signature_key: OAuthClientSecret
+        signature_key: Drugi klucz konfiguracji
         pos_id: Identyfikator punktu płatności
         gateway_label: PayU

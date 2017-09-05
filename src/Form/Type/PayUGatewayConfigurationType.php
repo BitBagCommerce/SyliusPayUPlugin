@@ -39,6 +39,7 @@ final class PayUGatewayConfigurationType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'bitbag.payu_plugin.gateway_configuration.signature_key.not_blank',
+                        'groups' => ['sylius'],
                     ])
                 ],
             ])
@@ -47,6 +48,7 @@ final class PayUGatewayConfigurationType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'bitbag.payu_plugin.gateway_configuration.pos_id.not_blank',
+                        'groups' => ['sylius'],
                     ])
                 ],
             ])

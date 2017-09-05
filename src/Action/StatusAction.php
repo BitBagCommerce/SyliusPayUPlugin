@@ -10,7 +10,7 @@
 
 namespace BitBag\PayUPlugin\Action;
 
-use BitBag\PayUPlugin\Bridge\OpenPayUBridge;
+use BitBag\PayUPlugin\Bridge\OpenPayUBridgeInterface;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -32,25 +32,25 @@ final class StatusAction implements ActionInterface
         $model = ArrayObject::ensureArrayObject($request->getModel());
         $status = $model['status'];
 
-        if (null === $status || OpenPayUBridge::NEW_API_STATUS === $status) {
+        if (null === $status || OpenPayUBridgeInterface::NEW_API_STATUS === $status) {
             $request->markNew();
 
             return;
         }
 
-        if (OpenPayUBridge::PENDING_API_STATUS === $status) {
+        if (OpenPayUBridgeInterface::PENDING_API_STATUS === $status) {
             $request->markCaptured();
 
             return;
         }
 
-        if (OpenPayUBridge::CANCELED_API_STATUS === $status) {
+        if (OpenPayUBridgeInterface::CANCELED_API_STATUS === $status) {
             $request->markCanceled();
 
             return;
         }
 
-        if (OpenPayUBridge::COMPLETED_API_STATUS === $status) {
+        if (OpenPayUBridgeInterface::COMPLETED_API_STATUS === $status) {
             $request->markCaptured();
 
             return;

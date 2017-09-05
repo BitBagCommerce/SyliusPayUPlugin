@@ -11,6 +11,7 @@
 namespace spec\BitBag\PayUPlugin\Action;
 
 use BitBag\PayUPlugin\Action\NotifyAction;
+use BitBag\PayUPlugin\Bridge\OpenPayUBridgeInterface;
 use BitBag\PayUPlugin\SetPayU;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -25,6 +26,11 @@ use PhpSpec\ObjectBehavior;
  */
 final class NotifyActionSpec extends ObjectBehavior
 {
+    function let(OpenPayUBridgeInterface $openPayUBridge)
+    {
+        $this->beConstructedWith($openPayUBridge);
+    }
+
     function it_is_initializable()
     {
         $this->shouldHaveType(NotifyAction::class);
@@ -56,6 +62,7 @@ final class NotifyActionSpec extends ObjectBehavior
 
         $this
             ->shouldThrow(RequestNotSupportedException::class)
-            ->during('execute', [$request]);
+            ->during('execute', [$request])
+        ;
     }
 }

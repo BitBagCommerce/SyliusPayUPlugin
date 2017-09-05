@@ -30,15 +30,21 @@ interface OpenPayUBridgeInterface
 
     /**
      * @param $order
-     *
-     * @return mixed
      */
     public function create($order);
 
     /**
-     * @param $orderId
+     * @param string $orderId
      *
-     * @return mixed
+     * @return object
      */
     public function retrieve($orderId);
+
+    /**
+     * @param $data
+     * @return null|\OpenPayU_Result
+     *
+     * @throws \OpenPayU_Exception
+     */
+    public function consumeNotification($data);
 }

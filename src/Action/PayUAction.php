@@ -19,9 +19,12 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Reply\HttpRedirect;
+use Payum\Core\Security\GenericTokenFactoryAwareInterface;
+use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\TokenInterface;
 use Sylius\Component\Core\Model\CustomerInterface;
 use Webmozart\Assert\Assert;
+use Payum\Core\Payum;
 
 /**
  * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
@@ -34,6 +37,11 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
      * @var OpenPayUBridgeInterface
      */
     private $openPayUBridge;
+
+    /**
+     * @var Payum
+     */
+    private $payum;
 
     /**
      * {@inheritDoc}
@@ -49,10 +57,12 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
 
     /**
      * @param OpenPayUBridgeInterface $openPayUBridge
+     * @param Payum $payum
      */
-    public function __construct(OpenPayUBridgeInterface $openPayUBridge)
+    public function __construct(OpenPayUBridgeInterface $openPayUBridge, Payum $payum)
     {
-        $this->setOpenPayUBridge($openPayUBridge);
+        $this->payum = $payum;
+        $this->openPayUBridge = $openPayUBridge;
     }
 
     /**
@@ -131,8 +141,11 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
 
     private function prepareOrder(TokenInterface $token, $model, $posId)
     {
+        $notifyToken = $this->createNotifyToken($token->getGatewayName(), $token->getDetails());
+
         $order = [];
         $order['continueUrl'] = $token->getTargetUrl();
+        $order['notifyUrl'] = $notifyToken->getTargetUrl();
         $order['customerIp'] = $model['customerIp'];
         $order['merchantPosId'] = $posId;
         $order['description'] = $model['description'];
@@ -181,5 +194,19 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
         }
 
         return $model['products'];
+    }
+
+    /**
+     * @param string $gatewayName
+     * @param object $model
+     *
+     * @return TokenInterface
+     */
+    private function createNotifyToken($gatewayName, $model)
+    {
+        return $this->payum->getTokenFactory()->createNotifyToken(
+            $gatewayName,
+            $model
+        );
     }
 }

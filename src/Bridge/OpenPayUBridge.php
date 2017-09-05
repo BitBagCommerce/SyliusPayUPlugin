@@ -41,4 +41,12 @@ final class OpenPayUBridge implements OpenPayUBridgeInterface
     {
         return \OpenPayU_Order::retrieve($orderId);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function consumeNotification($data)
+    {
+        \OpenPayU_Order::consumeNotification($data);
+    }
 }
