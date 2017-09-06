@@ -19,8 +19,6 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Reply\HttpRedirect;
-use Payum\Core\Security\GenericTokenFactoryAwareInterface;
-use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\TokenInterface;
 use Sylius\Component\Core\Model\CustomerInterface;
 use Webmozart\Assert\Assert;
@@ -86,11 +84,12 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
             Assert::keyExists($response->orders, 0);
 
             if (OpenPayUBridgeInterface::SUCCESS_API_STATUS === $response->status->statusCode) {
-                $model['status'] = $response->orders[0]->status;
+                $model['statusPayU'] = $response->orders[0]->status;
                 $request->setModel($model);
             }
 
             if (OpenPayUBridgeInterface::NEW_API_STATUS !== $response->orders[0]->status) {
+
                 return;
             }
         }

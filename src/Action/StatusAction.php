@@ -30,7 +30,7 @@ final class StatusAction implements ActionInterface
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        $status = $model['status'];
+        $status = isset($model['statusPayU']) ? $model['statusPayU'] : null;
 
         if (null === $status || OpenPayUBridgeInterface::NEW_API_STATUS === $status) {
             $request->markNew();
