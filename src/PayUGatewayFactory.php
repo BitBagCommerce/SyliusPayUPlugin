@@ -14,6 +14,7 @@ use BitBag\PayUPlugin\Action\CaptureAction;
 use BitBag\PayUPlugin\Action\ConvertPaymentAction;
 use BitBag\PayUPlugin\Action\NotifyAction;
 use BitBag\PayUPlugin\Action\StatusAction;
+use BitBag\PayUPlugin\Bridge\OpenPayUBridge;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
 
@@ -34,7 +35,7 @@ final class PayUGatewayFactory extends GatewayFactory
             'payum.action.capture' => new CaptureAction(),
             'payum.action.convert_payment' => new ConvertPaymentAction(),
             'payum.action.status' => new StatusAction(),
-            'payum.action.notify' => new NotifyAction()
+            'payum.action.notify' => new NotifyAction(new OpenPayUBridge())
         ]);
 
         if (false == $config['payum.api']) {

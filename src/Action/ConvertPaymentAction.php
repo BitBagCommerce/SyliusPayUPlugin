@@ -10,7 +10,7 @@
 
 namespace BitBag\PayUPlugin\Action;
 
-use BitBag\PayUPlugin\OpenPayUWrapper;
+use BitBag\PayUPlugin\Bridge\OpenPayUBridge;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
@@ -48,7 +48,7 @@ final class ConvertPaymentAction implements ActionInterface, GatewayAwareInterfa
         $details['client_email'] = $payment->getClientEmail();
         $details['client_id'] = $payment->getClientId();
         $details['customerIp'] = $this->getClientIp();
-        $details['status']  = OpenPayUWrapper::NEW_API_STATUS;
+        $details['status']  = OpenPayUBridge::NEW_API_STATUS;
 
         $request->setResult((array) $details);
     }
@@ -58,8 +58,7 @@ final class ConvertPaymentAction implements ActionInterface, GatewayAwareInterfa
      */
     public function supports($request)
     {
-        return
-            $request instanceof Convert &&
+        return $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&
             $request->getTo() === 'array'
         ;
