@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5184f37444256b7821ee9a4d7bfd77dd",
+    "content-hash": "a4d936f5b4bdeb704a2b2c14d8cc05ca",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2609,7 +2609,7 @@
                     "email": "stof@notk.org"
                 },
                 {
-                    "name": "KnpLabs",
+                    "name": "Knplabs",
                     "homepage": "http://knplabs.com"
                 },
                 {
@@ -4669,16 +4669,16 @@
         },
         {
             "name": "sonata-project/intl-bundle",
-            "version": "2.3.1",
+            "version": "2.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataIntlBundle.git",
-                "reference": "d01e85fbc740452b7590d6e465bbcf852def00cc"
+                "reference": "dedaf0752b36742c1f782d4d3953815a270c83f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataIntlBundle/zipball/d01e85fbc740452b7590d6e465bbcf852def00cc",
-                "reference": "d01e85fbc740452b7590d6e465bbcf852def00cc",
+                "url": "https://api.github.com/repos/sonata-project/SonataIntlBundle/zipball/dedaf0752b36742c1f782d4d3953815a270c83f8",
+                "reference": "dedaf0752b36742c1f782d4d3953815a270c83f8",
                 "shasum": ""
             },
             "require": {
@@ -4690,7 +4690,7 @@
                 "twig/twig": "^1.12 || ^2.0"
             },
             "conflict": {
-                "sonata-project/user-bundle": "<2.0 || >=4.0"
+                "sonata-project/user-bundle": "<2.0 || >=5.0"
             },
             "require-dev": {
                 "matthiasnoback/symfony-dependency-injection-test": "^0.7.6 || ^1.0",
@@ -4739,7 +4739,7 @@
                 "sonata",
                 "time"
             ],
-            "time": "2017-06-27T15:35:25+00:00"
+            "time": "2017-09-14T10:52:04+00:00"
         },
         {
             "name": "stof/doctrine-extensions-bundle",
@@ -4898,16 +4898,16 @@
         },
         {
             "name": "sylius/sylius",
-            "version": "v1.0.0-rc.2",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sylius/Sylius.git",
-                "reference": "80b2aa30436f2cd06e8fac93c61224af6a586edb"
+                "reference": "b5920f580e7ffddacdd507161f3cb94a1e7f4ed2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sylius/Sylius/zipball/80b2aa30436f2cd06e8fac93c61224af6a586edb",
-                "reference": "80b2aa30436f2cd06e8fac93c61224af6a586edb",
+                "url": "https://api.github.com/repos/Sylius/Sylius/zipball/b5920f580e7ffddacdd507161f3cb94a1e7f4ed2",
+                "reference": "b5920f580e7ffddacdd507161f3cb94a1e7f4ed2",
                 "shasum": ""
             },
             "require": {
@@ -5076,7 +5076,7 @@
             ],
             "description": "E-Commerce platform for PHP, based on Symfony framework.",
             "homepage": "http://sylius.org",
-            "time": "2017-09-12T18:03:42+00:00"
+            "time": "2017-09-13T10:31:29+00:00"
         },
         {
             "name": "symfony/monolog-bundle",
@@ -7905,12 +7905,12 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "sylius/sylius": 5
+        "sylius/sylius": 10
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^5.6|^7.0"
+        "php": "^7.1"
     },
     "platform-dev": []
 }
