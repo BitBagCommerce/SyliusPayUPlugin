@@ -11,7 +11,6 @@
 namespace BitBag\PayUPlugin\Action;
 
 use BitBag\PayUPlugin\Bridge\OpenPayUBridgeInterface;
-use BitBag\PayUPlugin\Exception\PayUException;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -76,28 +75,38 @@ final class NotifyAction implements ActionInterface, ApiAwareInterface
         $payment = $request->getFirstModel();
         Assert::isInstanceOf($payment, PaymentInterface::class);
 
+        $model = $request->getModel();
+
         $this->openPayUBridge->setAuthorizationDataApi(
             $this->api['environment'],
-            $this->api['pos_id'],
-            $this->api['signature_key']
+            $this->api['signature_key'],
+            $this->api['pos_id']
         );
 
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $body = file_get_contents('php://input');
+            $data = trim($body);
 
-        try {
-            $result = $this->openPayUBridge->consumeNotification($_POST);
-            $orderId = $result->getResponse()->order->orderId;
+            try {
+                $result = $this->openPayUBridge->consumeNotification($data);
 
-            if (true === (bool)$orderId) {
-                $order = $this->openPayUBridge->retrieve($orderId);
+                if ($result->getResponse()->order->orderId) {
+                    /** @var \OpenPayU_Result $order */
+                    $order =  $this->openPayUBridge->retrieve($result->getResponse()->order->orderId);
 
-                if (OpenPayUBridgeInterface::SUCCESS_API_STATUS === $order->getStatus()) {
-                    $payment->setState(PaymentInterface::STATE_COMPLETED);
+                    if (OpenPayUBridgeInterface::SUCCESS_API_STATUS === $order->getStatus()) {
+                        if (PaymentInterface::STATE_COMPLETED !== $payment->getState()) {
+                            $status = $order->getResponse()->orders[0]->status;
+                            $model['statusPayU'] = $status;
+                            $request->setModel($model);
+                        }
+
+                        throw new HttpResponse('SUCCESS');
+                    }
                 }
+            } catch (\OpenPayU_Exception $e) {
+                throw new HttpResponse($e->getMessage());
             }
-
-        } catch (PayUException $e) {
-
-            throw new HttpResponse($e->getMessage());
         }
     }
 
@@ -107,8 +116,7 @@ final class NotifyAction implements ActionInterface, ApiAwareInterface
     public function supports($request)
     {
         return $request instanceof Notify &&
-            $request->getModel() instanceof \ArrayObject &&
-            'POST' === $_SERVER['REQUEST_METHOD']
+            $request->getModel() instanceof \ArrayObject
         ;
     }
 }

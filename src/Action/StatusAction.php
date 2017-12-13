@@ -32,27 +32,27 @@ final class StatusAction implements ActionInterface
         $model = ArrayObject::ensureArrayObject($request->getModel());
         $status = isset($model['statusPayU']) ? $model['statusPayU'] : null;
 
-        if (null === $status || OpenPayUBridgeInterface::NEW_API_STATUS === $status) {
+        if ((null === $status || OpenPayUBridgeInterface::NEW_API_STATUS === $status) && false === isset($model['orderId'])) {
             $request->markNew();
-
             return;
         }
 
         if (OpenPayUBridgeInterface::PENDING_API_STATUS === $status) {
-            $request->markCaptured();
-
             return;
         }
 
         if (OpenPayUBridgeInterface::CANCELED_API_STATUS === $status) {
             $request->markCanceled();
+            return;
+        }
 
+        if (OpenPayUBridgeInterface::WAITING_FOR_CONFIRMATION_PAYMENT_STATUS === $status) {
+            $request->markSuspended();
             return;
         }
 
         if (OpenPayUBridgeInterface::COMPLETED_API_STATUS === $status) {
             $request->markCaptured();
-
             return;
         }
 

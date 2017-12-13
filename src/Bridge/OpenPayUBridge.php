@@ -22,8 +22,8 @@ final class OpenPayUBridge implements OpenPayUBridgeInterface
     public function setAuthorizationDataApi($environment, $signatureKey, $posId)
     {
         \OpenPayU_Configuration::setEnvironment($environment);
-        \OpenPayU_Configuration::setMerchantPosId($posId);
         \OpenPayU_Configuration::setSignatureKey($signatureKey);
+        \OpenPayU_Configuration::setMerchantPosId($posId);
     }
 
     /**
@@ -47,6 +47,6 @@ final class OpenPayUBridge implements OpenPayUBridgeInterface
      */
     public function consumeNotification($data)
     {
-        \OpenPayU_Order::consumeNotification($data);
+        return \OpenPayU_Order::consumeNotification($data);
     }
 }

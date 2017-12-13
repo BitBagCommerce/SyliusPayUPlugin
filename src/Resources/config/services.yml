@@ -19,3 +19,10 @@ services:
         arguments: ['@bitbag.payu_plugin.bridge.open_payu', '@payum']
         tags:
             - { name: payum.action, factory: payu, alias: payum.action.set_payu }
+
+    bitbag.payu_plugin.notify_action:
+        class: BitBag\PayUPlugin\Action\NotifyAction
+        arguments:
+            - '@bitbag.payu_plugin.bridge.open_payu'
+        tags:
+            - { name: payum.action, factory: payu, alias: payum.action.notify }
