@@ -13,7 +13,6 @@ before_install:
     - echo "memory_limit=4096M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 
 install:
-    - composer update --prefer-dist
     - composer install
     #- (cd tests/Application && yarn install)
 
@@ -32,7 +31,6 @@ before_script:
     - (cd tests/Application && bin/console server:run 127.0.0.1:8080 --env=test --quiet > /dev/null 2>&1 &)
 
 script:
-    - composer validate --strict
 
     - vendor/bin/phpspec run
     - vendor/bin/behat --strict -vvv --no-interaction --tags ~@javascript
