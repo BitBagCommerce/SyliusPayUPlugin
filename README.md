@@ -1,6 +1,6 @@
 ![BitBag](https://bitbag.pl/static/bitbag-logo.png)
 
-# BitBag PayU Plugin [![Build Status](https://travis-ci.org/bitbag-commerce/PayUPlugin.svg?branch=master)](https://travis-ci.org/bitbag-commerce/PayUPlugin)
+# BitBag PayU Plugin [![Build Status](https://travis-ci.org/BitBagCommerce/SyliusPayUPlugin.svg?branch=master)](https://travis-ci.org/BitBagCommerce/SyliusPayUPlugin)
 
 ## Overview
 
