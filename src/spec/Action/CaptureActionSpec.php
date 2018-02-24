@@ -47,9 +47,11 @@ final class CaptureActionSpec extends ObjectBehavior
         $request->getModel()->willReturn($model);
         $model->getIterator()->willReturn($iterator);
         $model->offsetSet('customer', $customer)->willReturn(null);
+        $model->offsetSet('locale', 'en')->willReturn(null);
         $request->getFirstModel()->willReturn($orderItem);
         $orderItem->getOrder()->willReturn($order);
         $order->getCustomer()->willReturn($customer);
+        $order->getLocaleCode()->willReturn('en_US');
         $request->getToken()->willReturn($token);
         $setPayU->getToken()->willReturn($token);
         $setPayU->getModel()->willReturn($model);

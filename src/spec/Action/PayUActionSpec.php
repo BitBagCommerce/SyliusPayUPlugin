@@ -61,6 +61,7 @@ final class PayUActionSpec extends ObjectBehavior
         $model->offsetGet('extOrderId')->willReturn(null);
         $model->offsetSet('orderId', 1)->shouldBeCalled();
         $model->offsetGet('customer')->willReturn($customer);
+        $model->offsetGet('locale')->willReturn(null);
         $payum->getTokenFactory()->willReturn($tokenFactory);
         $tokenFactory->createNotifyToken(Argument::any(), Argument::any())->willReturn($token);
         $openPayUResult->getResponse()->willReturn((object)['status' => (object)['statusCode' => OpenPayUBridgeInterface::SUCCESS_API_STATUS], 'orderId' => 1, 'redirectUri' => '/']);
@@ -78,7 +79,8 @@ final class PayUActionSpec extends ObjectBehavior
             'buyer' => [
                 'email' => '',
                 'firstName' => '',
-                'lastName' => ''
+                'lastName' => '',
+                'language' => '',
             ],
             'products' => [
                 [
