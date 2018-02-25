@@ -36,7 +36,9 @@ final class CaptureAction implements ActionInterface, GatewayAwareInterface
         $model = $request->getModel();
         ArrayObject::ensureArrayObject($model);
 
-        $model['customer'] = $request->getFirstModel()->getOrder()->getCustomer();
+        $order = $request->getFirstModel()->getOrder();
+        $model['customer'] = $order->getCustomer();
+        $model['locale'] = $this->getFallbackLocaleCode($order->getLocaleCode());
 
         $payUAction = $this->getPayUAction($request->getToken(), $model);
 
@@ -74,5 +76,10 @@ final class CaptureAction implements ActionInterface, GatewayAwareInterface
         $payUAction->setModel($model);
 
         return $payUAction;
+    }
+
+    private function getFallbackLocaleCode($localeCode)
+    {
+        return explode('_', $localeCode)[0];
     }
 }

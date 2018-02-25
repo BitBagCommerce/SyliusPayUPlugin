@@ -164,9 +164,10 @@ final class PayUAction implements ApiAwareInterface, ActionInterface
         );
 
         $buyer = [
-            'email' => (string)$customer->getEmail(),
-            'firstName' => (string)$customer->getFirstName(),
-            'lastName' => (string)$customer->getLastName(),
+            'email' => (string) $customer->getEmail(),
+            'firstName' => (string) $customer->getFirstName(),
+            'lastName' => (string) $customer->getLastName(),
+            'language' => $model['locale'],
         ];
 
         $order['buyer'] = $buyer;
