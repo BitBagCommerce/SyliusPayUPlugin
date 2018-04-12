@@ -8,7 +8,7 @@
  * an email on kontakt@bitbag.pl.
  */
 
-namespace Tests\BitBag\PayUPlugin\Behat\Page\External;
+namespace Tests\BitBag\SyliusPayUPlugin\Behat\Page\External;
 
 use Behat\Mink\Session;
 use Payum\Core\Security\TokenInterface;

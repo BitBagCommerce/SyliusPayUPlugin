@@ -1,2 +1,2 @@
 suites:
-    PayUPlugin: { namespace: BitBag\PayUPlugin, psr4_prefix: BitBag\PayUPlugin, spec_path: src, src_path: src }
+    PayUPlugin: { namespace: BitBag\SyliusPayUPlugin, psr4_prefix: BitBag\SyliusPayUPlugin, spec_path: src, src_path: src }

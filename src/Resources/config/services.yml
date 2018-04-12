@@ -1,27 +1,27 @@
 services:
     bitbag.payu_plugin.form.type.gateway_configuration:
-        class: BitBag\PayUPlugin\Form\Type\PayUGatewayConfigurationType
+        class: BitBag\SyliusPayUPlugin\Form\Type\PayUGatewayConfigurationType
         tags:
             - { name: sylius.gateway_configuration_type, type: payu, label: bitbag.payu_plugin.gateway_label }
             - { name: form.type }
 
     bitbag.payu_plugin.gateway_factory:
         class: Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder
-        arguments: [BitBag\PayUPlugin\PayUGatewayFactory]
+        arguments: [BitBag\SyliusPayUPlugin\PayUGatewayFactory]
         tags:
             - { name: payum.gateway_factory_builder, factory: payu }
 
     bitbag.payu_plugin.bridge.open_payu:
-        class: BitBag\PayUPlugin\Bridge\OpenPayUBridge
+        class: BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridge
 
     bitbag.payu_plugin.payu_action:
-        class: BitBag\PayUPlugin\Action\PayUAction
+        class: BitBag\SyliusPayUPlugin\Action\PayUAction
         arguments: ['@bitbag.payu_plugin.bridge.open_payu', '@payum']
         tags:
             - { name: payum.action, factory: payu, alias: payum.action.set_payu }
 
     bitbag.payu_plugin.notify_action:
-        class: BitBag\PayUPlugin\Action\NotifyAction
+        class: BitBag\SyliusPayUPlugin\Action\NotifyAction
         arguments:
             - '@bitbag.payu_plugin.bridge.open_payu'
         tags:

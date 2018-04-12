@@ -8,7 +8,7 @@
  * an email on kontakt@bitbag.pl.
  */
 
-namespace BitBag\PayUPlugin;
+namespace BitBag\SyliusPayUPlugin;
 
 use Sylius\Bundle\CoreBundle\Application\SyliusPluginTrait;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 /**
  * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
  */
-final class BitBagPayUPlugin extends Bundle
+final class BitBagSyliusPayUPlugin extends Bundle
 {
     use SyliusPluginTrait;
 }

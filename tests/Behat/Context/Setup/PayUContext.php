@@ -8,7 +8,7 @@
  * an email on kontakt@bitbag.pl.
  */
 
-namespace Tests\BitBag\PayUPlugin\Behat\Context\Setup;
+namespace Tests\BitBag\SyliusPayUPlugin\Behat\Context\Setup;
 
 use Behat\Behat\Context\Context;
 use Sylius\Behat\Service\SharedStorageInterface;

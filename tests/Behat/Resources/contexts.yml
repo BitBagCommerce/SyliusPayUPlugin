@@ -1,6 +1,6 @@
 services:
     bitbag.payu_plugin.context.setup.payu:
-        class: Tests\BitBag\PayUPlugin\Behat\Context\Setup\PayUContext
+        class: Tests\BitBag\SyliusPayUPlugin\Behat\Context\Setup\PayUContext
         arguments:
             - '@sylius.behat.shared_storage'
             - '@__symfony__.sylius.repository.payment_method'
@@ -12,7 +12,7 @@ services:
             - { name: fob.context_service }
 
     bitbag.payu_plugin.context.ui.payu:
-        class: Tests\BitBag\PayUPlugin\Behat\Context\Ui\PayUContext
+        class: Tests\BitBag\SyliusPayUPlugin\Behat\Context\Ui\PayUContext
         arguments:
             - '@bitbag.payu_plugin.mocker.payu_api'
             - '@sylius.behat.page.shop.order.show'

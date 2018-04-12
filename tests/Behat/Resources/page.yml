@@ -1,6 +1,6 @@
 services:
     bitbag.payu_plugin.page.external:
-        class: Tests\BitBag\PayUPlugin\Behat\Page\External\PayUCheckoutPage
+        class: Tests\BitBag\SyliusPayUPlugin\Behat\Page\External\PayUCheckoutPage
         parent: sylius.behat.page
         public: false
         arguments:

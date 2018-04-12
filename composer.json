@@ -36,8 +36,8 @@
     },
     "autoload": {
         "psr-4": {
-            "BitBag\\PayUPlugin\\": "src/",
-            "Tests\\BitBag\\PayUPlugin\\": "tests/"
+            "BitBag\\SyliusPayUPlugin\\": "src/",
+            "Tests\\BitBag\\SyliusPayUPlugin\\": "tests/"
         }
     }
 }

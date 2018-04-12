@@ -8,12 +8,12 @@
  * an email on kontakt@bitbag.pl.
  */
 
-namespace spec\BitBag\PayUPlugin\Action;
+namespace spec\BitBag\SyliusPayUPlugin\Action;
 
-use BitBag\PayUPlugin\Action\PayUAction;
-use BitBag\PayUPlugin\Bridge\OpenPayUBridge;
-use BitBag\PayUPlugin\Bridge\OpenPayUBridgeInterface;
-use BitBag\PayUPlugin\SetPayU;
+use BitBag\SyliusPayUPlugin\Action\PayUAction;
+use BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridge;
+use BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridgeInterface;
+use BitBag\SyliusPayUPlugin\SetPayU;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Payum;

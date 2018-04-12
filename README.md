@@ -25,7 +25,7 @@ public function registerBundles()
     return array_merge(parent::registerBundles(), [
         ...
         
-        new \BitBag\PayUPlugin\BitBagPayUPlugin(),
+        new \BitBag\SyliusPayUPlugin\BitBagPayUPlugin(),
     ]);
 }
 ```

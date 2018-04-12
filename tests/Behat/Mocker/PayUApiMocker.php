@@ -8,10 +8,10 @@
  * an email on kontakt@bitbag.pl.
  */
 
-namespace Tests\BitBag\PayUPlugin\Behat\Mocker;
+namespace Tests\BitBag\SyliusPayUPlugin\Behat\Mocker;
 
-use BitBag\PayUPlugin\Bridge\OpenPayUBridge;
-use BitBag\PayUPlugin\Bridge\OpenPayUBridgeInterface;
+use BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridge;
+use BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridgeInterface;
 use Sylius\Behat\Service\Mocker\Mocker;
 
 /**

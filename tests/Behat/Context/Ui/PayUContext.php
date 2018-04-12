@@ -8,13 +8,13 @@
  * an email on kontakt@bitbag.pl.
  */
 
-namespace Tests\BitBag\PayUPlugin\Behat\Context\Ui;
+namespace Tests\BitBag\SyliusPayUPlugin\Behat\Context\Ui;
 
 use Behat\Behat\Context\Context;
 use Sylius\Behat\Page\Shop\Checkout\CompletePageInterface;
 use Sylius\Behat\Page\Shop\Order\ShowPageInterface;
-use Tests\BitBag\PayUPlugin\Behat\Mocker\PayUApiMocker;
-use Tests\BitBag\PayUPlugin\Behat\Page\External\PayUCheckoutPageInterface;
+use Tests\BitBag\SyliusPayUPlugin\Behat\Mocker\PayUApiMocker;
+use Tests\BitBag\SyliusPayUPlugin\Behat\Page\External\PayUCheckoutPageInterface;
 
 /**
  * @author Patryk Drapik <patryk.drapik@bitbag.pl>

@@ -8,13 +8,13 @@
  * an email on kontakt@bitbag.pl.
  */
 
-namespace BitBag\PayUPlugin;
+namespace BitBag\SyliusPayUPlugin;
 
-use BitBag\PayUPlugin\Action\CaptureAction;
-use BitBag\PayUPlugin\Action\ConvertPaymentAction;
-use BitBag\PayUPlugin\Action\NotifyAction;
-use BitBag\PayUPlugin\Action\StatusAction;
-use BitBag\PayUPlugin\Bridge\OpenPayUBridge;
+use BitBag\SyliusPayUPlugin\Action\CaptureAction;
+use BitBag\SyliusPayUPlugin\Action\ConvertPaymentAction;
+use BitBag\SyliusPayUPlugin\Action\NotifyAction;
+use BitBag\SyliusPayUPlugin\Action\StatusAction;
+use BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridge;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
 

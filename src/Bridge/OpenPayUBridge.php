@@ -8,7 +8,7 @@
  * an email on kontakt@bitbag.pl.
  */
 
-namespace BitBag\PayUPlugin\Bridge;
+namespace BitBag\SyliusPayUPlugin\Bridge;
 
 /**
  * @author Mikołaj Król <mikolaj.krol@bitbag.pl>

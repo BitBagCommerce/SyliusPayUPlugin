@@ -8,7 +8,7 @@
  * an email on kontakt@bitbag.pl.
  */
 
-namespace BitBag\PayUPlugin\Exception;
+namespace BitBag\SyliusPayUPlugin\Exception;
 
 use Payum\Core\Exception\Http\HttpException;
 

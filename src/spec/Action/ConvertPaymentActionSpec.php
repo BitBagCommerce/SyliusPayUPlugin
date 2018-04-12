@@ -8,9 +8,9 @@
  * an email on kontakt@bitbag.pl.
  */
 
-namespace spec\BitBag\PayUPlugin\Action;
+namespace spec\BitBag\SyliusPayUPlugin\Action;
 
-use BitBag\PayUPlugin\Action\ConvertPaymentAction;
+use BitBag\SyliusPayUPlugin\Action\ConvertPaymentAction;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\PaymentInterface;

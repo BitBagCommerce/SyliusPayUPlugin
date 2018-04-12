@@ -8,7 +8,7 @@
  * an email on kontakt@bitbag.pl.
  */
 
-namespace BitBag\PayUPlugin;
+namespace BitBag\SyliusPayUPlugin;
 
 use Payum\Core\Request\Generic;
 

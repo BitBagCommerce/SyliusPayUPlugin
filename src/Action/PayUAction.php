@@ -8,11 +8,11 @@
  * an email on kontakt@bitbag.pl.
  */
 
-namespace BitBag\PayUPlugin\Action;
+namespace BitBag\SyliusPayUPlugin\Action;
 
-use BitBag\PayUPlugin\Exception\PayUException;
-use BitBag\PayUPlugin\Bridge\OpenPayUBridgeInterface;
-use BitBag\PayUPlugin\SetPayU;
+use BitBag\SyliusPayUPlugin\Exception\PayUException;
+use BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridgeInterface;
+use BitBag\SyliusPayUPlugin\SetPayU;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;

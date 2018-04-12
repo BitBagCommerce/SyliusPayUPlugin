@@ -8,7 +8,7 @@
  * an email on kontakt@bitbag.pl.
  */
 
-namespace BitBag\PayUPlugin\DependencyInjection;
+namespace BitBag\SyliusPayUPlugin\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\Loader;
 /**
  * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
  */
-final class BitBagPayUExtension extends Extension
+final class BitBagSyliusPayUExtension extends Extension
 {
     /**
      * {@inheritdoc}
