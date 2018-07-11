@@ -16,12 +16,14 @@ services:
 
     bitbag.payu_plugin.payu_action:
         class: BitBag\SyliusPayUPlugin\Action\PayUAction
+        public: true
         arguments: ['@bitbag.payu_plugin.bridge.open_payu', '@payum']
         tags:
             - { name: payum.action, factory: payu, alias: payum.action.set_payu }
 
     bitbag.payu_plugin.notify_action:
         class: BitBag\SyliusPayUPlugin\Action\NotifyAction
+        public: true
         arguments:
             - '@bitbag.payu_plugin.bridge.open_payu'
         tags:
