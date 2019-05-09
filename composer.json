@@ -49,5 +49,8 @@
             "BitBag\\SyliusPayUPlugin\\": "src/",
             "Tests\\BitBag\\SyliusPayUPlugin\\": "tests/"
         }
+    },
+    "config": {
+        "bin-dir": "bin"
     }
 }
