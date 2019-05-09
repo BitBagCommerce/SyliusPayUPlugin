@@ -11,8 +11,8 @@
 namespace Tests\BitBag\SyliusPayUPlugin\Behat\Page\External;
 
 use Behat\Mink\Session;
+use FriendsOfBehat\PageObjectExtension\Page\Page;
 use Payum\Core\Security\TokenInterface;
-use Sylius\Behat\Page\Page;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 /**
@@ -30,7 +30,7 @@ final class PayUCheckoutPage extends Page implements PayUCheckoutPageInterface
      * @param array $parameters
      * @param RepositoryInterface $securityTokenRepository
      */
-    public function __construct(Session $session, array $parameters, RepositoryInterface $securityTokenRepository)
+    public function __construct(Session $session, $parameters, RepositoryInterface $securityTokenRepository)
     {
         parent::__construct($session, $parameters);
 
@@ -58,7 +58,7 @@ final class PayUCheckoutPage extends Page implements PayUCheckoutPageInterface
      *
      * @return string
      */
-    protected function getUrl(array $urlParameters = [])
+    protected function getUrl(array $urlParameters = []): string
     {
         return 'https://secure.payu.com/api/v2_1/orders';
     }

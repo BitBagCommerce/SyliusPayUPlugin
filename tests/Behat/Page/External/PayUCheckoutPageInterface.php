@@ -12,7 +12,7 @@ namespace Tests\BitBag\SyliusPayUPlugin\Behat\Page\External;
 
 use Behat\Mink\Exception\DriverException;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
-use Sylius\Behat\Page\PageInterface;
+use FriendsOfBehat\PageObjectExtension\Page\PageInterface;
 
 /**
  * @author Patryk Drapik <patryk.drapik@bitbag.pl>

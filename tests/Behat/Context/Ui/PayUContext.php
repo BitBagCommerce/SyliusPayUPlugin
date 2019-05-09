@@ -40,11 +40,11 @@ final class PayUContext implements Context
      * @var PayUCheckoutPageInterface
      */
     private $payUCheckoutPage;
-    
+
     /**
-     * @param PayUApiMocker $payUApiMocker
-     * @param ShowPageInterface $orderDetails
-     * @param CompletePageInterface $summaryPage
+     * @param PayUApiMocker             $payUApiMocker
+     * @param ShowPageInterface         $orderDetails
+     * @param CompletePageInterface     $summaryPage
      * @param PayUCheckoutPageInterface $payUCheckoutPage
      */
     public function __construct(
@@ -52,8 +52,7 @@ final class PayUContext implements Context
         ShowPageInterface $orderDetails,
         CompletePageInterface $summaryPage,
         PayUCheckoutPageInterface $payUCheckoutPage
-    )
-    {
+    ) {
         $this->orderDetails = $orderDetails;
         $this->summaryPage = $summaryPage;
         $this->payUCheckoutPage = $payUCheckoutPage;
@@ -66,9 +65,11 @@ final class PayUContext implements Context
      */
     public function iConfirmMyOrderWithPayUPayment()
     {
-        $this->payUApiMocker->mockApiSuccessfulPaymentResponse(function (){
-            $this->summaryPage->confirmOrder();
-        });
+        $this->payUApiMocker->mockApiSuccessfulPaymentResponse(
+            function () {
+                $this->summaryPage->confirmOrder();
+            }
+        );
     }
 
     /**
@@ -76,9 +77,11 @@ final class PayUContext implements Context
      */
     public function iSignInToPayUAndPaySuccessfully()
     {
-        $this->payUApiMocker->completedPayment(function (){
-            $this->payUCheckoutPage->pay();
-        });
+        $this->payUApiMocker->completedPayment(
+            function () {
+                $this->payUCheckoutPage->pay();
+            }
+        );
     }
 
     /**
@@ -87,9 +90,11 @@ final class PayUContext implements Context
      */
     public function iCancelMyPayUPayment()
     {
-        $this->payUApiMocker->canceledPayment(function (){
-            $this->payUCheckoutPage->cancel();
-        });
+        $this->payUApiMocker->canceledPayment(
+            function () {
+                $this->payUCheckoutPage->cancel();
+            }
+        );
     }
 
     /**
@@ -97,8 +102,10 @@ final class PayUContext implements Context
      */
     public function iTryToPayAgainWithPayUPayment()
     {
-        $this->payUApiMocker->mockApiSuccessfulPaymentResponse(function (){
-            $this->orderDetails->pay();
-        });
+        $this->payUApiMocker->mockApiSuccessfulPaymentResponse(
+            function () {
+                $this->orderDetails->pay();
+            }
+        );
     }
 }

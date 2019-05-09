@@ -52,11 +52,11 @@ final class PayUContext implements Context
     private $paymentMethodManager;
 
     /**
-     * @param SharedStorageInterface $sharedStorage
+     * @param SharedStorageInterface           $sharedStorage
      * @param PaymentMethodRepositoryInterface $paymentMethodRepository
-     * @param ExampleFactoryInterface $paymentMethodExampleFactory
-     * @param FactoryInterface $paymentMethodTranslationFactory
-     * @param ObjectManager $paymentMethodManager
+     * @param ExampleFactoryInterface          $paymentMethodExampleFactory
+     * @param FactoryInterface                 $paymentMethodTranslationFactory
+     * @param ObjectManager                    $paymentMethodManager
      */
     public function __construct(
         SharedStorageInterface $sharedStorage,
@@ -78,24 +78,25 @@ final class PayUContext implements Context
     public function theStoreHasAPaymentMethodWithACodeAndPayuCheckoutGateway(
         $paymentMethodName,
         $paymentMethodCode
-    )
-    {
+    ) {
         $paymentMethod = $this->createPaymentMethod($paymentMethodName, $paymentMethodCode, 'Paypal Express Checkout');
-        $paymentMethod->getGatewayConfig()->setConfig([
-            'environment' => 'sandbox',
-            'signature_key' => 'TEST',
-            'pos_id' => 'TEST',
-            'payum.http_client' => '@sylius.payum.http_client',
-        ]);
+        $paymentMethod->getGatewayConfig()->setConfig(
+            [
+                'environment' => 'sandbox',
+                'signature_key' => 'TEST',
+                'pos_id' => 'TEST',
+                'payum.http_client' => '@sylius.payum.http_client',
+            ]
+        );
 
         $this->paymentMethodManager->flush();
     }
 
     /**
-     * @param string $name
-     * @param string $code
-     * @param string $description
-     * @param bool $addForCurrentChannel
+     * @param string   $name
+     * @param string   $code
+     * @param string   $description
+     * @param bool     $addForCurrentChannel
      * @param int|null $position
      *
      * @return PaymentMethodInterface
@@ -109,15 +110,18 @@ final class PayUContext implements Context
     ) {
 
         /** @var PaymentMethodInterface $paymentMethod */
-        $paymentMethod = $this->paymentMethodExampleFactory->create([
-            'name' => ucfirst($name),
-            'code' => $code,
-            'description' => $description,
-            'gatewayName' => 'payu',
-            'gatewayFactory' => 'payu',
-            'enabled' => true,
-            'channels' => ($addForCurrentChannel && $this->sharedStorage->has('channel')) ? [$this->sharedStorage->get('channel')] : [],
-        ]);
+        $paymentMethod = $this->paymentMethodExampleFactory->create(
+            [
+                'name' => ucfirst($name),
+                'code' => $code,
+                'description' => $description,
+                'gatewayName' => 'payu',
+                'gatewayFactory' => 'payu',
+                'enabled' => true,
+                'channels' => ($addForCurrentChannel && $this->sharedStorage->has('channel'))
+                    ? [$this->sharedStorage->get('channel')] : [],
+            ]
+        );
 
         if (null !== $position) {
             $paymentMethod->setPosition($position);
