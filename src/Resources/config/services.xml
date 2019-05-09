@@ -1,12 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
-<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="bitbag.payu_plugin.form.type.gateway_configuration" class="BitBag\SyliusPayUPlugin\Form\Type\PayUGatewayConfigurationType">
+        <service id="bitbag.payu_plugin.form.type.gateway_configuration"
+                 class="BitBag\SyliusPayUPlugin\Form\Type\PayUGatewayConfigurationType">
             <tag name="sylius.gateway_configuration_type" type="payu" label="bitbag.payu_plugin.gateway_label"/>
             <tag name="form.type"/>
         </service>
 
-        <service id="bitbag.payu_plugin.gateway_factory" class="Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder">
+        <service id="bitbag.payu_plugin.gateway_factory"
+                 class="Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder">
             <tag name="payum.gateway_factory_builder" factory="payu"/>
             <argument>BitBag\SyliusPayUPlugin\PayUGatewayFactory</argument>
         </service>
