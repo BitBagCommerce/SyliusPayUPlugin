@@ -3,13 +3,14 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
 
-        <service id="bitbag.payu_plugin.context.setup.payu" class="Tests\BitBag\SyliusPayUPlugin\Behat\Context\Setup\PayUContext">
+        <defaults public="true" autoconfigure="false" autowire="false"/>
+
+        <service id="bitbag.payu_plugin.context.setup.payu" class="Tests\BitBag\SyliusPayUPlugin\Behat\Context\Setup\PayUContext" public="true">
             <argument type="service" id="sylius.behat.shared_storage"/>
             <argument type="service" id="sylius.repository.payment_method"/>
             <argument type="service" id="sylius.fixture.example_factory.payment_method"/>
             <argument type="service" id="sylius.factory.payment_method_translation"/>
             <argument type="service" id="sylius.manager.payment_method"/>
-            <tag name="fob.context_service"/>
         </service>
 
         <service id="bitbag.payu_plugin.context.ui.payu" class="Tests\BitBag\SyliusPayUPlugin\Behat\Context\Ui\PayUContext">
@@ -17,7 +18,6 @@
             <argument type="service" id="sylius.behat.page.shop.order.show"/>
             <argument type="service" id="sylius.behat.page.shop.checkout.complete"/>
             <argument type="service" id="bitbag.payu_plugin.page.external"/>
-            <tag name="fob.context_service"/>
         </service>
 
     </services>
