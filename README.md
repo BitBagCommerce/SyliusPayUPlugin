@@ -51,4 +51,4 @@ $ bin/phpspec run
 
 ## Contribution
 
-Learn more about our contribution workflow on http://docs.sylius.org/en/latest/contributing/.
+Learn more about our contribution workflow on <http://docs.sylius.org/en/latest/contributing/>.

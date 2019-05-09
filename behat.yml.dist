@@ -4,15 +4,13 @@ imports:
 
 default:
     extensions:
-        FriendsOfBehat\ContextServiceExtension:
-            imports:
-                - vendor/sylius/sylius/src/Sylius/Behat/Resources/config/services.xml
-                - tests/Behat/Resources/contexts.yml
-                - tests/Behat/Resources/mocker.yml
-                - tests/Behat/Resources/page.yml
-
         FriendsOfBehat\SymfonyExtension:
+            bootstrap: tests/Application/config/bootstrap.php
             kernel:
-                class: AppKernel
-                path: tests/Application/app/AppKernel.php
-                bootstrap: tests/Application/app/autoload.php
+                class: Tests\Acme\SyliusExamplePlugin\Application\Kernel
+
+        FriendsOfBehat\VariadicExtension: ~
+
+        FriendsOfBehat\SuiteSettingsExtension:
+            paths:
+                - "features"
