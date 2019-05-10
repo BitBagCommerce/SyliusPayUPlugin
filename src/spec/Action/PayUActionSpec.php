@@ -11,7 +11,6 @@
 namespace spec\BitBag\SyliusPayUPlugin\Action;
 
 use BitBag\SyliusPayUPlugin\Action\PayUAction;
-use BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridge;
 use BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridgeInterface;
 use BitBag\SyliusPayUPlugin\SetPayU;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -51,8 +50,7 @@ final class PayUActionSpec extends ObjectBehavior
         \OpenPayU_Result $openPayUResult,
         Payum $payum,
         GenericTokenFactoryInterface $tokenFactory
-    )
-    {
+    ) {
         $model->offsetGet('orderId')->willReturn(null);
         $model->offsetGet('customerIp')->willReturn(null);
         $model->offsetGet('description')->willReturn(null);
@@ -64,7 +62,13 @@ final class PayUActionSpec extends ObjectBehavior
         $model->offsetGet('locale')->willReturn(null);
         $payum->getTokenFactory()->willReturn($tokenFactory);
         $tokenFactory->createNotifyToken(Argument::any(), Argument::any())->willReturn($token);
-        $openPayUResult->getResponse()->willReturn((object)['status' => (object)['statusCode' => OpenPayUBridgeInterface::SUCCESS_API_STATUS], 'orderId' => 1, 'redirectUri' => '/']);
+        $openPayUResult->getResponse()->willReturn(
+            (object) [
+                'status' => (object) ['statusCode' => OpenPayUBridgeInterface::SUCCESS_API_STATUS],
+                'orderId' => 1,
+                'redirectUri' => '/',
+            ]
+        );
         $openPayUBridge->setAuthorizationDataApi('secure', '123', '123')->shouldBeCalled();
 
         $dataApi = [
@@ -86,9 +90,9 @@ final class PayUActionSpec extends ObjectBehavior
                 [
                     'name' => null,
                     'unitPrice' => null,
-                    'quantity' => 1
-                ]
-            ]
+                    'quantity' => 1,
+                ],
+            ],
         ];
 
         $openPayUBridge->create($dataApi)->willReturn($openPayUResult);
@@ -100,8 +104,7 @@ final class PayUActionSpec extends ObjectBehavior
 
         $this
             ->shouldThrow(HttpRedirect::class)
-            ->during('execute', [$request])
-        ;
+            ->during('execute', [$request]);
     }
 
     function it_throws_exception_when_model_is_not_array_object(SetPayU $request)
@@ -110,7 +113,6 @@ final class PayUActionSpec extends ObjectBehavior
 
         $this
             ->shouldThrow(RequestNotSupportedException::class)
-            ->during('execute', [$request])
-        ;
+            ->during('execute', [$request]);
     }
 }

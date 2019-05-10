@@ -8,45 +8,35 @@
  * an email on kontakt@bitbag.pl.
  */
 
+declare(strict_types=1);
+
 namespace BitBag\SyliusPayUPlugin\Bridge;
 
-/**
- * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
- * @author Patryk Drapik <patryk.drapik@bitbag.pl>
- */
+use OpenPayU_Configuration;
+use OpenPayU_Order;
+use OpenPayU_Result;
+
 final class OpenPayUBridge implements OpenPayUBridgeInterface
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function setAuthorizationDataApi($environment, $signatureKey, $posId)
+    public function setAuthorizationDataApi(string $environment, string $signatureKey, string $posId): void
     {
-        \OpenPayU_Configuration::setEnvironment($environment);
-        \OpenPayU_Configuration::setSignatureKey($signatureKey);
-        \OpenPayU_Configuration::setMerchantPosId($posId);
+        OpenPayU_Configuration::setEnvironment($environment);
+        OpenPayU_Configuration::setSignatureKey($signatureKey);
+        OpenPayU_Configuration::setMerchantPosId($posId);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function create($order)
+    public function create(array $order)
     {
-        return \OpenPayU_Order::create($order);
+        return OpenPayU_Order::create($order);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function retrieve($orderId)
+    public function retrieve(string $orderId): OpenPayU_Result
     {
-        return \OpenPayU_Order::retrieve($orderId);
+        return OpenPayU_Order::retrieve($orderId);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function consumeNotification($data)
+    public function consumeNotification($data): ?OpenPayU_Result
     {
-        return \OpenPayU_Order::consumeNotification($data);
+        return OpenPayU_Order::consumeNotification($data);
     }
 }

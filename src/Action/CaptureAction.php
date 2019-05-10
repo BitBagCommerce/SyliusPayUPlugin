@@ -8,34 +8,42 @@
  * an email on kontakt@bitbag.pl.
  */
 
+declare(strict_types=1);
+
 namespace BitBag\SyliusPayUPlugin\Action;
 
+use BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridgeInterface;
 use BitBag\SyliusPayUPlugin\SetPayU;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Security\TokenInterface;
+use Sylius\Component\Core\Model\OrderInterface;
 
-/**
- * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
- */
 final class CaptureAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function execute($request)
+    /** @var OpenPayUBridgeInterface */
+    private $openPayUBridge;
+
+    public function __construct(OpenPayUBridgeInterface $openPayUBridge)
+    {
+        $this->openPayUBridge = $openPayUBridge;
+    }
+
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = $request->getModel();
         ArrayObject::ensureArrayObject($model);
 
+        /** @var OrderInterface $order */
         $order = $request->getFirstModel()->getOrder();
         $model['customer'] = $order->getCustomer();
         $model['locale'] = $this->getFallbackLocaleCode($order->getLocaleCode());
@@ -45,10 +53,7 @@ final class CaptureAction implements ActionInterface, GatewayAwareInterface
         $this->getGateway()->execute($payUAction);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function supports($request)
+    public function supports($request): bool
     {
         return
             $request instanceof Capture &&
@@ -56,21 +61,12 @@ final class CaptureAction implements ActionInterface, GatewayAwareInterface
         ;
     }
 
-    /**
-     * @return \Payum\Core\GatewayInterface
-     */
-    public function getGateway()
+    public function getGateway(): GatewayInterface
     {
         return $this->gateway;
     }
 
-    /**
-     * @param TokenInterface $token
-     * @param ArrayObject $model
-     *
-     * @return SetPayU
-     */
-    private function getPayUAction(TokenInterface $token, ArrayObject $model)
+    private function getPayUAction(TokenInterface $token, ArrayObject $model): SetPayU
     {
         $payUAction = new SetPayU($token);
         $payUAction->setModel($model);
@@ -78,7 +74,7 @@ final class CaptureAction implements ActionInterface, GatewayAwareInterface
         return $payUAction;
     }
 
-    private function getFallbackLocaleCode($localeCode)
+    private function getFallbackLocaleCode(string $localeCode): string
     {
         return explode('_', $localeCode)[0];
     }

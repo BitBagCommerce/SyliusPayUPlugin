@@ -9,7 +9,6 @@
             <argument type="service" id="sylius.behat.shared_storage"/>
             <argument type="service" id="sylius.repository.payment_method"/>
             <argument type="service" id="sylius.fixture.example_factory.payment_method"/>
-            <argument type="service" id="sylius.factory.payment_method_translation"/>
             <argument type="service" id="sylius.manager.payment_method"/>
         </service>
 

@@ -9,7 +9,7 @@
 
         <defaults public="true" autoconfigure="false" autowire="false"/>
 
-        <service id="bitbag.payu_plugin.mocker.payu_api" class="Tests\BitBag\SyliusPayUPlugin\Behat\Mocker\PayUApiMocker">
+        <service id="bitbag.payu_plugin.mocker.payu_api" class="Tests\BitBag\SyliusPayUPlugin\Behat\Mocker\PayUApiMocker" public="true">
             <argument type="service" id="sylius.behat.mocker"/>
         </service>
 
