@@ -81,7 +81,7 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Generic
 
         if (null !== $model['orderId']) {
             /** @var mixed $response */
-            $response = $this->openPayUBridge->retrieve($model['orderId'])->getResponse();
+            $response = $this->openPayUBridge->retrieve((string) $model['orderId'])->getResponse();
             Assert::keyExists($response->orders, 0);
 
             if (OpenPayUBridgeInterface::SUCCESS_API_STATUS === $response->status->statusCode) {

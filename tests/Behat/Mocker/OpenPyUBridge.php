@@ -26,12 +26,26 @@ final class OpenPyUBridge implements OpenPayUBridgeInterface
         $this->container = $container;
     }
 
-    public function setAuthorizationDataApi(string $environment, string $signatureKey, string $posId): void
-    {
-        $this->container->get('bitbag.payu_plugin.bridge.open_payu')->setAuthorizationDataApi($environment, $signatureKey, $posId);
+    public function setAuthorizationData(
+        string $environment,
+        string $signatureKey,
+        string $posId,
+        string $clientId,
+        string $clientSecret
+    ): void {
+        $this->container
+            ->get('bitbag.payu_plugin.bridge.open_payu')
+            ->setAuthorizationData(
+                $environment,
+                $signatureKey,
+                $posId,
+                $clientId,
+                $clientSecret
+            )
+        ;
     }
 
-    public function create(array $order)
+    public function create(array $order): ?OpenPayU_Result
     {
         return $this->container->get('bitbag.payu_plugin.bridge.open_payu')->create($order);
     }

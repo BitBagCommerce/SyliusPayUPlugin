@@ -21,36 +21,23 @@ use Sylius\Component\Core\Model\PaymentMethodInterface;
 use Sylius\Component\Core\Repository\PaymentMethodRepositoryInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 
-/**
- * @author Patryk Drapik <patryk.drapik@bitbag.pl>
- */
 final class PayUContext implements Context
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @var SharedStorageInterface
-     */
+    /** @var SharedStorageInterface */
     private $sharedStorage;
 
-    /**
-     * @var PaymentMethodRepositoryInterface
-     */
+    /** @var PaymentMethodRepositoryInterface */
     private $paymentMethodRepository;
 
-    /**
-     * @var ExampleFactoryInterface
-     */
+    /** @var ExampleFactoryInterface */
     private $paymentMethodExampleFactory;
 
-    /**
-     * @var FactoryInterface
-     */
+    /** @var FactoryInterface */
     private $paymentMethodTranslationFactory;
 
-    /**
-     * @var ObjectManager
-     */
+    /** @var ObjectManager */
     private $paymentMethodManager;
 
     public function __construct(
@@ -72,12 +59,14 @@ final class PayUContext implements Context
         string $paymentMethodName,
         string $paymentMethodCode
     ): void {
-        $paymentMethod = $this->createPaymentMethod($paymentMethodName, $paymentMethodCode, 'Paypal Express Checkout');
+        $paymentMethod = $this->createPaymentMethod($paymentMethodName, $paymentMethodCode, 'PayU Checkout');
         $paymentMethod->getGatewayConfig()->setConfig(
             [
                 'environment' => 'sandbox',
                 'signature_key' => 'TEST',
                 'pos_id' => 'TEST',
+                'oauth_client_id' => 'CLIENT_ID',
+                'oauth_client_secret' => 'SECRET',
                 'payum.http_client' => '@sylius.payum.http_client',
             ]
         );
