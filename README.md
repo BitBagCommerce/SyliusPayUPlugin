@@ -23,17 +23,20 @@ $ composer require bitbag/payu-plugin
 
 ```
     
-Add plugin dependencies to your AppKernel.php file:
+Add plugin dependencies to your config/bundles.php file:
 
 ```php
-public function registerBundles()
-{
-    return array_merge(parent::registerBundles(), [
-        ...
-        
-        new \BitBag\SyliusPayUPlugin\BitBagSyliusPayUPlugin(),
-    ]);
-}
+return [
+    BitBag\SyliusPayUPlugin\BitBagSyliusPayUPlugin::class => ['all' => true],
+]
+```
+## Customization
+
+### Available services you can [decorate](https://symfony.com/doc/current/service_container/service_decoration.html) and forms you can [extend](http://symfony.com/doc/current/form/create_form_type_extension.html)
+
+Run the below command to see what Symfony services are shared with this plugin:
+```bash
+$ bin/console debug:container bitbag.payu_plugin
 ```
 
 ## Testing
