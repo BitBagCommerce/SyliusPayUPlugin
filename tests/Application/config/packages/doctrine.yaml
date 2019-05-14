@@ -8,4 +8,4 @@ parameters:
 doctrine:
     dbal:
         charset: UTF8
-        url: 'mysql://homestead:secret@127.0.0.1/sylius_payu_%kernel.environment%?serverVersion=5.7'
+        url: '%env(resolve:DATABASE_URL)%'
