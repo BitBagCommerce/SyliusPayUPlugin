@@ -8,45 +8,49 @@
  * an email on kontakt@bitbag.pl.
  */
 
+declare(strict_types=1);
+
 namespace BitBag\SyliusPayUPlugin\Bridge;
 
-/**
- * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
- * @author Patryk Drapik <patryk.drapik@bitbag.pl>
- */
+use OpenPayU_Configuration;
+use OpenPayU_Order;
+use OpenPayU_Result;
+
 final class OpenPayUBridge implements OpenPayUBridgeInterface
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function setAuthorizationDataApi($environment, $signatureKey, $posId)
-    {
-        \OpenPayU_Configuration::setEnvironment($environment);
-        \OpenPayU_Configuration::setSignatureKey($signatureKey);
-        \OpenPayU_Configuration::setMerchantPosId($posId);
+    public function setAuthorizationData(
+        string $environment,
+        string $signatureKey,
+        string $posId,
+        string $clientId,
+        string $clientSecret
+    ): void {
+        OpenPayU_Configuration::setEnvironment($environment);
+
+        //set POS ID and Second MD5 Key (from merchant admin panel)
+        OpenPayU_Configuration::setMerchantPosId($posId);
+        OpenPayU_Configuration::setSignatureKey($signatureKey);
+
+        //set Oauth Client Id and Oauth Client Secret (from merchant admin panel)
+        OpenPayU_Configuration::setOauthClientId($clientId);
+        OpenPayU_Configuration::setOauthClientSecret($clientSecret);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function create($order)
+    public function create(array $order): ?OpenPayU_Result
     {
-        return \OpenPayU_Order::create($order);
+        /** @var null|OpenPayU_Result $result */
+        $result = OpenPayU_Order::create($order);
+
+        return $result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function retrieve($orderId)
+    public function retrieve(string $orderId): OpenPayU_Result
     {
-        return \OpenPayU_Order::retrieve($orderId);
+        return OpenPayU_Order::retrieve($orderId);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function consumeNotification($data)
+    public function consumeNotification($data): ?OpenPayU_Result
     {
-        return \OpenPayU_Order::consumeNotification($data);
+        return OpenPayU_Order::consumeNotification($data);
     }
 }

@@ -1,0 +1,27 @@
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+
+        <defaults public="true" autoconfigure="false" autowire="false"/>
+
+        <service id="bitbag.payu_plugin.action.capture" class="BitBag\SyliusPayUPlugin\Action\CaptureAction">
+            <argument type="service" id="bitbag.payu_plugin.bridge.open_payu"/>
+            <tag name="payum.action" factory="payu" alias="payum.action.capture"/>
+        </service>
+
+        <service id="bitbag.payu_plugin.action.notify" class="BitBag\SyliusPayUPlugin\Action\NotifyAction">
+            <argument type="service" id="bitbag.payu_plugin.bridge.open_payu"/>
+            <tag name="payum.action" factory="payu" alias="payum.action.notify"/>
+        </service>
+
+        <service id="bitbag.payu_plugin.action.status" class="BitBag\SyliusPayUPlugin\Action\StatusAction">
+            <argument type="service" id="bitbag.payu_plugin.bridge.open_payu"/>
+            <tag name="payum.action" factory="payu" alias="payum.action.status"/>
+        </service>
+
+        <service id="bitbag.payu_plugin.action.convert_payment" class="BitBag\SyliusPayUPlugin\Action\ConvertPaymentAction">
+            <tag name="payum.action" factory="payu" alias="payum.action.convert_payment"/>
+        </service>
+
+    </services>
+</container>

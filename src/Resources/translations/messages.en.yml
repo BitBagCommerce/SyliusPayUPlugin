@@ -6,3 +6,5 @@ bitbag:
         signature_key: Second configuration key
         pos_id: Payment point identifier
         gateway_label: PayU
+        oauth_client_id: OAuth protocol - client_id
+        oauth_client_secret: OAuth protocol - client_secret

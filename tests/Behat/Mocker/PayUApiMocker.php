@@ -12,6 +12,7 @@ namespace Tests\BitBag\SyliusPayUPlugin\Behat\Mocker;
 
 use BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridge;
 use BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridgeInterface;
+use OpenPayU_Result;
 use Sylius\Behat\Service\Mocker\Mocker;
 
 /**
@@ -35,13 +36,13 @@ final class PayUApiMocker
     /**
      * @param callable $action
      */
-    public function mockApiSuccessfulPaymentResponse(callable $action)
+    public function mockApiSuccessfulPaymentResponse(callable $action): void
     {
         $service = $this->mocker
             ->mockService('bitbag.payu_plugin.bridge.open_payu', OpenPayUBridgeInterface::class);
 
         $service->shouldReceive('create')->andReturn($this->createResponseSuccessfulApi());
-        $service->shouldReceive('setAuthorizationDataApi');
+        $service->shouldReceive('setAuthorizationData');
 
         $action();
 
@@ -51,7 +52,7 @@ final class PayUApiMocker
     /**
      * @param callable $action
      */
-    public function completedPayment(callable $action)
+    public function completedPayment(callable $action): void
     {
         $service = $this->mocker
             ->mockService('bitbag.payu_plugin.bridge.open_payu', OpenPayUBridgeInterface::class);
@@ -60,7 +61,7 @@ final class PayUApiMocker
             $this->getDataRetrieve(OpenPayUBridge::COMPLETED_API_STATUS)
         );
         $service->shouldReceive('create')->andReturn($this->createResponseSuccessfulApi());
-        $service->shouldReceive('setAuthorizationDataApi');
+        $service->shouldReceive('setAuthorizationData');
 
         $action();
 
@@ -70,7 +71,7 @@ final class PayUApiMocker
     /**
      * @param callable $action
      */
-    public function canceledPayment(callable $action)
+    public function canceledPayment(callable $action): void
     {
         $service = $this->mocker
             ->mockService('bitbag.payu_plugin.bridge.open_payu', OpenPayUBridgeInterface::class);
@@ -79,7 +80,7 @@ final class PayUApiMocker
             $this->getDataRetrieve(OpenPayUBridge::CANCELED_API_STATUS)
         );
         $service->shouldReceive('create')->andReturn($this->createResponseSuccessfulApi());
-        $service->shouldReceive('setAuthorizationDataApi');
+        $service->shouldReceive('setAuthorizationData');
 
         $action();
 
@@ -89,11 +90,11 @@ final class PayUApiMocker
     /**
      * @param $statusPayment
      *
-     * @return \OpenPayU_Result
+     * @return OpenPayU_Result
      */
-    private function getDataRetrieve($statusPayment)
+    private function getDataRetrieve($statusPayment): OpenPayU_Result
     {
-        $openPayUResult = new \OpenPayU_Result();
+        $openPayUResult = new OpenPayU_Result();
 
         $data = (object)[
             'status' => (object)[
@@ -113,11 +114,11 @@ final class PayUApiMocker
     }
 
     /**
-     * @return \OpenPayU_Result
+     * @return OpenPayU_Result
      */
-    private function createResponseSuccessfulApi()
+    private function createResponseSuccessfulApi(): OpenPayU_Result
     {
-        $openPayUResult = new \OpenPayU_Result();
+        $openPayUResult = new OpenPayU_Result();
 
         $data = (object)[
             'status' => (object)[

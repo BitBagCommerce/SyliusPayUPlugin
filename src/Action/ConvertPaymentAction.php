@@ -8,20 +8,19 @@
  * an email on kontakt@bitbag.pl.
  */
 
+declare(strict_types=1);
+
 namespace BitBag\SyliusPayUPlugin\Action;
 
 use BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridge;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
-use Payum\Core\Action\ActionInterface;
-use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
 
-/**
- * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
- */
 final class ConvertPaymentAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
@@ -31,24 +30,22 @@ final class ConvertPaymentAction implements ActionInterface, GatewayAwareInterfa
      *
      * @param Convert $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        /**
-         * @var $payment PaymentInterface
-         */
+        /** @var $payment PaymentInterface */
         $payment = $request->getSource();
         $details = ArrayObject::ensureArrayObject($payment->getDetails());
 
         $details['totalAmount'] = $payment->getTotalAmount();
         $details['currencyCode'] = $payment->getCurrencyCode();
-        $details['extOrderId'] = uniqid($payment->getNumber());
+        $details['extOrderId'] = uniqid((string) $payment->getNumber(), true);
         $details['description'] = $payment->getDescription();
         $details['client_email'] = $payment->getClientEmail();
         $details['client_id'] = $payment->getClientId();
         $details['customerIp'] = $this->getClientIp();
-        $details['status']  = OpenPayUBridge::NEW_API_STATUS;
+        $details['status'] = OpenPayUBridge::NEW_API_STATUS;
 
         $request->setResult((array) $details);
     }
@@ -56,19 +53,15 @@ final class ConvertPaymentAction implements ActionInterface, GatewayAwareInterfa
     /**
      * {@inheritDoc}
      */
-    public function supports($request)
+    public function supports($request): bool
     {
-        return $request instanceof Convert &&
-            $request->getSource() instanceof PaymentInterface &&
-            $request->getTo() === 'array'
-        ;
+        return $request instanceof Convert
+               && $request->getSource() instanceof PaymentInterface
+               && 'array' === $request->getTo();
     }
 
-    /**
-     * @return string|null
-     */
-    private function getClientIp()
+    private function getClientIp(): ?string
     {
-        return array_key_exists('REMOTE_ADDR', $_SERVER) ? $_SERVER['REMOTE_ADDR'] : null;
+        return $_SERVER['REMOTE_ADDR'] ?? null;
     }
 }

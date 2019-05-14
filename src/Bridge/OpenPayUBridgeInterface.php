@@ -8,48 +8,39 @@
  * an email on kontakt@bitbag.pl.
  */
 
+declare(strict_types=1);
+
 namespace BitBag\SyliusPayUPlugin\Bridge;
 
-/**
- * @author Patryk Drapik <patryk.drapik@bitbag.pl>
- */
+use OpenPayU_Result;
+
 interface OpenPayUBridgeInterface
 {
-    const NEW_API_STATUS = 'NEW';
-    const PENDING_API_STATUS = 'PENDING';
-    const COMPLETED_API_STATUS = 'COMPLETED';
-    const SUCCESS_API_STATUS = 'SUCCESS';
-    const CANCELED_API_STATUS = 'CANCELED';
-    const COMPLETED_PAYMENT_STATUS = 'COMPLETED';
-    const PENDING_PAYMENT_STATUS = 'PENDING';
-    const CANCELED_PAYMENT_STATUS = 'CANCELED';
-    const WAITING_FOR_CONFIRMATION_PAYMENT_STATUS = 'WAITING_FOR_CONFIRMATION';
-    const REJECTED_STATUS = 'REJECTED';
+    public const SANDBOX_ENVIRONMENT                     = 'sandbox';
+    public const SECURE_ENVIRONMENT                      = 'secure';
 
-    /**
-     * @param $environment
-     * @param $signatureKey
-     * @param $posId
-     */
-    public function setAuthorizationDataApi($environment, $signatureKey, $posId);
+    public const NEW_API_STATUS                          = 'NEW';
+    public const PENDING_API_STATUS                      = 'PENDING';
+    public const COMPLETED_API_STATUS                    = 'COMPLETED';
+    public const SUCCESS_API_STATUS                      = 'SUCCESS';
+    public const CANCELED_API_STATUS                     = 'CANCELED';
+    public const COMPLETED_PAYMENT_STATUS                = 'COMPLETED';
+    public const PENDING_PAYMENT_STATUS                  = 'PENDING';
+    public const CANCELED_PAYMENT_STATUS                 = 'CANCELED';
+    public const WAITING_FOR_CONFIRMATION_PAYMENT_STATUS = 'WAITING_FOR_CONFIRMATION';
+    public const REJECTED_STATUS                         = 'REJECTED';
 
-    /**
-     * @param $order
-     */
-    public function create($order);
+    public function setAuthorizationData(
+        string $environment,
+        string $signatureKey,
+        string $posId,
+        string $clientId,
+        string $clientSecret
+    ): void;
 
-    /**
-     * @param string $orderId
-     *
-     * @return object
-     */
-    public function retrieve($orderId);
+    public function create(array $order): ?OpenPayU_Result;
 
-    /**
-     * @param $data
-     * @return null|\OpenPayU_Result
-     *
-     * @throws \OpenPayU_Exception
-     */
-    public function consumeNotification($data);
+    public function retrieve(string $orderId): OpenPayU_Result;
+
+    public function consumeNotification($data): ?OpenPayU_Result;
 }

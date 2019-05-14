@@ -4,4 +4,8 @@ bitbag:
             pos_id:
                 not_blank: Nie podano identyfikatora punktu płatności.
             signature_key:
+                not_blank: Nie podano kodu Second key.
+            oauth_client_secret:
                 not_blank: Nie podano kodu OAuthClientSecret.
+            oauth_client_id:
+                not_blank: Nie podano identyfikatora OAuthClientId.

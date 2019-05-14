@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+
+        <service id="bitbag.payu_plugin.page.external" class="Tests\BitBag\SyliusPayUPlugin\Behat\Mocker\PayUApiMocker" public="true">
+            <argument type="service" id="sylius.behat.mocker"/>
+        </service>
+
+        <service id="bitbag.payu_plugin.page_checkout.external" class="Tests\BitBag\SyliusPayUPlugin\Behat\Page\External\PayUCheckoutPage" parent="sylius.behat.page" public="true">
+            <argument type="service" id="sylius.repository.payment_security_token" />
+        </service>
+
+    </services>
+</container>

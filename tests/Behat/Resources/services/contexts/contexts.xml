@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+
+        <defaults public="true" autoconfigure="false" autowire="false"/>
+
+        <service id="bitbag.payu_plugin.context.setup.payu" class="Tests\BitBag\SyliusPayUPlugin\Behat\Context\Setup\PayUContext" public="true">
+            <argument type="service" id="sylius.behat.shared_storage"/>
+            <argument type="service" id="sylius.repository.payment_method"/>
+            <argument type="service" id="sylius.fixture.example_factory.payment_method"/>
+            <argument type="service" id="sylius.manager.payment_method"/>
+        </service>
+
+        <service id="bitbag.payu_plugin.context.ui.payu" class="Tests\BitBag\SyliusPayUPlugin\Behat\Context\Ui\PayUContext" public="true">
+            <argument type="service" id="bitbag.payu_plugin.mocker.payu_api"/>
+            <argument type="service" id="sylius.behat.page.shop.order.show"/>
+            <argument type="service" id="sylius.behat.page.shop.checkout.complete"/>
+            <argument type="service" id="bitbag.payu_plugin.page_checkout.external"/>
+        </service>
+
+    </services>
+</container>

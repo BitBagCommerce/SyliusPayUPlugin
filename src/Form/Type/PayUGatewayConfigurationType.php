@@ -10,6 +10,7 @@
 
 namespace BitBag\SyliusPayUPlugin\Form\Type;
 
+use BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridgeInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -27,31 +28,75 @@ final class PayUGatewayConfigurationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('environment', ChoiceType::class, [
-                'choices' => [
-                    'bitbag.payu_plugin.secure' => 'secure',
-                    'bitbag.payu_plugin.sandbox' => 'sandbox',
-                ],
-                'label' => 'bitbag.payu_plugin.environment',
-            ])
-            ->add('signature_key', TextType::class, [
-                'label' => 'bitbag.payu_plugin.signature_key',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'bitbag.payu_plugin.gateway_configuration.signature_key.not_blank',
-                        'groups' => ['sylius'],
-                    ])
-                ],
-            ])
-            ->add('pos_id', TextType::class, [
-                'label' => 'bitbag.payu_plugin.pos_id',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'bitbag.payu_plugin.gateway_configuration.pos_id.not_blank',
-                        'groups' => ['sylius'],
-                    ])
-                ],
-            ])
-        ;
+            ->add(
+                'environment',
+                ChoiceType::class,
+                [
+                    'choices' => [
+                        'bitbag.payu_plugin.secure' => OpenPayUBridgeInterface::SECURE_ENVIRONMENT,
+                        'bitbag.payu_plugin.sandbox' => OpenPayUBridgeInterface::SANDBOX_ENVIRONMENT,
+                    ],
+                    'label' => 'bitbag.payu_plugin.environment',
+                ]
+            )
+            ->add(
+                'signature_key',
+                TextType::class,
+                [
+                    'label' => 'bitbag.payu_plugin.signature_key',
+                    'constraints' => [
+                        new NotBlank(
+                            [
+                                'message' => 'bitbag.payu_plugin.gateway_configuration.signature_key.not_blank',
+                                'groups' => ['sylius'],
+                            ]
+                        ),
+                    ],
+                ]
+            )
+            ->add(
+                'pos_id',
+                TextType::class,
+                [
+                    'label' => 'bitbag.payu_plugin.pos_id',
+                    'constraints' => [
+                        new NotBlank(
+                            [
+                                'message' => 'bitbag.payu_plugin.gateway_configuration.pos_id.not_blank',
+                                'groups' => ['sylius'],
+                            ]
+                        ),
+                    ],
+                ]
+            )
+            ->add(
+                'oauth_client_id',
+                TextType::class,
+                [
+                    'label' => 'bitbag.payu_plugin.oauth_client_id',
+                    'constraints' => [
+                        new NotBlank(
+                            [
+                                'message' => 'bitbag.payu_plugin.gateway_configuration.oauth_client_id.not_blank',
+                                'groups' => ['sylius'],
+                            ]
+                        ),
+                    ],
+                ]
+            )->add(
+                'oauth_client_secret',
+                TextType::class,
+                [
+                    'label' => 'bitbag.payu_plugin.oauth_client_secret',
+                    'constraints' => [
+                        new NotBlank(
+                            [
+                                'message' => 'bitbag.payu_plugin.gateway_configuration.oauth_client_secret.not_blank',
+                                'groups' => ['sylius'],
+                            ]
+                        ),
+                    ],
+                ]
+            );
     }
 }

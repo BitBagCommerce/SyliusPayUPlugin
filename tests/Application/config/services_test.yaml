@@ -1,0 +1,14 @@
+imports:
+    - { resource: "../../Behat/Resources/services.xml" }
+    - { resource: "../../../vendor/sylius/sylius/src/Sylius/Behat/Resources/config/services.xml" }
+
+services:
+    bitbag.test.client: '@test.client'
+    bitbag.test.client.history: '@test.client.history'
+    bitbag.test.client.cookiejar: '@test.client.cookiejar'
+
+    bitbag.payu_plugin.bridge.open_payu:
+        class: Tests\BitBag\SyliusPayUPlugin\Behat\Mocker\OpenPyUBridge
+        public: true
+        arguments:
+            - "@service_container"

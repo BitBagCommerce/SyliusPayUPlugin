@@ -8,9 +8,14 @@
  * an email on kontakt@bitbag.pl.
  */
 
+declare(strict_types=1);
+
 namespace BitBag\SyliusPayUPlugin\Action;
 
+use ArrayObject;
 use BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridgeInterface;
+use OpenPayU_Exception;
+use OpenPayU_Result;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -21,53 +26,43 @@ use Payum\Core\Request\Notify;
 use Sylius\Component\Core\Model\PaymentInterface;
 use Webmozart\Assert\Assert;
 
-/**
- * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
- */
 final class NotifyAction implements ActionInterface, ApiAwareInterface
 {
     use GatewayAwareTrait;
 
-    private $api = [];
-
-    /**
-     * @var OpenPayUBridgeInterface
-     */
+    /** @var OpenPayUBridgeInterface */
     private $openPayUBridge;
 
-    /**
-     * @param OpenPayUBridgeInterface $openPayUBridge
-     */
+    /** @param OpenPayUBridgeInterface $openPayUBridge */
     public function __construct(OpenPayUBridgeInterface $openPayUBridge)
     {
         $this->openPayUBridge = $openPayUBridge;
     }
 
     /**
-     * @return \Payum\Core\GatewayInterface
+     * @param mixed $api
+     *
+     * @throws UnsupportedApiException if the given Api is not supported.
      */
-    public function getGateway()
+    public function setApi($api): void
     {
-        return $this->gateway;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
-    {
-        if (!is_array($api)) {
-
-            throw new UnsupportedApiException('Not supported.');
+        if (false === is_array($api)) {
+            throw new UnsupportedApiException('Not supported. Expected to be set as array.');
         }
 
-        $this->api = $api;
+        $this->openPayUBridge->setAuthorizationData(
+            $api['environment'],
+            $api['signature_key'],
+            $api['pos_id'],
+            $api['oauth_client_id'],
+            $api['oauth_client_secret']
+        );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var $request Notify */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -77,34 +72,31 @@ final class NotifyAction implements ActionInterface, ApiAwareInterface
 
         $model = $request->getModel();
 
-        $this->openPayUBridge->setAuthorizationDataApi(
-            $this->api['environment'],
-            $this->api['signature_key'],
-            $this->api['pos_id']
-        );
-
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if ('POST' === $_SERVER['REQUEST_METHOD']) {
             $body = file_get_contents('php://input');
             $data = trim($body);
 
             try {
                 $result = $this->openPayUBridge->consumeNotification($data);
 
-                if ($result->getResponse()->order->orderId) {
-                    /** @var \OpenPayU_Result $order */
-                    $order =  $this->openPayUBridge->retrieve($result->getResponse()->order->orderId);
+                if (null !== $result) {
+                    /** @var mixed $response */
+                    $response = $result->getResponse();
+                    if ($response->order->orderId) {
+                        /** @var OpenPayU_Result $order */
+                        $order =  $this->openPayUBridge->retrieve($response->order->orderId);
+                        if (OpenPayUBridgeInterface::SUCCESS_API_STATUS === $order->getStatus()) {
+                            if (PaymentInterface::STATE_COMPLETED !== $payment->getState()) {
+                                $status = $order->getResponse()->orders[0]->status;
+                                $model['statusPayU'] = $status;
+                                $request->setModel($model);
+                            }
 
-                    if (OpenPayUBridgeInterface::SUCCESS_API_STATUS === $order->getStatus()) {
-                        if (PaymentInterface::STATE_COMPLETED !== $payment->getState()) {
-                            $status = $order->getResponse()->orders[0]->status;
-                            $model['statusPayU'] = $status;
-                            $request->setModel($model);
+                            throw new HttpResponse('SUCCESS');
                         }
-
-                        throw new HttpResponse('SUCCESS');
                     }
                 }
-            } catch (\OpenPayU_Exception $e) {
+            } catch (OpenPayU_Exception $e) {
                 throw new HttpResponse($e->getMessage());
             }
         }
@@ -113,10 +105,10 @@ final class NotifyAction implements ActionInterface, ApiAwareInterface
     /**
      * {@inheritDoc}
      */
-    public function supports($request)
+    public function supports($request): bool
     {
         return $request instanceof Notify &&
-            $request->getModel() instanceof \ArrayObject
+            $request->getModel() instanceof ArrayObject
         ;
     }
 }

@@ -4,4 +4,8 @@ bitbag:
             pos_id:
                 not_blank: The payment ID has not been provided.
             signature_key:
+                not_blank: The Second key code has not been provided.
+            oauth_client_secret:
                 not_blank: The OAuthClientSecret code has not been provided.
+            oauth_client_id:
+                not_blank: The OAuthClientId code has not been provided.
