@@ -1,4 +1,0 @@
-suites:
-    main:
-        namespace: BitBag\SyliusPayUPlugin
-        psr4_prefix: BitBag\SyliusPayUPlugin

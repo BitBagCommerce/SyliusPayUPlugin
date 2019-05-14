@@ -28,46 +28,39 @@ final class NotifyAction implements ActionInterface, ApiAwareInterface
 {
     use GatewayAwareTrait;
 
-    private $api = [];
-
-    /**
-     * @var OpenPayUBridgeInterface
-     */
+    /** @var OpenPayUBridgeInterface */
     private $openPayUBridge;
 
-    /**
-     * @param OpenPayUBridgeInterface $openPayUBridge
-     */
+    /** @param OpenPayUBridgeInterface $openPayUBridge */
     public function __construct(OpenPayUBridgeInterface $openPayUBridge)
     {
         $this->openPayUBridge = $openPayUBridge;
     }
 
     /**
-     * @return \Payum\Core\GatewayInterface
+     * @param mixed $api
+     *
+     * @throws UnsupportedApiException if the given Api is not supported.
      */
-    public function getGateway()
+    public function setApi($api): void
     {
-        return $this->gateway;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
-    {
-        if (!is_array($api)) {
-
-            throw new UnsupportedApiException('Not supported.');
+        if (false === is_array($api)) {
+            throw new UnsupportedApiException('Not supported. Expected to be set as array.');
         }
 
-        $this->api = $api;
+        $this->openPayUBridge->setAuthorizationData(
+            $api['environment'],
+            $api['signature_key'],
+            $api['pos_id'],
+            $api['oauth_client_id'],
+            $api['oauth_client_secret']
+        );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var $request Notify */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -77,13 +70,7 @@ final class NotifyAction implements ActionInterface, ApiAwareInterface
 
         $model = $request->getModel();
 
-        $this->openPayUBridge->setAuthorizationDataApi(
-            $this->api['environment'],
-            $this->api['signature_key'],
-            $this->api['pos_id']
-        );
-
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if ('POST' === $_SERVER['REQUEST_METHOD']) {
             $body = file_get_contents('php://input');
             $data = trim($body);
 
@@ -113,7 +100,7 @@ final class NotifyAction implements ActionInterface, ApiAwareInterface
     /**
      * {@inheritDoc}
      */
-    public function supports($request)
+    public function supports($request): bool
     {
         return $request instanceof Notify &&
             $request->getModel() instanceof \ArrayObject
