@@ -34,18 +34,18 @@ final class ConvertPaymentAction implements ActionInterface, GatewayAwareInterfa
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        /** @var $payment PaymentInterface*/
+        /** @var $payment PaymentInterface */
         $payment = $request->getSource();
         $details = ArrayObject::ensureArrayObject($payment->getDetails());
 
         $details['totalAmount'] = $payment->getTotalAmount();
         $details['currencyCode'] = $payment->getCurrencyCode();
-        $details['extOrderId'] = uniqid($payment->getNumber(), true);
+        $details['extOrderId'] = uniqid((string) $payment->getNumber(), true);
         $details['description'] = $payment->getDescription();
         $details['client_email'] = $payment->getClientEmail();
         $details['client_id'] = $payment->getClientId();
         $details['customerIp'] = $this->getClientIp();
-        $details['status']  = OpenPayUBridge::NEW_API_STATUS;
+        $details['status'] = OpenPayUBridge::NEW_API_STATUS;
 
         $request->setResult((array) $details);
     }
@@ -55,10 +55,9 @@ final class ConvertPaymentAction implements ActionInterface, GatewayAwareInterfa
      */
     public function supports($request): bool
     {
-        return $request instanceof Convert &&
-            $request->getSource() instanceof PaymentInterface &&
-               'array' === $request->getTo()
-        ;
+        return $request instanceof Convert
+               && $request->getSource() instanceof PaymentInterface
+               && 'array' === $request->getTo();
     }
 
     private function getClientIp(): ?string

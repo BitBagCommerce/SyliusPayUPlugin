@@ -8,11 +8,12 @@
  * an email on kontakt@bitbag.pl.
  */
 
+declare(strict_types=1);
+
 namespace spec\BitBag\SyliusPayUPlugin\Action;
 
 use BitBag\SyliusPayUPlugin\Action\NotifyAction;
 use BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridgeInterface;
-use BitBag\SyliusPayUPlugin\SetPayU;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayInterface;
@@ -21,17 +22,14 @@ use Payum\Core\Request\Notify;
 use Payum\Core\Security\TokenInterface;
 use PhpSpec\ObjectBehavior;
 
-/**
- * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
- */
 final class NotifyActionSpec extends ObjectBehavior
 {
-    function let(OpenPayUBridgeInterface $openPayUBridge)
+    function let(OpenPayUBridgeInterface $openPayUBridge): void
     {
         $this->beConstructedWith($openPayUBridge);
     }
 
-    function it_is_initializable()
+    function it_is_initializable(): void
     {
         $this->shouldHaveType(NotifyAction::class);
     }
@@ -40,29 +38,21 @@ final class NotifyActionSpec extends ObjectBehavior
         Notify $request,
         TokenInterface $token,
         ArrayObject $model,
-        SetPayU $setPayU,
         GetHumanStatus $status,
         GatewayInterface $gateway
-
-    )
-    {
+    ): void {
         $request->getToken()->willReturn($token);
         $request->getModel()->willReturn($model);
-        $setPayU->getToken()->willReturn($token);
-        $setPayU->getModel()->willReturn($model);
 
         $this->setGateway($gateway);
-        $this->getGateway()->execute($status);
-        $this->getGateway()->execute($setPayU);
     }
 
-    function it_throws_exception_when_model_is_not_array_object(Notify $request)
+    function it_throws_exception_when_model_is_not_array_object(Notify $request): void
     {
         $request->getModel()->willReturn(null);
 
         $this
             ->shouldThrow(RequestNotSupportedException::class)
-            ->during('execute', [$request])
-        ;
+            ->during('execute', [$request]);
     }
 }

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusPayUPlugin\Action;
 
+use ArrayAccess;
 use BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridgeInterface;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -60,13 +61,15 @@ final class StatusAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
         $status = $model['statusPayU'] ?? null;
+        $orderId = $model['orderId'] ?? null;
 
-        if ((null === $status || OpenPayUBridgeInterface::NEW_API_STATUS === $status) && false === isset($model['orderId'])) {
+        if ((null === $status || OpenPayUBridgeInterface::NEW_API_STATUS === $status) && null !== $orderId) {
             $request->markNew();
             return;
         }
 
         if (OpenPayUBridgeInterface::PENDING_API_STATUS === $status) {
+            $request->markPending();
             return;
         }
 
@@ -88,13 +91,10 @@ final class StatusAction implements ActionInterface
         $request->markUnknown();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function supports($request)
+    public function supports($request): bool
     {
         return $request instanceof GetStatusInterface &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

@@ -8,6 +8,8 @@
  * an email on kontakt@bitbag.pl.
  */
 
+declare(strict_types=1);
+
 namespace spec\BitBag\SyliusPayUPlugin\Action;
 
 use BitBag\SyliusPayUPlugin\Action\ConvertPaymentAction;
@@ -17,69 +19,70 @@ use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Sylius\Component\Core\Model\OrderInterface;
 
-/**
- * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
- */
 final class ConvertPaymentActionSpec extends ObjectBehavior
 {
-    function it_is_initializable()
+    function it_is_initializable(): void
     {
         $this->shouldHaveType(ConvertPaymentAction::class);
     }
 
-    function it_implements_action_interface()
+    function it_implements_action_interface(): void
     {
         $this->shouldImplement(ActionInterface::class);
     }
 
     function it_executes(
         Convert $request,
-        PaymentInterface $payment
-    )
-    {
-
-        $request->getSource()->willReturn($payment)->shouldBeCalled();
-        $request->getTo()->willReturn('array');
+        PaymentInterface $payment,
+        OrderInterface $order
+    ): void {
         $payment->getDetails()->willReturn([]);
         $payment->getTotalAmount()->willReturn(88000);
         $payment->getCurrencyCode()->willReturn('PLN');
         $payment->getNumber()->willReturn(123456);
         $payment->getDescription()->willReturn('Lamborghini Huracan');
-        $payment->getClientEmail()->willReturn('mikolaj.krol@bitbag.pl');
-        $payment->getClientId()->willReturn(1);
+        $payment->getClientEmail()->willReturn('test@bitbag.pl');
+        $payment->getClientId()->willReturn('1');
+
+        $request->getSource()->willReturn($payment);
+        $request->getTo()->willReturn('array');
+
         $_SERVER['REMOTE_ADDR'] = '69.65.13.216';
 
         $details['totalAmount'] = 88000;
         $details['currencyCode'] = 'PLN';
         $details['extOrderId'] = 123456;
         $details['description'] = 'Lamborghini Huracan';
-        $details['client_email'] = 'mikolaj.krol@bitbag.pl';
+        $details['client_email'] = 'test@bitbag.pl';
         $details['client_id'] = '1';
         $details['customerIp'] = '69.65.13.216';
         $details['status'] = 'NEW';
 
+        $request->setResult(
+            Argument::that(
+                static function ($values) use ($details): bool {
+                    foreach ($values as $key => $value) {
+                        if ('extOrderId' !== $key && $value !== $details[$key]) {
+                            return false;
+                        }
+                    }
 
-        $request->setResult(Argument::that(function ($value) use ($details) {
-            foreach ($value as $key => $value) {
-                if ($details[$key] != $value && $key !== 'extOrderId') {
-                    return false;
+                    return true;
                 }
-            }
-
-            return true;
-        }))->shouldBeCalled();
+            )
+        )->shouldBeCalled();
 
         $this->execute($request);
     }
 
-    function it_throws_exception_when_source_is_not_a_payment_interface(Convert $request)
+    function it_throws_exception_when_source_is_not_a_payment_interface(Convert $request): void
     {
         $request->getSource()->willReturn(null);
 
         $this
             ->shouldThrow(RequestNotSupportedException::class)
-            ->during('execute', [$request])
-        ;
+            ->during('execute', [$request]);
     }
 }
