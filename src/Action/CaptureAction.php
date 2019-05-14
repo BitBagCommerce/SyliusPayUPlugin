@@ -97,13 +97,17 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Generic
         /** @var TokenInterface $token */
         $token = $request->getToken();
         $order = $this->prepareOrder($token, $model);
-        $response = $this->openPayUBridge->create($order)->getResponse();
 
-        if ($response && OpenPayUBridgeInterface::SUCCESS_API_STATUS === $response->status->statusCode) {
-            $model['orderId'] = $response->orderId;
-            $request->setModel($model);
+        $result = $this->openPayUBridge->create($order);
+        if (null !== $result) {
+            /** @var mixed $response */
+            $response = $result->getResponse();
+            if ($response && OpenPayUBridgeInterface::SUCCESS_API_STATUS === $response->status->statusCode) {
+                $model['orderId'] = $response->orderId;
+                $request->setModel($model);
 
-            throw new HttpRedirect($response->redirectUri);
+                throw new HttpRedirect($response->redirectUri);
+            }
         }
 
         throw PayUException::newInstance($response->status);

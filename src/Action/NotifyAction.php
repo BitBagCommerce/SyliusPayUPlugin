@@ -8,9 +8,14 @@
  * an email on kontakt@bitbag.pl.
  */
 
+declare(strict_types=1);
+
 namespace BitBag\SyliusPayUPlugin\Action;
 
+use ArrayObject;
 use BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridgeInterface;
+use OpenPayU_Exception;
+use OpenPayU_Result;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -21,9 +26,6 @@ use Payum\Core\Request\Notify;
 use Sylius\Component\Core\Model\PaymentInterface;
 use Webmozart\Assert\Assert;
 
-/**
- * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
- */
 final class NotifyAction implements ActionInterface, ApiAwareInterface
 {
     use GatewayAwareTrait;
@@ -77,21 +79,24 @@ final class NotifyAction implements ActionInterface, ApiAwareInterface
             try {
                 $result = $this->openPayUBridge->consumeNotification($data);
 
-                if ($result->getResponse()->order->orderId) {
-                    /** @var \OpenPayU_Result $order */
-                    $order =  $this->openPayUBridge->retrieve($result->getResponse()->order->orderId);
+                if (null !== $result) {
+                    /** @var mixed $response */
+                    $response = $result->getResponse();
+                    if ($response->order->orderId) {
+                        /** @var OpenPayU_Result $order */
+                        $order =  $this->openPayUBridge->retrieve($response->order->orderId);
+                        if (OpenPayUBridgeInterface::SUCCESS_API_STATUS === $order->getStatus()) {
+                            if (PaymentInterface::STATE_COMPLETED !== $payment->getState()) {
+                                $status = $order->getResponse()->orders[0]->status;
+                                $model['statusPayU'] = $status;
+                                $request->setModel($model);
+                            }
 
-                    if (OpenPayUBridgeInterface::SUCCESS_API_STATUS === $order->getStatus()) {
-                        if (PaymentInterface::STATE_COMPLETED !== $payment->getState()) {
-                            $status = $order->getResponse()->orders[0]->status;
-                            $model['statusPayU'] = $status;
-                            $request->setModel($model);
+                            throw new HttpResponse('SUCCESS');
                         }
-
-                        throw new HttpResponse('SUCCESS');
                     }
                 }
-            } catch (\OpenPayU_Exception $e) {
+            } catch (OpenPayU_Exception $e) {
                 throw new HttpResponse($e->getMessage());
             }
         }
@@ -103,7 +108,7 @@ final class NotifyAction implements ActionInterface, ApiAwareInterface
     public function supports($request): bool
     {
         return $request instanceof Notify &&
-            $request->getModel() instanceof \ArrayObject
+            $request->getModel() instanceof ArrayObject
         ;
     }
 }
