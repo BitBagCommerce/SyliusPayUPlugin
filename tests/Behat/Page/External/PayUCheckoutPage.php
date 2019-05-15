@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file was created by the developers from BitBag.
  * Feel free to contact us once you face any issues or want to start
@@ -15,20 +17,13 @@ use FriendsOfBehat\PageObjectExtension\Page\Page;
 use Payum\Core\Security\TokenInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
-/**
- * @author Patryk Drapik <patryk.drapik@bitbag.pl>
- */
 final class PayUCheckoutPage extends Page implements PayUCheckoutPageInterface
 {
-    /**
-     * @var RepositoryInterface
-     */
+    /** @var RepositoryInterface */
     private $securityTokenRepository;
 
     /**
-     * @param Session $session
      * @param array $parameters
-     * @param RepositoryInterface $securityTokenRepository
      */
     public function __construct(Session $session, $parameters, RepositoryInterface $securityTokenRepository)
     {
@@ -38,7 +33,7 @@ final class PayUCheckoutPage extends Page implements PayUCheckoutPageInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function pay()
     {
@@ -46,18 +41,13 @@ final class PayUCheckoutPage extends Page implements PayUCheckoutPageInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function cancel()
     {
         $this->getDriver()->visit($this->findCaptureToken()->getTargetUrl());
     }
 
-    /**
-     * @param array $urlParameters
-     *
-     * @return string
-     */
     protected function getUrl(array $urlParameters = []): string
     {
         return 'https://secure.payu.com/api/v2_1/orders';

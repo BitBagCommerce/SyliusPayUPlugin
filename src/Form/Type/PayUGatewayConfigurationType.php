@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file was created by the developers from BitBag.
  * Feel free to contact us once you face any issues or want to start
@@ -17,9 +19,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-/**
- * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
- */
 final class PayUGatewayConfigurationType extends AbstractType
 {
     /**

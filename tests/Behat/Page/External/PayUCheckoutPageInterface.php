@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file was created by the developers from BitBag.
  * Feel free to contact us once you face any issues or want to start
@@ -14,9 +16,6 @@ use Behat\Mink\Exception\DriverException;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
 use FriendsOfBehat\PageObjectExtension\Page\PageInterface;
 
-/**
- * @author Patryk Drapik <patryk.drapik@bitbag.pl>
- */
 interface PayUCheckoutPageInterface extends PageInterface
 {
     /**

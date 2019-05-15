@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file was created by the developers from BitBag.
  * Feel free to contact us once you face any issues or want to start
@@ -15,27 +17,16 @@ use BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridgeInterface;
 use OpenPayU_Result;
 use Sylius\Behat\Service\Mocker\Mocker;
 
-/**
- * @author Patryk Drapik <patryk.drapik@bitbag.pl>
- */
 final class PayUApiMocker
 {
-    /**
-     * @var Mocker
-     */
+    /** @var Mocker */
     private $mocker;
 
-    /**
-     * @param Mocker $mocker
-     */
     public function __construct(Mocker $mocker)
     {
         $this->mocker = $mocker;
     }
 
-    /**
-     * @param callable $action
-     */
     public function mockApiSuccessfulPaymentResponse(callable $action): void
     {
         $service = $this->mocker
@@ -49,9 +40,6 @@ final class PayUApiMocker
         $this->mocker->unmockAll();
     }
 
-    /**
-     * @param callable $action
-     */
     public function completedPayment(callable $action): void
     {
         $service = $this->mocker
@@ -68,9 +56,6 @@ final class PayUApiMocker
         $this->mocker->unmockAll();
     }
 
-    /**
-     * @param callable $action
-     */
     public function canceledPayment(callable $action): void
     {
         $service = $this->mocker
@@ -89,23 +74,21 @@ final class PayUApiMocker
 
     /**
      * @param $statusPayment
-     *
-     * @return OpenPayU_Result
      */
     private function getDataRetrieve($statusPayment): OpenPayU_Result
     {
         $openPayUResult = new OpenPayU_Result();
 
-        $data = (object)[
-            'status' => (object)[
-                'statusCode' => OpenPayUBridge::SUCCESS_API_STATUS
+        $data = (object) [
+            'status' => (object) [
+                'statusCode' => OpenPayUBridge::SUCCESS_API_STATUS,
             ],
             'orderId' => 1,
             'orders' => [
-                (object)[
-                    'status' => $statusPayment
-                ]
-            ]
+                (object) [
+                    'status' => $statusPayment,
+                ],
+            ],
         ];
 
         $openPayUResult->setResponse($data);
@@ -113,19 +96,16 @@ final class PayUApiMocker
         return $openPayUResult;
     }
 
-    /**
-     * @return OpenPayU_Result
-     */
     private function createResponseSuccessfulApi(): OpenPayU_Result
     {
         $openPayUResult = new OpenPayU_Result();
 
-        $data = (object)[
-            'status' => (object)[
-                'statusCode' => OpenPayUBridge::SUCCESS_API_STATUS
+        $data = (object) [
+            'status' => (object) [
+                'statusCode' => OpenPayUBridge::SUCCESS_API_STATUS,
             ],
             'orderId' => 1,
-            'redirectUri' => '/'
+            'redirectUri' => '/',
         ];
 
         $openPayUResult->setResponse($data);

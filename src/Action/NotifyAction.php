@@ -40,8 +40,6 @@ final class NotifyAction implements ActionInterface, ApiAwareInterface
     }
 
     /**
-     * @param mixed $api
-     *
      * @throws UnsupportedApiException if the given Api is not supported.
      */
     public function setApi($api): void
@@ -84,7 +82,7 @@ final class NotifyAction implements ActionInterface, ApiAwareInterface
                     $response = $result->getResponse();
                     if ($response->order->orderId) {
                         /** @var OpenPayU_Result $order */
-                        $order =  $this->openPayUBridge->retrieve($response->order->orderId);
+                        $order = $this->openPayUBridge->retrieve($response->order->orderId);
                         if (OpenPayUBridgeInterface::SUCCESS_API_STATUS === $order->getStatus()) {
                             if (PaymentInterface::STATE_COMPLETED !== $payment->getState()) {
                                 $status = $order->getResponse()->orders[0]->status;
@@ -103,7 +101,7 @@ final class NotifyAction implements ActionInterface, ApiAwareInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supports($request): bool
     {
