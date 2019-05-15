@@ -18,29 +18,18 @@ use Sylius\Behat\Page\Shop\Order\ShowPageInterface;
 use Tests\BitBag\SyliusPayUPlugin\Behat\Mocker\PayUApiMocker;
 use Tests\BitBag\SyliusPayUPlugin\Behat\Page\External\PayUCheckoutPageInterface;
 
-/**
- * @author Patryk Drapik <patryk.drapik@bitbag.pl>
- */
 final class PayUContext implements Context
 {
-    /**
-     * @var PayUApiMocker
-     */
+    /** @var PayUApiMocker */
     private $payUApiMocker;
 
-    /**
-     * @var ShowPageInterface
-     */
+    /** @var ShowPageInterface */
     private $orderDetails;
 
-    /**
-     * @var CompletePageInterface
-     */
+    /** @var CompletePageInterface */
     private $summaryPage;
 
-    /**
-     * @var PayUCheckoutPageInterface
-     */
+    /** @var PayUCheckoutPageInterface */
     private $payUCheckoutPage;
 
     public function __construct(

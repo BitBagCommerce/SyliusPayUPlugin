@@ -26,7 +26,7 @@ final class ConvertPaymentAction implements ActionInterface, GatewayAwareInterfa
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param Convert $request
      */
@@ -34,7 +34,7 @@ final class ConvertPaymentAction implements ActionInterface, GatewayAwareInterfa
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        /** @var $payment PaymentInterface */
+        /** @var PaymentInterface $payment */
         $payment = $request->getSource();
         $details = ArrayObject::ensureArrayObject($payment->getDetails());
 
@@ -51,7 +51,7 @@ final class ConvertPaymentAction implements ActionInterface, GatewayAwareInterfa
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supports($request): bool
     {

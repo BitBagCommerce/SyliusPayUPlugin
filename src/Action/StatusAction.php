@@ -32,8 +32,6 @@ final class StatusAction implements ActionInterface
     }
 
     /**
-     * @param mixed $api
-     *
      * @throws UnsupportedApiException if the given Api is not supported.
      */
     public function setApi($api): void
@@ -52,7 +50,7 @@ final class StatusAction implements ActionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function execute($request): void
     {
@@ -65,26 +63,31 @@ final class StatusAction implements ActionInterface
 
         if ((null === $status || OpenPayUBridgeInterface::NEW_API_STATUS === $status) && null !== $orderId) {
             $request->markNew();
+
             return;
         }
 
         if (OpenPayUBridgeInterface::PENDING_API_STATUS === $status) {
             $request->markPending();
+
             return;
         }
 
         if (OpenPayUBridgeInterface::CANCELED_API_STATUS === $status) {
             $request->markCanceled();
+
             return;
         }
 
         if (OpenPayUBridgeInterface::WAITING_FOR_CONFIRMATION_PAYMENT_STATUS === $status) {
             $request->markSuspended();
+
             return;
         }
 
         if (OpenPayUBridgeInterface::COMPLETED_API_STATUS === $status) {
             $request->markCaptured();
+
             return;
         }
 

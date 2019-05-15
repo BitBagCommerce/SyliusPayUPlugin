@@ -47,8 +47,6 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Generic
     }
 
     /**
-     * @param mixed $api
-     *
      * @throws UnsupportedApiException if the given Api is not supported.
      */
     public function setApi($api): void

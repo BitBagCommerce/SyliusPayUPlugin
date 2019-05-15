@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "983733389e3701253fcc94f2dc682871",
+    "content-hash": "c7d2074fa98d0f557b17dd282c3b5932",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -9378,7 +9378,7 @@
             ],
             "authors": [
                 {
-                    "name": "William DURAND",
+                    "name": "William Durand",
                     "email": "william.durand1@gmail.com"
                 }
             ],
@@ -9942,12 +9942,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/minkphp/Mink.git",
-                "reference": "153e4bbee958fea4a6dc542105ff6013c06813e8"
+                "reference": "6d637f7af4816c26ad8a943da2e3f7eef1231bea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minkphp/Mink/zipball/153e4bbee958fea4a6dc542105ff6013c06813e8",
-                "reference": "153e4bbee958fea4a6dc542105ff6013c06813e8",
+                "url": "https://api.github.com/repos/minkphp/Mink/zipball/6d637f7af4816c26ad8a943da2e3f7eef1231bea",
+                "reference": "6d637f7af4816c26ad8a943da2e3f7eef1231bea",
                 "shasum": ""
             },
             "require": {
@@ -9993,7 +9993,7 @@
                 "testing",
                 "web"
             ],
-            "time": "2019-05-07T14:41:06+00:00"
+            "time": "2019-05-14T09:56:49+00:00"
         },
         {
             "name": "behat/mink-browserkit-driver",
@@ -12923,23 +12923,29 @@
         },
         {
             "name": "sylius-labs/coding-standard",
-            "version": "v2.0.0",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SyliusLabs/CodingStandard.git",
-                "reference": "a6f3a2b0dd8ef2b54958d3b374b650e7e9fc6cad"
+                "reference": "5a0f55073bd18a36afd544d0c93399a3598cf249"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SyliusLabs/CodingStandard/zipball/a6f3a2b0dd8ef2b54958d3b374b650e7e9fc6cad",
-                "reference": "a6f3a2b0dd8ef2b54958d3b374b650e7e9fc6cad",
+                "url": "https://api.github.com/repos/SyliusLabs/CodingStandard/zipball/5a0f55073bd18a36afd544d0c93399a3598cf249",
+                "reference": "5a0f55073bd18a36afd544d0c93399a3598cf249",
                 "shasum": ""
             },
             "require": {
+                "friendsofphp/php-cs-fixer": "^2.12",
                 "php": "^7.1",
-                "symplify/easy-coding-standard": "^4.2.1"
+                "symplify/easy-coding-standard": "^4.5|^5.0"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
@@ -12952,7 +12958,7 @@
                 }
             ],
             "description": "Battle-tested coding standard configuration used in Sylius.",
-            "time": "2018-05-15T08:21:42+00:00"
+            "time": "2018-11-13T15:10:46+00:00"
         },
         {
             "name": "symfony/browser-kit",

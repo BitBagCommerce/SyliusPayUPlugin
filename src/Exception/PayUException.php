@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file was created by the developers from BitBag.
  * Feel free to contact us once you face any issues or want to start
@@ -12,12 +14,9 @@ namespace BitBag\SyliusPayUPlugin\Exception;
 
 use Payum\Core\Exception\Http\HttpException;
 
-/**
- * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
- */
 final class PayUException extends HttpException
 {
-    const LABEL = 'PayUException';
+    public const LABEL = 'PayUException';
 
     public static function newInstance($status)
     {
@@ -35,7 +34,7 @@ final class PayUException extends HttpException
             $parts[] = '[reason phrase] ' . $status->statusDesc;
         }
 
-        $message = implode(PHP_EOL, $parts);
+        $message = implode(\PHP_EOL, $parts);
 
         return new static($message);
     }
