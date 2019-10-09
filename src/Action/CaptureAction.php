@@ -29,6 +29,7 @@ use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\TokenInterface;
 use Sylius\Component\Core\Model\CustomerInterface;
 use Sylius\Component\Core\Model\OrderInterface;
+use Sylius\Component\Core\Model\OrderItemInterface;
 use Webmozart\Assert\Assert;
 
 final class CaptureAction implements ActionInterface, ApiAwareInterface, GenericTokenFactoryAwareInterface, GatewayAwareInterface
@@ -67,41 +68,35 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Generic
     public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
-
         $model = $request->getModel();
-        ArrayObject::ensureArrayObject($model);
-
-        /** @var OrderInterface $order */
+        /** @var OrderInterface $orderData */
         $order = $request->getFirstModel()->getOrder();
 
-        $model['customer'] = $order->getCustomer();
-        $model['locale'] = $this->getFallbackLocaleCode($order->getLocaleCode());
+        /** @var TokenInterface $token */
+        $token = $request->getToken();
+        $payUdata = $this->prepareOrder($token, $order);
+
+        $result = $this->openPayUBridge->create($payUdata);
 
         if (null !== $model['orderId']) {
             /** @var mixed $response */
             $response = $this->openPayUBridge->retrieve((string) $model['orderId'])->getResponse();
             Assert::keyExists($response->orders, 0);
-
             if (OpenPayUBridgeInterface::SUCCESS_API_STATUS === $response->status->statusCode) {
                 $model['statusPayU'] = $response->orders[0]->status;
                 $request->setModel($model);
             }
-
             if (OpenPayUBridgeInterface::NEW_API_STATUS !== $response->orders[0]->status) {
                 return;
             }
         }
 
-        /** @var TokenInterface $token */
-        $token = $request->getToken();
-        $order = $this->prepareOrder($token, $model);
-
-        $result = $this->openPayUBridge->create($order);
         if (null !== $result) {
             /** @var mixed $response */
             $response = $result->getResponse();
             if ($response && OpenPayUBridgeInterface::SUCCESS_API_STATUS === $response->status->statusCode) {
                 $model['orderId'] = $response->orderId;
+
                 $request->setModel($model);
 
                 throw new HttpRedirect($response->redirectUri);
@@ -123,21 +118,20 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Generic
             && $request->getModel() instanceof ArrayObject;
     }
 
-    private function prepareOrder(TokenInterface $token, ArrayObject $model): array
+    private function prepareOrder(TokenInterface $token, OrderInterface $order): array
     {
         $notifyToken = $this->tokenFactory->createNotifyToken($token->getGatewayName(), $token->getDetails());
+        $payUdata = [];
 
-        $order = [];
-        $order['continueUrl'] = $token->getTargetUrl();
-        $order['notifyUrl'] = $notifyToken->getTargetUrl();
-        $order['customerIp'] = $model['customerIp'];
-        $order['merchantPosId'] = OpenPayU_Configuration::getMerchantPosId();
-        $order['description'] = $model['description'];
-        $order['currencyCode'] = $model['currencyCode'];
-        $order['totalAmount'] = $model['totalAmount'];
-        $order['extOrderId'] = $model['extOrderId'];
+        $payUdata['continueUrl'] = $token->getTargetUrl();
+        $payUdata['notifyUrl'] = $notifyToken->getTargetUrl();
+        $payUdata['customerIp'] = $order->getCustomerIp();
+        $payUdata['merchantPosId'] = OpenPayU_Configuration::getMerchantPosId();
+        $payUdata['description'] = $order->getNumber();
+        $payUdata['currencyCode'] = $order->getCurrencyCode();
+        $payUdata['totalAmount'] = $order->getTotal();
         /** @var CustomerInterface $customer */
-        $customer = $model['customer'];
+        $customer = $order->getCustomer();
 
         Assert::isInstanceOf(
             $customer,
@@ -149,31 +143,33 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Generic
         );
 
         $buyer = [
-            'email' => (string) $customer->getEmail(),
-            'firstName' => (string) $customer->getFirstName(),
-            'lastName' => (string) $customer->getLastName(),
-            'language' => $model['locale'],
+            'email' => (string)$customer->getEmail(),
+            'firstName' => (string)$customer->getFirstName(),
+            'lastName' => (string)$customer->getLastName(),
+            'language' => $this->getFallbackLocaleCode($order->getLocaleCode()),
         ];
+        $payUdata['buyer'] = $buyer;
+        $payUdata['products'] = $this->getOrderItems($order);
 
-        $order['buyer'] = $buyer;
-        $order['products'] = $this->resolveProducts($model);
-
-        return $order;
+        return $payUdata;
     }
 
-    private function resolveProducts(ArrayObject $model): array
+    private function getOrderItems(OrderInterface $order): array
     {
-        if (!array_key_exists('products', $model) || 0 === count($model['products'])) {
-            return [
-                [
-                    'name' => $model['description'],
-                    'unitPrice' => $model['totalAmount'],
-                    'quantity' => 1,
-                ],
-            ];
+        $itemsData = [];
+
+        if ($items = $order->getItems()) {
+            /** @var OrderItemInterface $item */
+            foreach ($items as $key => $item) {
+                $itemsData[$key] = [
+                    'name' => $item->getProductName(),
+                    'unitPrice' => $item->getUnitPrice(),
+                    'quantity' => $item->getQuantity()
+                ];
+            }
         }
 
-        return $model['products'];
+        return $itemsData;
     }
 
     private function getFallbackLocaleCode(string $localeCode): string
