@@ -143,9 +143,9 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Generic
         );
 
         $buyer = [
-            'email' => (string)$customer->getEmail(),
-            'firstName' => (string)$customer->getFirstName(),
-            'lastName' => (string)$customer->getLastName(),
+            'email' => (string) $customer->getEmail(),
+            'firstName' => (string) $customer->getFirstName(),
+            'lastName' => (string) $customer->getLastName(),
             'language' => $this->getFallbackLocaleCode($order->getLocaleCode()),
         ];
         $payUdata['buyer'] = $buyer;
@@ -164,7 +164,7 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Generic
                 $itemsData[$key] = [
                     'name' => $item->getProductName(),
                     'unitPrice' => $item->getUnitPrice(),
-                    'quantity' => $item->getQuantity()
+                    'quantity' => $item->getQuantity(),
                 ];
             }
         }
