@@ -4,7 +4,7 @@
 
 ## Overview
 
-This plugin integrated [PayU payments](https://www.payu.pl/) with Sylius based applications. After installing it you should be able to create a payment method for PayU gateway and enable its payments in your web store.
+The plugin integrates [PayU payments](https://www.payu.pl/) with Sylius based applications. After the installation you should be able to create a payment method for PayU gateway and enable its payments in your web store.
 
 ## Support
 
