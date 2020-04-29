@@ -1,10 +1,15 @@
-![BitBag](https://bitbag.pl/static/bitbag-logo.png)
+![BitBag](https://bitbag.io/wp-content/uploads/2020/04/logo.svg)
 
 # BitBag PayU Plugin [![Build Status](https://travis-ci.org/BitBagCommerce/SyliusPayUPlugin.svg?branch=master)](https://travis-ci.org/BitBagCommerce/SyliusPayUPlugin)
 
 ## Overview
 
-The plugin integrates [PayU payments](https://www.payu.pl/) with Sylius based applications. After the installation you should be able to create a payment method for PayU gateway and enable its payments in your web store.
+The plugin integrates [PayU Poland payments](https://www.payu.pl/) with Sylius based applications. After the installation you should be able to create a payment method for PayU gateway and enable its payments in your web store.
+
+
+## Note
+
+PayU operates the payment service provider service in various countries under the same brand ([RO](https://www.payu.ro/), [PL](https://www.payu.pl/), [IN](https://www.payu.in/), [AR](https://www.payulatam.com/ar/), [BR](https://www.payu.com.br/) just to name a few). Unfortunately, they use different platforms and this plugin it does not work for PayU in Romania, for example. 
 
 ## Support
 
