@@ -120,7 +120,7 @@ For online communication, we invite you to chat with us & other users on [Sylius
 ---
 
 We created a demo app with some useful use-cases of plugins!
-Visit b2b.bitbag.shop to take a look at it. The admin can be accessed under b2b.bitbag.shop/admin/login link and sylius: sylius credentials.
+Visit b2b.bitbag.shop to take a look at it. The admin can be accessed under https://b2b.bitbag.shop/admin/login link and sylius: sylius credentials.
 Plugins that we have used in the demo:
 | BitBag's Plugin | GitHub | Sylius' Store|
 | ------ | ------ | ------|
