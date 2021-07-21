@@ -4,6 +4,8 @@
 
         <defaults public="true" autoconfigure="false" autowire="false"/>
 
-        <service id="bitbag.payu_plugin.bridge.open_payu" class="BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridge"/>
+        <service id="bitbag.payu_plugin.bridge.open_payu" class="BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridge">
+            <argument>%bitbag_open_payu_cache_dir%</argument>
+        </service>
     </services>
 </container>
