@@ -4,6 +4,10 @@
         <import resource="services/**/*.xml"/>
     </imports>
 
+    <parameters>
+        <parameter key="bitbag_open_payu_cache_dir">%kernel.project_dir%/var/cache/%env(APP_ENV)%</parameter>
+    </parameters>
+
     <services>
         <defaults public="false" autoconfigure="false" autowire="false"/>
 

@@ -12,12 +12,21 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusPayUPlugin\Bridge;
 
+use OauthCacheFile;
 use OpenPayU_Configuration;
 use OpenPayU_Order;
 use OpenPayU_Result;
 
 final class OpenPayUBridge implements OpenPayUBridgeInterface
 {
+    /*** @var string|null */
+    private $cacheDir;
+
+    public function __construct(string $cacheDir = null)
+    {
+        $this->cacheDir = $cacheDir;
+    }
+
     public function setAuthorizationData(
         string $environment,
         string $signatureKey,
@@ -34,6 +43,8 @@ final class OpenPayUBridge implements OpenPayUBridgeInterface
         //set Oauth Client Id and Oauth Client Secret (from merchant admin panel)
         OpenPayU_Configuration::setOauthClientId($clientId);
         OpenPayU_Configuration::setOauthClientSecret($clientSecret);
+
+        OpenPayU_Configuration::setOauthTokenCache(new OauthCacheFile($this->cacheDir));
     }
 
     public function create(array $order): ?OpenPayU_Result
