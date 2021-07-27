@@ -19,6 +19,7 @@ use OpenPayU_Result;
 
 final class OpenPayUBridge implements OpenPayUBridgeInterface
 {
+    /*** @var string|null */
     private $cacheDir;
 
     public function __construct(string $cacheDir = null)
