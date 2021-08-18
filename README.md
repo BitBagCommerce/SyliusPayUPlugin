@@ -11,7 +11,7 @@ Like what we do? Want to join us? Check out our job listings on our [career page
 
 ## Table of Content
 ---
-* [Overwiev](#overwiev)
+* [Overview](#overview)
 * [Installation](#installation)
   * [Customization](#customization)
   * [Testing](#testing)
@@ -23,7 +23,7 @@ Like what we do? Want to join us? Check out our job listings on our [career page
 * [Contact](#contact)
 
 
-# Overwiev
+# Overview
 ---
 The plugin integrates [PayU Poland payments](https://www.payu.pl/) with Sylius based applications. After the installation you should be able to create a payment method for PayU gateway and enable its payments in your web store.
 
