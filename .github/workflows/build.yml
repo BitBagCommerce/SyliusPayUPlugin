@@ -109,7 +109,7 @@ jobs:
      run: composer require "sylius/sylius:${{ matrix.sylius }}" --no-update --no-scripts --no-interaction
 
    - name: Install PHP dependencies
-     run: composer install --no-interaction
+     run: composer install --no-interaction --no-scripts
 
    - name: Get Yarn cache directory
      id: yarn-cache
