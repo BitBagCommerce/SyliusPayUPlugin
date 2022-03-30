@@ -29,9 +29,9 @@ jobs:
     exclude:
         -   sylius: ~1.9
             php: 8.0
-        -   sylius: ~1.10.0
+        -   sylius: ~1.10
             symfony: 4.4
-        -   sylius: ~1.11.0
+        -   sylius: ~1.11
             php: 7.4
   env:
    APP_ENV: test
