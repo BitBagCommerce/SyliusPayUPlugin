@@ -22,10 +22,17 @@ jobs:
    matrix:
     php: [ 7.4, 8.0 ]
     symfony: [ ^4.4, ^5.2 ]
-    sylius: [ ^1.9, ~1.10 ]
-    node: [ 10.x ]
-    mysql: [ 5.7 ]
+    sylius: [ ~1.9, ~1.10, ~1.11 ]
+    node: [ 14.x ]
+    mysql: [ 8.0 ]
 
+    exclude:
+        -   sylius: ~1.9
+            php: 8.0
+        -   sylius: ~1.10
+            symfony: 4.4
+        -   sylius: ~1.11
+            php: 7.4
   env:
    APP_ENV: test
    DATABASE_URL: "mysql://root:root@127.0.0.1/sylius?serverVersion=${{ matrix.mysql }}"
@@ -65,7 +72,7 @@ jobs:
    - name: Runs Elasticsearch
      uses: elastic/elastic-github-actions/elasticsearch@master
      with:
-      stack-version: 6.8.15
+      stack-version: 7.16.3
 
    - name: Output PHP version for Symfony CLI
      run: php -v | head -n 1 | awk '{ print $2 }' > .php-version
@@ -102,7 +109,7 @@ jobs:
      run: composer require "sylius/sylius:${{ matrix.sylius }}" --no-update --no-scripts --no-interaction
 
    - name: Install PHP dependencies
-     run: composer install --no-interaction
+     run: composer install --no-interaction --no-scripts
 
    - name: Get Yarn cache directory
      id: yarn-cache
