@@ -6,6 +6,7 @@
 
         <service id="bitbag.payu_plugin.action.capture" class="BitBag\SyliusPayUPlugin\Action\CaptureAction">
             <argument type="service" id="bitbag.payu_plugin.bridge.open_payu"/>
+            <argument type="service" id="bitbag.payu_plugin.provider.payment_description_provider"/>
             <tag name="payum.action" factory="payu" alias="payum.action.capture"/>
         </service>
 
