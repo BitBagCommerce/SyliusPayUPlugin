@@ -15,7 +15,7 @@
     ],
     "require": {
         "php": "^8.0",
-        "sylius/sylius": " ~1.12.0",
+        "sylius/sylius": "~1.11.0 || ~1.12.0",
         "openpayu/openpayu": "^2.2"
     },
     "require-dev": {

@@ -1,4 +1,4 @@
-#jms_serializer:
-#  visitors:
-#    xml_serialization:
-#      format_output: '%kernel.debug%'
+jms_serializer:
+  visitors:
+    xml_serialization:
+      format_output: '%kernel.debug%'

@@ -13,7 +13,7 @@ on:
 
 jobs:
  tests:
-  runs-on: ubuntu-18.04
+  runs-on: ubuntu-22.04
 
   name: "Sylius ${{ matrix.sylius }}, PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }}, MySQL ${{ matrix.mysql }}"
 
@@ -24,7 +24,7 @@ jobs:
       symfony: [ "^5.4", "^6.0" ]
       sylius: [ "~1.11.0", "~1.12.0" ]
       node: [ "^14.17.x" ]
-      mysql: [ "8.0" ]
+      mysql: [ "5.7", "8.0" ]
 
       exclude:
         - sylius: ~1.11.0
