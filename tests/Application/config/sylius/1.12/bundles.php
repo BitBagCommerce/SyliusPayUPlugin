@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 return [
     SyliusLabs\Polyfill\Symfony\Security\Bundle\SyliusLabsPolyfillSymfonySecurityBundle::class => ['all' => true],
-    FOS\OAuthServerBundle\FOSOAuthServerBundle::class => ['all' => true],
-    Sylius\Bundle\AdminApiBundle\SyliusAdminApiBundle::class => ['all' => true],
+    Sylius\Calendar\SyliusCalendarBundle::class => ['all' => true],
+    League\FlysystemBundle\FlysystemBundle::class =>['all' => true],
+
 ];

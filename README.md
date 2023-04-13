@@ -72,7 +72,7 @@ $ bin/console debug:container bitbag.payu_plugin
 $ wget http://getcomposer.org/composer.phar
 $ php composer.phar install
 $ yarn install
-$ yarn run gulp
+$ yarn encore dev
 $ php bin/console sylius:install --env test
 $ php bin/console server:start --env test
 $ open http://localhost:8000
