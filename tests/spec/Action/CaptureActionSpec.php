@@ -21,15 +21,18 @@ use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Security\TokenInterface;
 use PhpSpec\ObjectBehavior;
+use Sylius\Bundle\PayumBundle\Provider\PaymentDescriptionProviderInterface;
 use Sylius\Component\Core\Model\CustomerInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\OrderItemInterface;
 
 final class CaptureActionSpec extends ObjectBehavior
 {
-    function let(OpenPayUBridgeInterface $openPayUBridge): void
-    {
-        $this->beConstructedWith($openPayUBridge);
+    function let(
+        OpenPayUBridgeInterface $openPayUBridge,
+        PaymentDescriptionProviderInterface $paymentDescriptionProvider
+    ): void {
+        $this->beConstructedWith($openPayUBridge, $paymentDescriptionProvider);
     }
 
     function it_is_initializable(): void
