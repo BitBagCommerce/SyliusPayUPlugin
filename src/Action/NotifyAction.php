@@ -93,7 +93,7 @@ final class NotifyAction implements ActionInterface, ApiAwareInterface
                     }
                 }
             } catch (OpenPayU_Exception $e) {
-                throw new HttpResponse($e->getMessage());
+                throw new HttpResponse($e->getMessage(), 500);
             }
         }
     }
