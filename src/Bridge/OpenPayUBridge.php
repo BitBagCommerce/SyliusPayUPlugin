@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusPayUPlugin\Bridge;
 
+use BitBag\SyliusPayUPlugin\Exception\PayUResponseException;
 use OauthCacheFile;
 use OpenPayU_Configuration;
 use OpenPayU_Order;
@@ -30,7 +31,7 @@ final class OpenPayUBridge implements OpenPayUBridgeInterface
         string $signatureKey,
         string $posId,
         string $clientId,
-        string $clientSecret
+        string $clientSecret,
     ): void {
         OpenPayU_Configuration::setEnvironment($environment);
 
@@ -47,10 +48,15 @@ final class OpenPayUBridge implements OpenPayUBridgeInterface
 
     public function create(array $order): ?OpenPayU_Result
     {
-        /** @var OpenPayU_Result|null $result */
-        $result = OpenPayU_Order::create($order);
+        try {
+            /** @var OpenPayU_Result|null $result */
+            $result = OpenPayU_Order::create($order);
 
-        return $result;
+            return $result;
+        } catch (\OpenPayU_Exception $exception) {
+            throw new PayUResponseException($exception->getOriginalResponse()->getStatus(), $exception->getCode(), $order);
+//            throw new \OpenPayU_Exception_Request($exception->getMessage(), $exception->getCode(),$order);
+        }
     }
 
     public function retrieve(string $orderId): OpenPayU_Result

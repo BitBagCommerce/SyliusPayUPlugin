@@ -1,0 +1,5 @@
+bitbag:
+  payu_plugin:
+    payu_exception:
+      currencies: Przepraszamy, wystąpił nieoczekiwany błąd. Prosimy o powtórzenie operacji. Jeśli problem będzie się powtarzał, prosimy o kontakt z nami.
+      default: Przepraszamy, coś poszło nie tak. Jeśli widzisz ten komunikat prosimy o kontakt z nami.

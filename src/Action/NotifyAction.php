@@ -31,7 +31,6 @@ final class NotifyAction implements ActionInterface, ApiAwareInterface
     /** @var OpenPayUBridgeInterface */
     private $openPayUBridge;
 
-    /** @param OpenPayUBridgeInterface $openPayUBridge */
     public function __construct(OpenPayUBridgeInterface $openPayUBridge)
     {
         $this->openPayUBridge = $openPayUBridge;
@@ -51,16 +50,15 @@ final class NotifyAction implements ActionInterface, ApiAwareInterface
             $api['signature_key'],
             $api['pos_id'],
             $api['oauth_client_id'],
-            $api['oauth_client_secret']
+            $api['oauth_client_secret'],
         );
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute($request): void
     {
-        /** @var $request Notify */
         RequestNotSupportedException::assertSupports($this, $request);
         /** @var PaymentInterface $payment */
         $payment = $request->getFirstModel();
@@ -99,7 +97,7 @@ final class NotifyAction implements ActionInterface, ApiAwareInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function supports($request): bool
     {

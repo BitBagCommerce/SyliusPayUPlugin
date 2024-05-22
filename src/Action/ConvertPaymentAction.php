@@ -24,7 +24,7 @@ final class ConvertPaymentAction implements ActionInterface, GatewayAwareInterfa
     use GatewayAwareTrait;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param Convert $request
      */
@@ -49,13 +49,13 @@ final class ConvertPaymentAction implements ActionInterface, GatewayAwareInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function supports($request): bool
     {
-        return $request instanceof Convert
-               && $request->getSource() instanceof PaymentInterface
-               && 'array' === $request->getTo();
+        return $request instanceof Convert &&
+               $request->getSource() instanceof PaymentInterface &&
+               'array' === $request->getTo();
     }
 
     private function getClientIp(): ?string

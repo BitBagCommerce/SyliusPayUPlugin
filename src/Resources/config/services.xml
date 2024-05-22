@@ -11,5 +11,15 @@
     <services>
         <defaults public="false" autoconfigure="false" autowire="false"/>
 
+        <service
+                class="BitBag\SyliusPayUPlugin\EventListener\PayUResponseExceptionEventListener"
+                id="bitbag.sylius_payu_plugin.listener.payu_exception_listener"
+        >
+            <argument type="service" id="router" />
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="logger"/>
+            <tag name="kernel.event_listener" event="kernel.exception" method="onPayuOpenException" />
+        </service>
+
     </services>
 </container>

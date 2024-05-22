@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 final class PayUGatewayConfigurationType extends AbstractType
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -42,7 +42,7 @@ final class PayUGatewayConfigurationType extends AbstractType
                         'bitbag.payu_plugin.sandbox' => OpenPayUBridgeInterface::SANDBOX_ENVIRONMENT,
                     ],
                     'label' => 'bitbag.payu_plugin.environment',
-                ]
+                ],
             )
             ->add(
                 'signature_key',
@@ -54,10 +54,10 @@ final class PayUGatewayConfigurationType extends AbstractType
                             [
                                 'message' => 'bitbag.payu_plugin.gateway_configuration.signature_key.not_blank',
                                 'groups' => ['sylius'],
-                            ]
+                            ],
                         ),
                     ],
-                ]
+                ],
             )
             ->add(
                 'pos_id',
@@ -69,10 +69,10 @@ final class PayUGatewayConfigurationType extends AbstractType
                             [
                                 'message' => 'bitbag.payu_plugin.gateway_configuration.pos_id.not_blank',
                                 'groups' => ['sylius'],
-                            ]
+                            ],
                         ),
                     ],
-                ]
+                ],
             )
             ->add(
                 'oauth_client_id',
@@ -84,10 +84,10 @@ final class PayUGatewayConfigurationType extends AbstractType
                             [
                                 'message' => 'bitbag.payu_plugin.gateway_configuration.oauth_client_id.not_blank',
                                 'groups' => ['sylius'],
-                            ]
+                            ],
                         ),
                     ],
-                ]
+                ],
             )->add(
                 'oauth_client_secret',
                 TextType::class,
@@ -98,10 +98,10 @@ final class PayUGatewayConfigurationType extends AbstractType
                             [
                                 'message' => 'bitbag.payu_plugin.gateway_configuration.oauth_client_secret.not_blank',
                                 'groups' => ['sylius'],
-                            ]
+                            ],
                         ),
                     ],
-                ]
+                ],
             );
     }
 }

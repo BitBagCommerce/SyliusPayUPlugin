@@ -23,7 +23,6 @@ final class StatusAction implements ActionInterface
     /** @var OpenPayUBridgeInterface */
     private $openPayUBridge;
 
-    /** @param OpenPayUBridgeInterface $openPayUBridge */
     public function __construct(OpenPayUBridgeInterface $openPayUBridge)
     {
         $this->openPayUBridge = $openPayUBridge;
@@ -43,16 +42,15 @@ final class StatusAction implements ActionInterface
             $api['signature_key'],
             $api['pos_id'],
             $api['oauth_client_id'],
-            $api['oauth_client_secret']
+            $api['oauth_client_secret'],
         );
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute($request): void
     {
-        /** @var $request GetStatusInterface */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());

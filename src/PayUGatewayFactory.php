@@ -22,7 +22,7 @@ final class PayUGatewayFactory extends GatewayFactory
             [
                 'payum.factory_name' => 'payu',
                 'payum.factory_title' => 'PayU',
-            ]
+            ],
         );
 
         if (false === (bool) $config['payum.api']) {
