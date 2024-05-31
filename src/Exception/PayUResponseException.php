@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace BitBag\SyliusPayUPlugin\Exception;
 
 use Exception;
+use Payum\Core\Exception\Http\HttpException;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 final class PayUResponseException extends Exception
 {
@@ -26,7 +28,7 @@ final class PayUResponseException extends Exception
         parent::__construct($message, $code, $previous);
     }
 
-    public function getOrder()
+    public function getOrder(): array
     {
         return $this->order;
     }
