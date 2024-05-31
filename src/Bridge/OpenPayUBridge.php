@@ -55,7 +55,6 @@ final class OpenPayUBridge implements OpenPayUBridgeInterface
             return $result;
         } catch (\OpenPayU_Exception $exception) {
             throw new PayUResponseException($exception->getOriginalResponse()->getStatus(), $exception->getCode(), $order);
-//            throw new \OpenPayU_Exception_Request($exception->getMessage(), $exception->getCode(),$order);
         }
     }
 
