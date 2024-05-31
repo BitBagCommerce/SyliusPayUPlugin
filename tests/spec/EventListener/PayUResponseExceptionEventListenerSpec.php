@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file was created by developers working at BitBag
  * Do you need more information about us and what we do? Visit our https://bitbag.io website!
@@ -15,20 +17,19 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 final class PayUResponseExceptionEventListenerSpec extends ObjectBehavior
 {
     public function let(
         RouterInterface $router,
-        RequestStack    $requestStack,
-        LoggerInterface $logger
-    ): void
-    {
+        RequestStack $requestStack,
+        LoggerInterface $logger,
+    ): void {
         $this->beConstructedWith($router, $requestStack, $logger);
     }
 
@@ -38,21 +39,20 @@ final class PayUResponseExceptionEventListenerSpec extends ObjectBehavior
     }
 
     public function it_should_redirect_to_order_payment_page_if_token_value_is_set(
-        RequestStack        $requestStack,
-        Session             $session,
-        FlashBagInterface   $flashBag,
-        RouterInterface     $router,
+        RequestStack $requestStack,
+        Session $session,
+        FlashBagInterface $flashBag,
+        RouterInterface $router,
         HttpKernelInterface $kernel,
-        RedirectResponse    $response,
-    ): void
-    {
+        RedirectResponse $response,
+    ): void {
         $order = ['tokenValue' => 'D8gHAy3dpj12x'];
-        $exception = new PayUResponseException("ERROR_INCONSISTENT_CURRENCIES", 500, $order);
+        $exception = new PayUResponseException('ERROR_INCONSISTENT_CURRENCIES', 500, $order);
         $event = new ExceptionEvent(
             $kernel->getWrappedObject(),
             new Request(),
             500,
-            $exception
+            $exception,
         );
 
         $requestStack->getSession()->willReturn($session);
@@ -68,21 +68,20 @@ final class PayUResponseExceptionEventListenerSpec extends ObjectBehavior
     }
 
     public function it_should_redirect_to_empty_cart_page_if_token_value_is_not_set(
-        RequestStack        $requestStack,
-        Session             $session,
-        FlashBagInterface   $flashBag,
-        RouterInterface     $router,
+        RequestStack $requestStack,
+        Session $session,
+        FlashBagInterface $flashBag,
+        RouterInterface $router,
         HttpKernelInterface $kernel,
-        RedirectResponse    $response,
-    ): void
-    {
+        RedirectResponse $response,
+    ): void {
         $order = [];
-        $exception = new PayUResponseException("ERROR_INCONSISTENT_CURRENCIES", 500, $order);
+        $exception = new PayUResponseException('ERROR_INCONSISTENT_CURRENCIES', 500, $order);
         $event = new ExceptionEvent(
             $kernel->getWrappedObject(),
             new Request(),
             500,
-            $exception
+            $exception,
         );
 
         $requestStack->getSession()->willReturn($session);
@@ -97,21 +96,20 @@ final class PayUResponseExceptionEventListenerSpec extends ObjectBehavior
     }
 
     public function it_should_redirect_to_empty_cart_page_if_token_value_is_not_set_and_currency_is_correct(
-        RequestStack        $requestStack,
-        Session             $session,
-        FlashBagInterface   $flashBag,
-        RouterInterface     $router,
+        RequestStack $requestStack,
+        Session $session,
+        FlashBagInterface $flashBag,
+        RouterInterface $router,
         HttpKernelInterface $kernel,
-        RedirectResponse    $response,
-    ): void
-    {
+        RedirectResponse $response,
+    ): void {
         $order = [];
-        $exception = new PayUResponseException("SOME_ERROR", 500, $order);
+        $exception = new PayUResponseException('SOME_ERROR', 500, $order);
         $event = new ExceptionEvent(
             $kernel->getWrappedObject(),
             new Request(),
             500,
-            $exception
+            $exception,
         );
 
         $requestStack->getSession()->willReturn($session);
@@ -124,7 +122,6 @@ final class PayUResponseExceptionEventListenerSpec extends ObjectBehavior
 
         $this->onPayuOpenException($event);
     }
-
 
     public function it_logs_errors(LoggerInterface $logger): void
     {

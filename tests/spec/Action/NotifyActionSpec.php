@@ -39,7 +39,7 @@ final class NotifyActionSpec extends ObjectBehavior
         TokenInterface $token,
         ArrayObject $model,
         GetHumanStatus $status,
-        GatewayInterface $gateway
+        GatewayInterface $gateway,
     ): void {
         $request->getToken()->willReturn($token);
         $request->getModel()->willReturn($model);

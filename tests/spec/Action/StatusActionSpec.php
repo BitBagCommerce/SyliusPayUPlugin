@@ -26,7 +26,7 @@ final class StatusActionSpec extends ObjectBehavior
     function it_marks_as_new_when_status_is_new(
         GetStatus $request,
         ArrayObject $model,
-        Iterator $iterator
+        Iterator $iterator,
     ): void {
         $model->getIterator()->willReturn($iterator);
         $model->offsetExists('orderId')->willReturn(true);
@@ -44,7 +44,7 @@ final class StatusActionSpec extends ObjectBehavior
     function it_marks_as_pending_when_status_form_api_is_pending(
         GetStatus $request,
         ArrayObject $model,
-        Iterator $iterator
+        Iterator $iterator,
     ): void {
         $model->getIterator()->willReturn($iterator);
         $model->offsetExists('orderId')->willReturn(true);
@@ -62,7 +62,7 @@ final class StatusActionSpec extends ObjectBehavior
     function it_marks_as_canceled_when_status_form_api_is_canceled(
         GetStatus $request,
         ArrayObject $model,
-        Iterator $iterator
+        Iterator $iterator,
     ): void {
         $model->getIterator()->willReturn($iterator);
         $model->offsetExists('orderId')->willReturn(true);
@@ -80,7 +80,7 @@ final class StatusActionSpec extends ObjectBehavior
     function it_marks_as_waiting_when_status_form_api_is_waiting_for_confirmation(
         GetStatus $request,
         ArrayObject $model,
-        Iterator $iterator
+        Iterator $iterator,
     ): void {
         $model->getIterator()->willReturn($iterator);
         $model->offsetExists('orderId')->willReturn(true);
@@ -98,7 +98,7 @@ final class StatusActionSpec extends ObjectBehavior
     function it_marks_as_completed_when_status_form_api_is_completed(
         GetStatus $request,
         ArrayObject $model,
-        Iterator $iterator
+        Iterator $iterator,
     ): void {
         $model->getIterator()->willReturn($iterator);
         $model->offsetExists('orderId')->willReturn(true);
