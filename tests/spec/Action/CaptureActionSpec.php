@@ -30,7 +30,7 @@ final class CaptureActionSpec extends ObjectBehavior
 {
     function let(
         OpenPayUBridgeInterface $openPayUBridge,
-        PaymentDescriptionProviderInterface $paymentDescriptionProvider
+        PaymentDescriptionProviderInterface $paymentDescriptionProvider,
     ): void {
         $this->beConstructedWith($openPayUBridge, $paymentDescriptionProvider);
     }
@@ -48,7 +48,7 @@ final class CaptureActionSpec extends ObjectBehavior
         OrderInterface $order,
         CustomerInterface $customer,
         TokenInterface $token,
-        GatewayInterface $gateway
+        GatewayInterface $gateway,
     ): void {
         $model->getIterator()->willReturn($iterator);
         $model->offsetSet('customer', $customer)->willReturn(null);

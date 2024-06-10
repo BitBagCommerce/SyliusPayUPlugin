@@ -47,7 +47,7 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Generic
 
     public function __construct(
         OpenPayUBridgeInterface $openPayUBridge,
-        PaymentDescriptionProviderInterface $paymentDescriptionProvider
+        PaymentDescriptionProviderInterface $paymentDescriptionProvider,
     ) {
         $this->openPayUBridge = $openPayUBridge;
         $this->paymentDescriptionProvider = $paymentDescriptionProvider;
@@ -67,7 +67,7 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Generic
             $api['signature_key'],
             $api['pos_id'],
             $api['oauth_client_id'],
-            $api['oauth_client_secret']
+            $api['oauth_client_secret'],
         );
     }
 
@@ -77,7 +77,7 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Generic
         $model = $request->getModel();
         /** @var PaymentInterface $payment */
         $payment = $request->getFirstModel();
-        /** @var OrderInterface $orderData */
+        /** @var OrderInterface $order */
         $order = $payment->getOrder();
 
         /** @var TokenInterface $token */
@@ -122,12 +122,15 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Generic
     public function supports($request): bool
     {
         return
-            $request instanceof Capture
-            && $request->getModel() instanceof ArrayObject;
+            $request instanceof Capture &&
+            $request->getModel() instanceof ArrayObject;
     }
 
-    private function prepareOrder(TokenInterface $token, OrderInterface $order, PaymentInterface $payment): array
-    {
+    private function prepareOrder(
+        TokenInterface $token,
+        OrderInterface $order,
+        PaymentInterface $payment,
+    ): array {
         $notifyToken = $this->tokenFactory->createNotifyToken($token->getGatewayName(), $token->getDetails());
         $payUdata = [];
 
@@ -138,6 +141,7 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Generic
         $payUdata['description'] = $this->paymentDescriptionProvider->getPaymentDescription($payment);
         $payUdata['currencyCode'] = $order->getCurrencyCode();
         $payUdata['totalAmount'] = $order->getTotal();
+        $payUdata['tokenValue'] = $order->getTokenValue();
         /** @var CustomerInterface $customer */
         $customer = $order->getCustomer();
 
@@ -146,8 +150,8 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Generic
             CustomerInterface::class,
             sprintf(
                 'Make sure the first model is the %s instance.',
-                CustomerInterface::class
-            )
+                CustomerInterface::class,
+            ),
         );
 
         $buyer = [

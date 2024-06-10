@@ -36,7 +36,7 @@ final class ConvertPaymentActionSpec extends ObjectBehavior
     function it_executes(
         Convert $request,
         PaymentInterface $payment,
-        OrderInterface $order
+        OrderInterface $order,
     ): void {
         $payment->getDetails()->willReturn([]);
         $payment->getTotalAmount()->willReturn(88000);
@@ -70,8 +70,8 @@ final class ConvertPaymentActionSpec extends ObjectBehavior
                     }
 
                     return true;
-                }
-            )
+                },
+            ),
         )->shouldBeCalled();
 
         $this->execute($request);

@@ -1,0 +1,5 @@
+bitbag:
+  payu_plugin:
+    payu_exception:
+      currencies: Sorry, an unexpected error has occurred. Please try again. If the problem still persists, please contact us.
+      default: Something is wrong, please contact us for more details.
