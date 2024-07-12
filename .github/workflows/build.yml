@@ -20,21 +20,18 @@ jobs:
   strategy:
     fail-fast: false
     matrix:
-      php: [ "8.0" ]
+      php: [ "8.1", "8.2", "8.3" ]
       symfony: [ "^5.4", "^6.0" ]
-      sylius: [ "~1.11.0", "~1.12.0" ]
-      node: [ "^14.17.x" ]
+      sylius: [ "~1.12.0", "~1.13.0" ]
+      node: [ "^14.17.x", "20.x" ]
       mysql: [ "5.7", "8.0" ]
 
-      exclude:
-        - sylius: ~1.11.0
-          symfony: "^6.0"
   env:
    APP_ENV: test
    DATABASE_URL: "mysql://root:root@127.0.0.1/sylius?serverVersion=${{ matrix.mysql }}"
 
   steps:
-   - uses: actions/checkout@v2
+   - uses: actions/checkout@v3
 
    - name: Setup PHP
      uses: shivammathur/setup-php@v2
@@ -45,7 +42,7 @@ jobs:
       coverage: none
 
    - name: Setup Node
-     uses: actions/setup-node@v1
+     uses: actions/setup-node@v4
      with:
       node-version: "${{ matrix.node }}"
 
@@ -150,7 +147,7 @@ jobs:
 
    - name: Run Behat
      run: vendor/bin/behat --colors --strict -vvv --no-interaction || vendor/bin/behat --colors --strict -vvv --no-interaction --rerun
-            
+     
    - name: Failed build Slack notification
      uses: rtCamp/action-slack-notify@v2
      if: ${{ failure() && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') }}
