@@ -45,6 +45,9 @@
         "polishsymfonycommunity/symfony-mocker-container": "^1.0",
         "bitbag/coding-standard": "^3.0"
     },
+    "conflict": {
+        "doctrine/persistence": "<3.0"
+    },
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
