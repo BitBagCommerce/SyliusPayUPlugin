@@ -31,7 +31,7 @@ final class OpenPyUBridge implements OpenPayUBridgeInterface
         string $signatureKey,
         string $posId,
         string $clientId,
-        string $clientSecret
+        string $clientSecret,
     ): void {
         $this->container
             ->get('bitbag.payu_plugin.bridge.open_payu')
@@ -40,7 +40,7 @@ final class OpenPyUBridge implements OpenPayUBridgeInterface
                 $signatureKey,
                 $posId,
                 $clientId,
-                $clientSecret
+                $clientSecret,
             )
         ;
     }

@@ -44,7 +44,7 @@ final class PayUContext implements Context
         SharedStorageInterface $sharedStorage,
         PaymentMethodRepositoryInterface $paymentMethodRepository,
         ExampleFactoryInterface $paymentMethodExampleFactory,
-        ObjectManager $paymentMethodManager
+        ObjectManager $paymentMethodManager,
     ) {
         $this->sharedStorage = $sharedStorage;
         $this->paymentMethodRepository = $paymentMethodRepository;
@@ -57,7 +57,7 @@ final class PayUContext implements Context
      */
     public function theStoreHasAPaymentMethodWithACodeAndPayuCheckoutGateway(
         string $paymentMethodName,
-        string $paymentMethodCode
+        string $paymentMethodCode,
     ): void {
         $paymentMethod = $this->createPaymentMethod($paymentMethodName, $paymentMethodCode, 'PayU Checkout');
         $paymentMethod->getGatewayConfig()->setConfig(
@@ -68,7 +68,7 @@ final class PayUContext implements Context
                 'oauth_client_id' => 'CLIENT_ID',
                 'oauth_client_secret' => 'SECRET',
                 'payum.http_client' => '@sylius.payum.http_client',
-            ]
+            ],
         );
         $this->paymentMethodManager->persist($paymentMethod);
         $this->paymentMethodManager->flush();
@@ -79,7 +79,7 @@ final class PayUContext implements Context
         string $code,
         string $description = '',
         bool $addForCurrentChannel = true,
-        ?int $position = null
+        ?int $position = null,
     ): PaymentMethodInterface {
         /** @var PaymentMethodInterface $paymentMethod */
         $paymentMethod = $this->paymentMethodExampleFactory->create(
@@ -92,7 +92,7 @@ final class PayUContext implements Context
                 'enabled' => true,
                 'channels' => ($addForCurrentChannel && $this->sharedStorage->has('channel'))
                     ? [$this->sharedStorage->get('channel')] : [],
-            ]
+            ],
         );
 
         if (null !== $position) {

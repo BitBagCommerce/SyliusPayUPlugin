@@ -11,8 +11,6 @@ declare(strict_types=1);
 namespace BitBag\SyliusPayUPlugin\Exception;
 
 use Exception;
-use Payum\Core\Exception\Http\HttpException;
-use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 final class PayUResponseException extends Exception
 {

@@ -44,7 +44,7 @@ final class PayUApiMocker
             ->mockService('bitbag.payu_plugin.bridge.open_payu', OpenPayUBridgeInterface::class);
 
         $service->shouldReceive('retrieve')->andReturn(
-            $this->getDataRetrieve(OpenPayUBridge::COMPLETED_API_STATUS)
+            $this->getDataRetrieve(OpenPayUBridge::COMPLETED_API_STATUS),
         );
         $service->shouldReceive('create')->andReturn($this->createResponseSuccessfulApi());
         $service->shouldReceive('setAuthorizationData');
@@ -60,7 +60,7 @@ final class PayUApiMocker
             ->mockService('bitbag.payu_plugin.bridge.open_payu', OpenPayUBridgeInterface::class);
 
         $service->shouldReceive('retrieve')->andReturn(
-            $this->getDataRetrieve(OpenPayUBridge::CANCELED_API_STATUS)
+            $this->getDataRetrieve(OpenPayUBridge::CANCELED_API_STATUS),
         );
         $service->shouldReceive('create')->andReturn($this->createResponseSuccessfulApi());
         $service->shouldReceive('setAuthorizationData');
@@ -70,9 +70,6 @@ final class PayUApiMocker
         $this->mocker->unmockAll();
     }
 
-    /**
-     * @param $statusPayment
-     */
     private function getDataRetrieve($statusPayment): OpenPayU_Result
     {
         $openPayUResult = new OpenPayU_Result();
