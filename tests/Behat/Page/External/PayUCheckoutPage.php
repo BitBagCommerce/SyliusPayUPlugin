@@ -31,7 +31,7 @@ final class PayUCheckoutPage extends Page implements PayUCheckoutPageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function pay()
     {
@@ -39,7 +39,7 @@ final class PayUCheckoutPage extends Page implements PayUCheckoutPageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function cancel()
     {

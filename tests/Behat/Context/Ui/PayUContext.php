@@ -36,7 +36,7 @@ final class PayUContext implements Context
         PayUApiMocker $payUApiMocker,
         ShowPageInterface $orderDetails,
         CompletePageInterface $summaryPage,
-        PayUCheckoutPageInterface $payUCheckoutPage
+        PayUCheckoutPageInterface $payUCheckoutPage,
     ) {
         $this->orderDetails = $orderDetails;
         $this->summaryPage = $summaryPage;
@@ -53,7 +53,7 @@ final class PayUContext implements Context
         $this->payUApiMocker->mockApiSuccessfulPaymentResponse(
             function () {
                 $this->summaryPage->confirmOrder();
-            }
+            },
         );
     }
 
@@ -65,7 +65,7 @@ final class PayUContext implements Context
         $this->payUApiMocker->completedPayment(
             function () {
                 $this->payUCheckoutPage->pay();
-            }
+            },
         );
     }
 
@@ -78,7 +78,7 @@ final class PayUContext implements Context
         $this->payUApiMocker->canceledPayment(
             function () {
                 $this->payUCheckoutPage->cancel();
-            }
+            },
         );
     }
 
@@ -90,7 +90,7 @@ final class PayUContext implements Context
         $this->payUApiMocker->mockApiSuccessfulPaymentResponse(
             function () {
                 $this->orderDetails->pay();
-            }
+            },
         );
     }
 }
