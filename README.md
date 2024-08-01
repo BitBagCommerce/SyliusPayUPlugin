@@ -16,6 +16,7 @@ Like what we do? Want to join us? Check out our job listings on our [career page
 ## Table of Content
 ---
 * [Overview](#overview)
+* [Functionalities](#functionalities)
 * [Installation](#installation)
   * [Customization](#customization)
   * [Testing](#testing)
