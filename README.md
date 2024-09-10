@@ -41,24 +41,29 @@ This **open-source plugin was developed to help the Sylius community**. If you h
 
 [![](https://bitbag.io/wp-content/uploads/2020/10/button-contact.png)](https://bitbag.io/contact-us/?utm_source=github&utm_medium=referral&utm_campaign=plugins_payu)
 
-# Functionalities
+## Functionalities
 
 All main functionalities of the plugin are described [here.](https://github.com/BitBagCommerce/SyliusPayUPlugin/blob/master/doc/functionalities.md)
 
-# Installation
+## Installation
 ---
 
-```bash
-$ composer require bitbag/payu-plugin
-```
-    
-Add plugin dependencies to your config/bundles.php file:
+### Requirements
 
-```php
-return [
-    BitBag\SyliusPayUPlugin\BitBagSyliusPayUPlugin::class => ['all' => true],
-]
-```
+We work on stable, supported and up-to-date versions of packages. We recommend you to do the same.
+
+| Package       | Version         |
+|---------------|-----------------|
+| PHP           | \>=8.0          |
+| sylius/sylius | 1.12.x - 1.13.x |
+| MySQL         | \>= 5.7         |
+| NodeJS        | 14.x            |
+
+----
+
+### Full installation guide
+- [See the full installation guide](doc/installation.md)
+
 ## Customization
 ----
 
