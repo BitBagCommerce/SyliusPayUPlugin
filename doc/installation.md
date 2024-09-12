@@ -48,6 +48,9 @@ bin/console cache:clear
 **Note:** If you are running it on production, add the `-e prod` flag to this command.
 
 ## Known issues
+
+> For the plugin to work correctly, `base currency` should be set to `Polish Zloty` in the Sylius admin panel.
+
 ### Translations not displaying correctly
 For incorrectly displayed translations, execute the command:
 ```bash
