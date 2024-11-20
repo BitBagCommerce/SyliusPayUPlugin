@@ -84,8 +84,6 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Generic
         $token = $request->getToken();
         $payUdata = $this->prepareOrder($token, $order, $payment);
 
-        $result = $this->openPayUBridge->create($payUdata);
-
         if (null !== $model['orderId']) {
             /** @var mixed $response */
             $response = $this->openPayUBridge->retrieve((string) $model['orderId'])->getResponse();
@@ -98,6 +96,8 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Generic
                 return;
             }
         }
+
+        $result = $this->openPayUBridge->create($payUdata);
 
         if (null !== $result) {
             /** @var mixed $response */
