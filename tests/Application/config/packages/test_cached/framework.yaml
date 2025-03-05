@@ -1,4 +1,2 @@
-framework:
-    test: ~
-    session:
-        handler_id: ~
+imports:
+    - { resource: ../test/framework.yaml }
