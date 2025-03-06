@@ -1,7 +1,3 @@
 sylius_admin:
     resource: "@SyliusAdminBundle/Resources/config/routing.yml"
-    prefix: /admin
-
-live_component:
-    resource: "@LiveComponentBundle/config/routes.php"
-    prefix: /_components
+    prefix: '/%sylius_admin.path_name%'

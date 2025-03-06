@@ -49,19 +49,13 @@
         "symfony/web-profiler-bundle": "^6.4 || ^7.1",
         "nyholm/psr7": "^1.8"
     },
-    "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "BitBag\\SyliusPayUPlugin\\": "src/"
+            "BitBag\\SyliusPayUPlugin\\": "src/",
+            "Tests\\BitBag\\SyliusPayUPlugin\\": "tests/"
         }
     },
     "autoload-dev": {
-        "psr-4": {
-            "Tests\\BitBag\\SyliusPayUPlugin\\": [
-                "tests/",
-                "tests/Application/src"
-            ]
-        },
         "classmap": ["tests/Application/Kernel.php"]
     },
     "config": {
@@ -71,6 +65,22 @@
     "extra": {
         "symfony": {
             "require": "^6.4 || ^7.1"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "php bin/create_node_symlink.php"
+        ],
+        "post-update-cmd": [
+            "php bin/create_node_symlink.php"
+        ],
+        "post-create-project-cmd": [
+            "php bin/create_node_symlink.php"
+        ],
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd",
+            "security-checker security:check": "script"
         }
     }
 }

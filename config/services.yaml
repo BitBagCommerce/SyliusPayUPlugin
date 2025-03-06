@@ -1,0 +1,11 @@
+parameters:
+    locale: 'en'
+
+services:
+  _defaults:
+    public: true
+    autoconfigure: false
+    autowire: false
+
+imports:
+  - { resource: services/*.yaml }

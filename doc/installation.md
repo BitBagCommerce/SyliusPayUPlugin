@@ -41,6 +41,15 @@ return [
 ];
 ```
 
+Import plugin configuration in `config/packages/_sylius.yaml` file:
+```yaml
+    # config/packages/_sylius.yaml
+
+    imports:
+    # ...
+    - { resource: "@BitBagSyliusPayUPlugin/config/config.yaml" }
+```
+
 ### Clear application cache by using command:
 ```bash
 bin/console cache:clear

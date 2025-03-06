@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-return [
+$bundles = [
     Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
     Symfony\Bundle\SecurityBundle\SecurityBundle::class => ['all' => true],
@@ -68,3 +68,9 @@ return [
     Symfony\UX\Icons\UXIconsBundle::class => ['all' => true],
     BitBag\SyliusPayUPlugin\BitBagSyliusPayUPlugin::class => ['all' => true],
 ];
+
+if (class_exists(winzou\Bundle\StateMachineBundle\winzouStateMachineBundle::class)) {
+    $bundles[winzou\Bundle\StateMachineBundle\winzouStateMachineBundle::class] = ['all' => true];
+}
+
+return $bundles;

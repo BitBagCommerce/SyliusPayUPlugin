@@ -34,8 +34,7 @@ final class PayUGatewayConfigurationType extends AbstractType
     {
         $builder
             ->add(
-                'environment',
-                ChoiceType::class,
+                'environment', ChoiceType::class,
                 [
                     'choices' => [
                         'bitbag.payu_plugin.secure' => OpenPayUBridgeInterface::SECURE_ENVIRONMENT,
@@ -45,8 +44,7 @@ final class PayUGatewayConfigurationType extends AbstractType
                 ],
             )
             ->add(
-                'signature_key',
-                TextType::class,
+                'signature_key', TextType::class,
                 [
                     'label' => 'bitbag.payu_plugin.signature_key',
                     'constraints' => [
@@ -60,8 +58,7 @@ final class PayUGatewayConfigurationType extends AbstractType
                 ],
             )
             ->add(
-                'pos_id',
-                TextType::class,
+                'pos_id', TextType::class,
                 [
                     'label' => 'bitbag.payu_plugin.pos_id',
                     'constraints' => [
@@ -75,8 +72,7 @@ final class PayUGatewayConfigurationType extends AbstractType
                 ],
             )
             ->add(
-                'oauth_client_id',
-                TextType::class,
+                'oauth_client_id', TextType::class,
                 [
                     'label' => 'bitbag.payu_plugin.oauth_client_id',
                     'constraints' => [
@@ -89,8 +85,7 @@ final class PayUGatewayConfigurationType extends AbstractType
                     ],
                 ],
             )->add(
-                'oauth_client_secret',
-                TextType::class,
+                'oauth_client_secret', TextType::class,
                 [
                     'label' => 'bitbag.payu_plugin.oauth_client_secret',
                     'constraints' => [
