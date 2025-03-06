@@ -1,0 +1,18 @@
+sylius_twig_hooks:
+  hooks:
+    'sylius_admin.payment_method.update.content.form.sections.gateway_configuration.payu':
+      environment:
+        template: '@BitBagSyliusPayUPlugin/admin/payment_method/form/environment.html.twig'
+        priority: 400
+      signature_key:
+        template: '@BitBagSyliusPayUPlugin/admin/payment_method/form/signature_key.html.twig'
+        priority: 300
+      pos_id:
+        template: '@BitBagSyliusPayUPlugin/admin/payment_method/form/pos_id.html.twig'
+        priority: 200
+      oauth_client_id:
+        template: '@BitBagSyliusPayUPlugin/admin/payment_method/form/oauth_client_id.html.twig'
+        priority: 100
+      oauth_client_secret:
+        template: '@BitBagSyliusPayUPlugin/admin/payment_method/form/oauth_client_secret.html.twig'
+        priority: 0
