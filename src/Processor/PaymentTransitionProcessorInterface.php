@@ -11,12 +11,10 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusPayUPlugin\Processor;
 
-use OpenPayU_Result;
 use Sylius\Component\Payment\Model\PaymentRequestInterface;
 
 interface PaymentTransitionProcessorInterface
 {
-
     public const STATE_NEW = 'NEW';
 
     public const STATE_CANCELED = 'CANCELED';

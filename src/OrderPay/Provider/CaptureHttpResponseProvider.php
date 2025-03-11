@@ -22,13 +22,12 @@ use Webmozart\Assert\Assert;
 
 final class CaptureHttpResponseProvider implements HttpResponseProviderInterface
 {
-
-    public function supports(RequestConfiguration $requestConfiguration, PaymentRequestInterface $paymentRequest,): bool
+    public function supports(RequestConfiguration $requestConfiguration, PaymentRequestInterface $paymentRequest): bool
     {
-        return $paymentRequest->getState() === PaymentRequestInterface::STATE_PROCESSING;
+        return PaymentRequestInterface::STATE_PROCESSING === $paymentRequest->getState();
     }
 
-    public function getResponse(RequestConfiguration $requestConfiguration, PaymentRequestInterface $paymentRequest,): Response
+    public function getResponse(RequestConfiguration $requestConfiguration, PaymentRequestInterface $paymentRequest): Response
     {
         $data = $paymentRequest->getResponseData();
         $result = $data['result'];
