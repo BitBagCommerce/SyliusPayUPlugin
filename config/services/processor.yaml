@@ -1,0 +1,6 @@
+services:
+  bitbag.payu_plugin.processor.payment_transition:
+    class: BitBag\SyliusPayUPlugin\Processor\PaymentTransitionProcessor
+    arguments:
+      - '@sylius_abstraction.state_machine'
+      - '@bitbag.payu_plugin.bridge.open_payu'

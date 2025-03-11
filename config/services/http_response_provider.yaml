@@ -1,0 +1,16 @@
+services:
+  bitbag.sylius.provider.order_pay.http_response.payu:
+    class: Sylius\Bundle\PaymentBundle\Provider\ActionsHttpResponseProvider
+    arguments:
+      - !tagged_locator
+        tag: bitbag.sylius.provider.order_pay.http_response.payu
+        index_by: action
+    tags:
+      - name: sylius.payment_request.provider.http_response
+        gateway_factory: 'payu'
+
+  bitbag.sylius.provider.order_pay.http_response.payu.capture:
+    class: BitBag\SyliusPayUPlugin\OrderPay\Provider\CaptureHttpResponseProvider
+    tags:
+      - name: bitbag.sylius.provider.order_pay.http_response.payu
+        action: !php/const Sylius\Component\Payment\Model\PaymentRequestInterface::ACTION_CAPTURE

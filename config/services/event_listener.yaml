@@ -1,0 +1,9 @@
+services:
+  bitbag.sylius_payu_plugin.listener.payu_exception_listener:
+    class: BitBag\SyliusPayUPlugin\EventListener\PayUResponseExceptionEventListener
+    arguments:
+      - "@router"
+      - "@request_stack"
+      - "@logger"
+    tags:
+      - { name: kernel.event_listener, event: kernel.exception, method: onPayuOpenException }
