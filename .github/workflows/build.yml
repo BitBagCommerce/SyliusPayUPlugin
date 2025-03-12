@@ -162,7 +162,6 @@ jobs:
         name: Run Behat
         run: vendor/bin/behat --colors --strict -vvv --no-interaction || vendor/bin/behat --colors --strict -vvv --no-interaction --rerun
 
-
       -
         name: Failed build Slack notification
         uses: rtCamp/action-slack-notify@v2
