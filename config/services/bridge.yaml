@@ -1,0 +1,5 @@
+services:
+  bitbag.payu_plugin.bridge.open_payu:
+    class: BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridge
+    arguments:
+      - '%bitbag_open_payu_cache_dir%'

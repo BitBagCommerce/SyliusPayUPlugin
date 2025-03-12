@@ -1,0 +1,12 @@
+parameters:
+    locale: 'en'
+    bitbag_open_payu_cache_dir: "%kernel.project_dir%/var/cache/%env(APP_ENV)%"
+
+services:
+  _defaults:
+    public: true
+    autoconfigure: false
+    autowire: false
+
+imports:
+  - { resource: services/*.yaml }

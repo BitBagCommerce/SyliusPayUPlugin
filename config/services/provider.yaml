@@ -1,0 +1,3 @@
+services:
+  bitbag.payu_plugin.provider.payment_description_provider:
+    class: BitBag\SyliusPayUPlugin\Provider\PaymentDescriptionProvider

@@ -15,7 +15,7 @@ You can find more information about our eCommerce services and technologies on o
 
 Do you like our work? Would you like to join us? Check out the **“Career” tab:** https://bitbag.io/pl/kariera. 
 
-# About Us 
+About Us 
 ---
 
 BitBag is a software house that implements tailor-made eCommerce platforms with the entire infrastructure—from creating eCommerce platforms to implementing PIM and CMS systems to developing custom eCommerce applications, specialist B2B solutions, and migrations from other platforms.
@@ -45,7 +45,7 @@ We have a 70-person team of experts: business analysts and consultants, eCommerc
 
 ---
 
-## Table of Content
+Table of Content
 ---
 * [Overview](#overview)
 * [Functionalities](#functionalities)
@@ -60,7 +60,7 @@ We have a 70-person team of experts: business analysts and consultants, eCommerc
 * [Community](#community)
 
 
-# Overview
+Overview
 ---
 The plugin integrates [PayU Poland payments](https://www.payu.pl/) with Sylius-based applications. The PayU Plugin fosters growth and facilitates secure and smooth transactions for web stores operating in Poland. It embodies a blend of reliability, user-friendliness, and adaptability, making it a valuable addition to your Sylius-powered online store.  After the installation, you should be able to create a payment method for the PayU gateway and enable its payments in your web store.
 
@@ -69,52 +69,38 @@ The plugin integrates [PayU Poland payments](https://www.payu.pl/) with Sylius-b
 PayU operates the payment service provider service in various countries under the same brand ([RO](https://www.payu.ro/), [PL](https://www.payu.pl/), [IN](https://www.payu.in/), [AR](https://www.payulatam.com/ar/), [BR](https://www.payu.com.br/) just to name a few). Unfortunately, they use different platforms and this plugin it does not work for PayU in Romania, for example. 
 
 
-# Installation
+Installation
 ---
 For the full installation guide, please go [here](doc/installation.md).  
 
-## Requirements
+Requirements
 ---
 
 We work on stable, supported and up-to-date versions of packages. We recommend you to do the same.
 
-| Package       | Version         |
-|---------------|-----------------|
-| PHP           | \>=8.0          |
-| sylius/sylius | 1.12.x - 1.13.x |
-| MySQL         | \>= 5.7         |
-| NodeJS        | 14.x            |
+| Package       | Version   |
+|---------------|-----------|
+| PHP           | \>= 8.1   |
+| sylius/sylius | \>= 2.0.4 |
+| MySQL         | \>= 5.7   |
+| NodeJS        | \>= 20.x  |
+| Symfony       | \>= 6.4   |
 
-
-## Customization
+Customization
 ----
 
 ### Available services you can [decorate](https://symfony.com/doc/current/service_container/service_decoration.html) and forms you can [extend](http://symfony.com/doc/current/form/create_form_type_extension.html)
 
 Run the below command to see what Symfony services are shared with this plugin:
 ```bash
-$ bin/console debug:container bitbag.payu_plugin
+bin/console debug:container bitbag.payu_plugin
 ```
 
-## Testing
-----
-
-```bash
-$ wget http://getcomposer.org/composer.phar
-$ php composer.phar install
-$ yarn install
-$ yarn encore dev
-$ php bin/console sylius:install --env test
-$ php bin/console server:start --env test
-$ open http://localhost:8000
-$ bin/behat features/*
-$ bin/phpspec run
-```
-# Functionalities
+Functionalities
 ---
 All main functionalities of the plugin are described [here.](https://github.com/BitBagCommerce/SyliusPayUPlugin/blob/master/doc/functionalities.md)
 
-# Demo 
+Demo 
 ---
 
 We created a demo app with some useful use-cases of plugins! Visit http://demo.sylius.com/ to take a look at it.
@@ -123,7 +109,7 @@ We created a demo app with some useful use-cases of plugins! Visit http://demo.s
 
 [![](https://bitbag.io/wp-content/uploads/2020/10/button_free_consulatation-1.png)](https://bitbag.io/contact-us/?utm_source=github&utm_medium=referral&utm_campaign=plugins_payu)
 
-# Additional resources for developers
+Additional resources for developers
 ---
 To learn more about our contribution workflow and more, we encourage you to use the following resources:
 * [Sylius Documentation](https://docs.sylius.com/en/latest/)
@@ -132,21 +118,21 @@ To learn more about our contribution workflow and more, we encourage you to use 
 * [Sylius Plugins Blogs](https://bitbag.io/blog/category/plugins)
 
 
-# License
+License
 ---
 
 This plugin's source code is completely free and released under the terms of the MIT license.
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen.)
 
-# Contact and Support 
+Contact and Support 
 ---
 This open-source plugin was developed to help the Sylius community. If you have any additional questions, would like help with installing or configuring the plugin, or need any assistance with your Sylius project - let us know! **Contact us** or send us an **e-mail to hello@bitbag.io** with your question(s).
 
 [![](https://bitbag.io/wp-content/uploads/2020/10/button-contact.png)](https://bitbag.io/contact-us/?utm_source=github&utm_medium=referral&utm_campaign=plugins_payu)
 
 
-# Community
+Community
 ----
 
 For online communication, we invite you to chat with us & other users on **[Sylius Slack](https://sylius-devs.slack.com/).**

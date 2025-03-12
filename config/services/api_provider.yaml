@@ -1,0 +1,6 @@
+services:
+  bitbag.payu_plugin.api_provider.payu_data_provider:
+    class: BitBag\SyliusPayUPlugin\Api\Provider\PayUDataProvider
+    arguments:
+      - '@sylius_shop.provider.order_pay.payment_request_pay_url'
+      - '@bitbag.payu_plugin.provider.payment_description_provider'
