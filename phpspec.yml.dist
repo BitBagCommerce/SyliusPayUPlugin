@@ -1,2 +1,0 @@
-suites:
-    PayUPlugin: { namespace: BitBag\SyliusPayUPlugin, psr4_prefix: BitBag\SyliusPayUPlugin, spec_path: tests, src_path: src }
