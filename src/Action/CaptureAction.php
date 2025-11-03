@@ -78,6 +78,8 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Generic
         /** @var PaymentInterface $payment */
         $payment = $request->getFirstModel();
         /** @var OrderInterface $order */
+
+
         $order = $payment->getOrder();
 
         /** @var TokenInterface $token */
@@ -90,10 +92,19 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Generic
             /** @var mixed $response */
             $response = $this->openPayUBridge->retrieve((string) $model['orderId'])->getResponse();
             Assert::keyExists($response->orders, 0);
+
+            if ($response && OpenPayUBridgeInterface::PENDING_API_STATUS === $response->orders[0]->status) {
+                $resultResponse = $result->getResponse();
+                if (isset($resultResponse->redirectUri)) {
+                    throw new HttpRedirect($resultResponse->redirectUri);
+                }
+            }
+
             if (OpenPayUBridgeInterface::SUCCESS_API_STATUS === $response->status->statusCode) {
                 $model['statusPayU'] = $response->orders[0]->status;
                 $request->setModel($model);
             }
+
             if (OpenPayUBridgeInterface::NEW_API_STATUS !== $response->orders[0]->status) {
                 return;
             }
