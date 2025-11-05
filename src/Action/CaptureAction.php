@@ -77,44 +77,55 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Generic
         $model = $request->getModel();
         /** @var PaymentInterface $payment */
         $payment = $request->getFirstModel();
+
         /** @var OrderInterface $order */
-
-
         $order = $payment->getOrder();
 
         /** @var TokenInterface $token */
         $token = $request->getToken();
         $payUdata = $this->prepareOrder($token, $order, $payment);
 
-        $result = $this->openPayUBridge->create($payUdata);
+        $paymentDetails = $payment->getDetails();
+        $forceNewTransaction = false;
 
-        if (null !== $model['orderId']) {
+        if (isset($paymentDetails['orderId'])) {
             /** @var mixed $response */
-            $response = $this->openPayUBridge->retrieve((string) $model['orderId'])->getResponse();
+            $response = $this->openPayUBridge->retrieve((string) $paymentDetails['orderId'])->getResponse();
             Assert::keyExists($response->orders, 0);
 
-            if ($response && OpenPayUBridgeInterface::PENDING_API_STATUS === $response->orders[0]->status) {
-                $resultResponse = $result->getResponse();
-                if (isset($resultResponse->redirectUri)) {
-                    throw new HttpRedirect($resultResponse->redirectUri);
+            if (OpenPayUBridgeInterface::SUCCESS_API_STATUS === $response->status->statusCode) {
+                if ($response->orders[0]->status === OpenPayUBridgeInterface::PENDING_API_STATUS) {
+                    // Sometimes PayU doesn't change payment status immediately. We need to wait a bit to check,
+                    // whether it's pending, because client closed a tab (and then force redirecting to new transaction)
+                    // or it's pending, because PayU didn't change payment status at time.
+                    
+                    sleep(2);
+                    $response = $this->openPayUBridge->retrieve((string) $paymentDetails['orderId'])->getResponse();
+                    Assert::keyExists($response->orders, 0);
+
+                    $forceNewTransaction = $response->orders[0]->status === OpenPayUBridgeInterface::PENDING_API_STATUS;
+                }
+
+                if ($forceNewTransaction === false) {
+                    $model['statusPayU'] = $response->orders[0]->status;
+                    $request->setModel($model);
                 }
             }
 
-            if (OpenPayUBridgeInterface::SUCCESS_API_STATUS === $response->status->statusCode) {
-                $model['statusPayU'] = $response->orders[0]->status;
-                $request->setModel($model);
-            }
-
-            if (OpenPayUBridgeInterface::NEW_API_STATUS !== $response->orders[0]->status) {
+            if ($forceNewTransaction === false) {
                 return;
             }
         }
 
+        $result = $this->openPayUBridge->create($payUdata);
         if (null !== $result) {
             /** @var mixed $response */
             $response = $result->getResponse();
             if ($response && OpenPayUBridgeInterface::SUCCESS_API_STATUS === $response->status->statusCode) {
                 $model['orderId'] = $response->orderId;
+                $paymentDetails = $payment->getDetails();
+                $paymentDetails['PayUOrderId'] = $response->orderId;
+                $payment->setDetails($paymentDetails);
 
                 $request->setModel($model);
 
