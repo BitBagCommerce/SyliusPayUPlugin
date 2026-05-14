@@ -52,7 +52,10 @@ final class OrderPayloadBuilder implements OrderPayloadBuilderInterface
 
         $extOrderId = sprintf('%s-%s', (string) $order->getNumber(), substr($hash, 0, 8));
 
-        return [
+        $billingAddress = $order->getBillingAddress();
+        $shippingAddress = $order->getShippingAddress();
+
+        $payload = [
             'notifyUrl' => $notifyUrl,
             'continueUrl' => $continueUrl,
             'customerIp' => $order->getCustomerIp() ?? '127.0.0.1',
@@ -63,12 +66,25 @@ final class OrderPayloadBuilder implements OrderPayloadBuilderInterface
             'extOrderId' => $extOrderId,
             'buyer' => [
                 'email' => (string) $customer->getEmail(),
-                'firstName' => (string) $customer->getFirstName(),
-                'lastName' => (string) $customer->getLastName(),
+                'phone' => (string) ($customer->getPhoneNumber() ?? $billingAddress?->getPhoneNumber() ?? ''),
+                'firstName' => (string) ($customer->getFirstName() ?: $billingAddress?->getFirstName() ?? ''),
+                'lastName' => (string) ($customer->getLastName() ?: $billingAddress?->getLastName() ?? ''),
                 'language' => $this->getLanguageCode($order->getLocaleCode()),
             ],
             'products' => $this->buildProducts($order),
         ];
+
+        if ($shippingAddress !== null) {
+            $payload['buyer']['delivery'] = [
+                'street' => (string) $shippingAddress->getStreet(),
+                'postalCode' => (string) $shippingAddress->getPostcode(),
+                'city' => (string) $shippingAddress->getCity(),
+                'countryCode' => strtoupper((string) $shippingAddress->getCountryCode()),
+                'name' => trim($shippingAddress->getFirstName() . ' ' . $shippingAddress->getLastName()),
+            ];
+        }
+
+        return $payload;
     }
 
     /**
