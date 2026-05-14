@@ -1,0 +1,3 @@
+http:
+    document-root: public
+    passthru: /index.php

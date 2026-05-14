@@ -10,28 +10,25 @@ declare(strict_types=1);
 
 namespace Tests\BitBag\SyliusPayUPlugin\Behat\Mocker;
 
-use BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridge;
-use BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridgeInterface;
-use OpenPayU_Result;
+use BitBag\SyliusPayUPlugin\Api\Dto\CreateOrderResponse;
+use BitBag\SyliusPayUPlugin\Api\Dto\OrderStatusResponse;
+use BitBag\SyliusPayUPlugin\Api\PayUClientFactoryInterface;
+use BitBag\SyliusPayUPlugin\Api\PayUClientInterface;
+use BitBag\SyliusPayUPlugin\PayUGatewayFactory;
 use Sylius\Behat\Service\Mocker\Mocker;
 
 final class PayUApiMocker
 {
-    /** @var Mocker */
-    private $mocker;
-
-    public function __construct(Mocker $mocker)
-    {
-        $this->mocker = $mocker;
+    public function __construct(
+        private readonly Mocker $mocker,
+    ) {
     }
 
     public function mockApiSuccessfulPaymentResponse(callable $action): void
     {
-        $service = $this->mocker
-            ->mockService('bitbag.payu_plugin.bridge.open_payu', OpenPayUBridgeInterface::class);
-
-        $service->shouldReceive('create')->andReturn($this->createResponseSuccessfulApi());
-        $service->shouldReceive('setAuthorizationData');
+        $this->mockClientFactory(static function ($client): void {
+            $client->shouldReceive('createOrder')->andReturn(self::createResponseSuccessfulApi());
+        });
 
         $action();
 
@@ -40,14 +37,12 @@ final class PayUApiMocker
 
     public function completedPayment(callable $action): void
     {
-        $service = $this->mocker
-            ->mockService('bitbag.payu_plugin.bridge.open_payu', OpenPayUBridgeInterface::class);
-
-        $service->shouldReceive('retrieve')->andReturn(
-            $this->getDataRetrieve(OpenPayUBridge::COMPLETED_API_STATUS),
-        );
-        $service->shouldReceive('create')->andReturn($this->createResponseSuccessfulApi());
-        $service->shouldReceive('setAuthorizationData');
+        $this->mockClientFactory(function ($client): void {
+            $client->shouldReceive('createOrder')->andReturn(self::createResponseSuccessfulApi());
+            $client->shouldReceive('getOrderStatus')->andReturn(
+                self::getDataRetrieve(PayUGatewayFactory::STATUS_COMPLETED),
+            );
+        });
 
         $action();
 
@@ -56,55 +51,46 @@ final class PayUApiMocker
 
     public function canceledPayment(callable $action): void
     {
-        $service = $this->mocker
-            ->mockService('bitbag.payu_plugin.bridge.open_payu', OpenPayUBridgeInterface::class);
-
-        $service->shouldReceive('retrieve')->andReturn(
-            $this->getDataRetrieve(OpenPayUBridge::CANCELED_API_STATUS),
-        );
-        $service->shouldReceive('create')->andReturn($this->createResponseSuccessfulApi());
-        $service->shouldReceive('setAuthorizationData');
+        $this->mockClientFactory(function ($client): void {
+            $client->shouldReceive('createOrder')->andReturn(self::createResponseSuccessfulApi());
+            $client->shouldReceive('getOrderStatus')->andReturn(
+                self::getDataRetrieve(PayUGatewayFactory::STATUS_CANCELED),
+            );
+        });
 
         $action();
 
         $this->mocker->unmockAll();
     }
 
-    private function getDataRetrieve($statusPayment): OpenPayU_Result
+    private function mockClientFactory(callable $clientExpectations): void
     {
-        $openPayUResult = new OpenPayU_Result();
+        $client = $this->mocker->mockService('bitbag.payu_plugin.api.payu_client', PayUClientInterface::class);
+        $clientExpectations($client);
 
-        $data = (object) [
-            'status' => (object) [
-                'statusCode' => OpenPayUBridge::SUCCESS_API_STATUS,
-            ],
-            'orderId' => 1,
-            'orders' => [
-                (object) [
-                    'status' => $statusPayment,
-                ],
-            ],
-        ];
-
-        $openPayUResult->setResponse($data);
-
-        return $openPayUResult;
+        $factory = $this->mocker->mockService(
+            'bitbag.payu_plugin.api.payu_client_factory',
+            PayUClientFactoryInterface::class,
+        );
+        $factory->shouldReceive('createForGatewayConfig')->andReturn($client);
     }
 
-    private function createResponseSuccessfulApi(): OpenPayU_Result
+    private static function getDataRetrieve(string $statusPayment): OrderStatusResponse
     {
-        $openPayUResult = new OpenPayU_Result();
+        return new OrderStatusResponse(
+            orderId: '1',
+            status: $statusPayment,
+            totalAmount: 0,
+            currencyCode: 'PLN',
+        );
+    }
 
-        $data = (object) [
-            'status' => (object) [
-                'statusCode' => OpenPayUBridge::SUCCESS_API_STATUS,
-            ],
-            'orderId' => 1,
-            'redirectUri' => '/',
-        ];
-
-        $openPayUResult->setResponse($data);
-
-        return $openPayUResult;
+    private static function createResponseSuccessfulApi(): CreateOrderResponse
+    {
+        return new CreateOrderResponse(
+            orderId: '1',
+            redirectUri: '/',
+            status: PayUGatewayFactory::RESPONSE_STATUS_SUCCESS,
+        );
     }
 }

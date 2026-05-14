@@ -1,0 +1,9 @@
+{% set form = hookable_metadata.context.form %}
+
+<div class="col-12">
+    {{ form_row(form.gatewayConfig.config.environment) }}
+    {{ form_row(form.gatewayConfig.config.signature_key) }}
+    {{ form_row(form.gatewayConfig.config.pos_id) }}
+    {{ form_row(form.gatewayConfig.config.oauth_client_id) }}
+    {{ form_row(form.gatewayConfig.config.oauth_client_secret) }}
+</div>

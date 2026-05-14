@@ -1,0 +1,14 @@
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+
+        <defaults public="true" autoconfigure="false" autowire="false"/>
+
+        <service id="bitbag.payu_plugin.provider.http_response"
+                 class="BitBag\SyliusPayUPlugin\Provider\PayUHttpResponseProvider">
+            <argument type="service" id="sylius_shop.provider.order_pay.final_url"/>
+            <tag name="sylius.payment_request.provider.http_response" gateway_factory="payu"/>
+        </service>
+
+    </services>
+</container>

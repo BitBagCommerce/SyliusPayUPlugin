@@ -12,3 +12,7 @@ tests/Application/web/*
 tests/Application/var/*
 
 tests/Application/node_modules
+public
+assets
+.idea
+var

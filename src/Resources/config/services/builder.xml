@@ -1,0 +1,17 @@
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+
+        <defaults public="true" autoconfigure="false" autowire="false"/>
+
+        <service id="bitbag.payu_plugin.builder.order_payload"
+                 class="BitBag\SyliusPayUPlugin\Builder\OrderPayloadBuilder">
+            <argument type="service" id="router"/>
+            <argument type="service" id="bitbag.payu_plugin.provider.payment_description_provider"/>
+        </service>
+
+        <service id="BitBag\SyliusPayUPlugin\Builder\OrderPayloadBuilderInterface"
+                 alias="bitbag.payu_plugin.builder.order_payload"/>
+
+    </services>
+</container>

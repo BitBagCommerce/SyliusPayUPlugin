@@ -18,7 +18,7 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusPayUPlugin\Form\Type;
 
-use BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridgeInterface;
+use BitBag\SyliusPayUPlugin\PayUGatewayFactory;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -38,8 +38,8 @@ final class PayUGatewayConfigurationType extends AbstractType
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'bitbag.payu_plugin.secure' => OpenPayUBridgeInterface::SECURE_ENVIRONMENT,
-                        'bitbag.payu_plugin.sandbox' => OpenPayUBridgeInterface::SANDBOX_ENVIRONMENT,
+                        'bitbag.payu_plugin.secure' => PayUGatewayFactory::ENVIRONMENT_SECURE,
+                        'bitbag.payu_plugin.sandbox' => PayUGatewayFactory::ENVIRONMENT_SANDBOX,
                     ],
                     'label' => 'bitbag.payu_plugin.environment',
                 ],

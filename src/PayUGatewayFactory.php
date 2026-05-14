@@ -1,53 +1,30 @@
 <?php
 
-/*
- * This file was created by developers working at BitBag
- * Do you need more information about us and what we do? Visit our https://bitbag.io website!
- * We are hiring developers from all over the world. Join us and start your new, exciting adventure and become part of us: https://bitbag.io/career
-*/
-
 declare(strict_types=1);
 
 namespace BitBag\SyliusPayUPlugin;
 
-use BitBag\SyliusPayUPlugin\Bridge\OpenPayUBridgeInterface;
-use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\GatewayFactory;
-
-final class PayUGatewayFactory extends GatewayFactory
+final class PayUGatewayFactory
 {
-    protected function populateConfig(ArrayObject $config): void
-    {
-        $config->defaults(
-            [
-                'payum.factory_name' => 'payu',
-                'payum.factory_title' => 'PayU',
-            ],
-        );
+    public const FACTORY_NAME = 'payu';
 
-        if (false === (bool) $config['payum.api']) {
-            $config['payum.default_options'] = [
-                'environment' => OpenPayUBridgeInterface::SANDBOX_ENVIRONMENT,
-                'pos_id' => '',
-                'signature_key' => '',
-                'oauth_client_id' => '',
-                'oauth_client_secret' => '',
-            ];
-            $config->defaults($config['payum.default_options']);
+    public const FACTORY_LABEL = 'bitbag.payu_plugin.gateway_label';
 
-            $config['payum.required_options'] = ['environment', 'pos_id', 'signature_key', 'oauth_client_id', 'oauth_client_secret'];
+    public const ENVIRONMENT_SANDBOX = 'sandbox';
 
-            $config['payum.api'] = static function (ArrayObject $config): array {
-                $config->validateNotEmpty($config['payum.required_options']);
+    public const ENVIRONMENT_SECURE = 'secure';
 
-                return [
-                    'environment' => $config['environment'],
-                    'pos_id' => $config['pos_id'],
-                    'signature_key' => $config['signature_key'],
-                    'oauth_client_id' => $config['oauth_client_id'],
-                    'oauth_client_secret' => $config['oauth_client_secret'],
-                ];
-            };
-        }
-    }
+    public const STATUS_NEW = 'NEW';
+
+    public const STATUS_PENDING = 'PENDING';
+
+    public const STATUS_COMPLETED = 'COMPLETED';
+
+    public const STATUS_CANCELED = 'CANCELED';
+
+    public const STATUS_WAITING_FOR_CONFIRMATION = 'WAITING_FOR_CONFIRMATION';
+
+    public const STATUS_REJECTED = 'REJECTED';
+
+    public const RESPONSE_STATUS_SUCCESS = 'SUCCESS';
 }
