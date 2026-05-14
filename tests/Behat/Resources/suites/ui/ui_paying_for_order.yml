@@ -1,6 +1,6 @@
 default:
     suites:
-        ui_paying_for_order:
+        ui_paying_for_order_with_payu:
             contexts:
                 - sylius.behat.context.hook.doctrine_orm
 
@@ -29,7 +29,6 @@ default:
                 - sylius.behat.context.setup.taxation
                 - sylius.behat.context.setup.user
 
-                - sylius.behat.context.ui.paypal
                 - sylius.behat.context.ui.shop.cart
                 - sylius.behat.context.ui.shop.checkout
                 - sylius.behat.context.ui.shop.checkout.addressing
@@ -42,5 +41,8 @@ default:
                 - bitbag.payu_plugin.context.setup.payu
                 - bitbag.payu_plugin.context.ui.payu
 
+            paths:
+                - features
+
             filters:
-                tags: "@paying_for_order_with_payu && @ui"
+                tags: "@paying_for_order_with_payu&&@ui"

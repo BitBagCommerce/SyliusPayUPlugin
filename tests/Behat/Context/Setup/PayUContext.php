@@ -67,7 +67,6 @@ final class PayUContext implements Context
                 'pos_id' => 'TEST',
                 'oauth_client_id' => 'CLIENT_ID',
                 'oauth_client_secret' => 'SECRET',
-                'payum.http_client' => '@sylius.payum.http_client',
             ],
         );
         $this->paymentMethodManager->persist($paymentMethod);
@@ -89,6 +88,7 @@ final class PayUContext implements Context
                 'description' => $description,
                 'gatewayName' => 'payu',
                 'gatewayFactory' => 'payu',
+                'usePayum' => false,
                 'enabled' => true,
                 'channels' => ($addForCurrentChannel && $this->sharedStorage->has('channel'))
                     ? [$this->sharedStorage->get('channel')] : [],

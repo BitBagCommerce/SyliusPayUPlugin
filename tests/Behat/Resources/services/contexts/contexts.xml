@@ -17,6 +17,7 @@
             <argument type="service" id="sylius.behat.page.shop.order.show"/>
             <argument type="service" id="sylius.behat.page.shop.checkout.complete"/>
             <argument type="service" id="bitbag.payu_plugin.page_checkout.external"/>
+            <argument type="service" id="sylius.repository.payment_request"/>
         </service>
 
     </services>

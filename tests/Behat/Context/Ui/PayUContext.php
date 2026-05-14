@@ -15,8 +15,11 @@ namespace Tests\BitBag\SyliusPayUPlugin\Behat\Context\Ui;
 use Behat\Behat\Context\Context;
 use Sylius\Behat\Page\Shop\Checkout\CompletePageInterface;
 use Sylius\Behat\Page\Shop\Order\ShowPageInterface;
+use Sylius\Component\Payment\Model\PaymentRequestInterface;
+use Sylius\Component\Payment\Repository\PaymentRequestRepositoryInterface;
 use Tests\BitBag\SyliusPayUPlugin\Behat\Mocker\PayUApiMocker;
 use Tests\BitBag\SyliusPayUPlugin\Behat\Page\External\PayUCheckoutPageInterface;
+use Webmozart\Assert\Assert;
 
 final class PayUContext implements Context
 {
@@ -32,16 +35,21 @@ final class PayUContext implements Context
     /** @var PayUCheckoutPageInterface */
     private $payUCheckoutPage;
 
+    /** @var PaymentRequestRepositoryInterface */
+    private $paymentRequestRepository;
+
     public function __construct(
         PayUApiMocker $payUApiMocker,
         ShowPageInterface $orderDetails,
         CompletePageInterface $summaryPage,
         PayUCheckoutPageInterface $payUCheckoutPage,
+        PaymentRequestRepositoryInterface $paymentRequestRepository,
     ) {
         $this->orderDetails = $orderDetails;
         $this->summaryPage = $summaryPage;
         $this->payUCheckoutPage = $payUCheckoutPage;
         $this->payUApiMocker = $payUApiMocker;
+        $this->paymentRequestRepository = $paymentRequestRepository;
     }
 
     /**
@@ -92,5 +100,31 @@ final class PayUContext implements Context
                 $this->orderDetails->pay();
             },
         );
+    }
+
+    /**
+     * @Then I should be notified that my payment has been completed
+     */
+    public function iShouldBeNotifiedThatMyPaymentHasBeenCompleted(): void
+    {
+        $paymentRequest = $this->paymentRequestRepository->findOneBy([
+            'action' => PaymentRequestInterface::ACTION_CAPTURE,
+            'state' => PaymentRequestInterface::STATE_COMPLETED,
+        ]);
+
+        Assert::notNull($paymentRequest, 'Expected a completed capture payment request, but none was found.');
+    }
+
+    /**
+     * @Then I should be notified that my payment has been cancelled
+     */
+    public function iShouldBeNotifiedThatMyPaymentHasBeenCancelled(): void
+    {
+        $paymentRequest = $this->paymentRequestRepository->findOneBy([
+            'action' => PaymentRequestInterface::ACTION_CAPTURE,
+            'state' => PaymentRequestInterface::STATE_CANCELLED,
+        ]);
+
+        Assert::notNull($paymentRequest, 'Expected a cancelled capture payment request, but none was found.');
     }
 }

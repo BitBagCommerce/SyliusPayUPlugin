@@ -9,8 +9,28 @@
 
         <defaults public="true" autoconfigure="false" autowire="false"/>
 
-        <service id="bitbag.payu_plugin.mocker.payu_api" class="Tests\BitBag\SyliusPayUPlugin\Behat\Mocker\PayUApiMocker" public="true">
-            <argument type="service" id="sylius.behat.mocker"/>
+        <service id="bitbag.payu_plugin.test.fake_payu_client"
+                 class="Tests\BitBag\SyliusPayUPlugin\Behat\Stub\FakePayUClient"
+                 public="true"/>
+
+        <service id="bitbag.payu_plugin.test.fake_payu_client_factory"
+                 class="Tests\BitBag\SyliusPayUPlugin\Behat\Stub\FakePayUClientFactory"
+                 public="true">
+            <argument type="service" id="bitbag.payu_plugin.test.fake_payu_client"/>
+        </service>
+
+        <service id="BitBag\SyliusPayUPlugin\Api\PayUClientFactoryInterface"
+                 alias="bitbag.payu_plugin.test.fake_payu_client_factory"
+                 public="true"/>
+
+        <service id="bitbag.payu_plugin.api.payu_client_factory"
+                 alias="bitbag.payu_plugin.test.fake_payu_client_factory"
+                 public="true"/>
+
+        <service id="bitbag.payu_plugin.mocker.payu_api"
+                 class="Tests\BitBag\SyliusPayUPlugin\Behat\Mocker\PayUApiMocker"
+                 public="true">
+            <argument type="service" id="bitbag.payu_plugin.test.fake_payu_client"/>
         </service>
 
     </services>

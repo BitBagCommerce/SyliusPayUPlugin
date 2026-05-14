@@ -14,7 +14,7 @@ Feature: Paying with PayU during checkout
 
     @ui
     Scenario: Successful payment
-        Given I added product "PHP T-Shirt" to the cart
+        Given the customer "john@bitbag.pl" added "PHP T-Shirt" product to the cart
         And I have proceeded selecting "PayU" payment method
         When I confirm my order with PayU payment
         And I sign in to PayU and pay successfully
@@ -22,7 +22,7 @@ Feature: Paying with PayU during checkout
 
     @ui
     Scenario: Cancelling the payment
-        Given I added product "PHP T-Shirt" to the cart
+        Given the customer "john@bitbag.pl" added "PHP T-Shirt" product to the cart
         And I have proceeded selecting "PayU" payment method
         When I confirm my order with PayU payment
         And I cancel my PayU payment
@@ -31,7 +31,7 @@ Feature: Paying with PayU during checkout
 
     @ui
     Scenario: Retrying the payment with success
-        Given I added product "PHP T-Shirt" to the cart
+        Given the customer "john@bitbag.pl" added "PHP T-Shirt" product to the cart
         And I have proceeded selecting "PayU" payment method
         And I have confirmed my order with PayU payment
         But I have cancelled PayU payment
@@ -42,7 +42,7 @@ Feature: Paying with PayU during checkout
 
     @ui
     Scenario: Retrying the payment and failing
-        Given I added product "PHP T-Shirt" to the cart
+        Given the customer "john@bitbag.pl" added "PHP T-Shirt" product to the cart
         And I have proceeded selecting "PayU" payment method
         And I have confirmed my order with PayU payment
         But I have cancelled PayU payment

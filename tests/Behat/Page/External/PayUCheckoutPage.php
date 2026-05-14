@@ -10,63 +10,72 @@ declare(strict_types=1);
 
 namespace Tests\BitBag\SyliusPayUPlugin\Behat\Page\External;
 
+use Behat\Mink\Driver\BrowserKitDriver;
 use Behat\Mink\Session;
 use FriendsOfBehat\PageObjectExtension\Page\Page;
-use Payum\Core\Security\TokenInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Sylius\Component\Payment\Model\PaymentRequestInterface;
+use Sylius\Component\Payment\Repository\PaymentRequestRepositoryInterface;
 
 final class PayUCheckoutPage extends Page implements PayUCheckoutPageInterface
 {
-    /** @var RepositoryInterface */
-    private $securityTokenRepository;
-
-    /**
-     * @param array $parameters
-     */
-    public function __construct(Session $session, $parameters, RepositoryInterface $securityTokenRepository)
-    {
+    public function __construct(
+        Session $session,
+        $parameters,
+        private readonly PaymentRequestRepositoryInterface $paymentRequestRepository,
+    ) {
         parent::__construct($session, $parameters);
-
-        $this->securityTokenRepository = $securityTokenRepository;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function pay()
+    public function pay(): void
     {
-        $this->getDriver()->visit($this->findCaptureToken()->getTargetUrl());
+        $this->postWebhook();
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function cancel()
+    public function cancel(): void
     {
-        $this->getDriver()->visit($this->findCaptureToken()->getTargetUrl());
+        $this->postWebhook();
     }
 
     protected function getUrl(array $urlParameters = []): string
     {
-        return 'https://secure.payu.com/api/v2_1/orders';
+        return '/';
     }
 
-    /**
-     * @return TokenInterface
-     *
-     * @throws \RuntimeException
-     */
-    private function findCaptureToken()
+    private function postWebhook(): void
     {
-        $tokens = $this->securityTokenRepository->findAll();
+        $paymentRequest = $this->findActivePaymentRequest();
+        $hash = (string) $paymentRequest->getHash();
 
-        /** @var TokenInterface $token */
-        foreach ($tokens as $token) {
-            if (strpos($token->getTargetUrl(), 'capture')) {
-                return $token;
-            }
+        $body = (string) json_encode(['order' => ['orderId' => '1']]);
+        $signature = md5($body . 'TEST');
+        $signatureHeader = 'sender=payu;signature=' . $signature . ';algorithm=MD5;content=DOCUMENT';
+
+        /** @var BrowserKitDriver $driver */
+        $driver = $this->getDriver();
+        $driver->getClient()->request(
+            'POST',
+            '/payment-requests/' . $hash,
+            [],
+            [],
+            ['HTTP_OPENPAYU_SIGNATURE' => $signatureHeader, 'CONTENT_TYPE' => 'application/json'],
+            $body,
+        );
+
+        $driver->getClient()->request('GET', '/en_US/order/after-pay/' . $hash);
+    }
+
+    private function findActivePaymentRequest(): PaymentRequestInterface
+    {
+        /** @var PaymentRequestInterface|null $paymentRequest */
+        $paymentRequest = $this->paymentRequestRepository->findOneBy([
+            'state' => PaymentRequestInterface::STATE_PROCESSING,
+            'action' => PaymentRequestInterface::ACTION_CAPTURE,
+        ]);
+
+        if (null === $paymentRequest) {
+            throw new \RuntimeException('Cannot find processing capture payment request. Make sure you are past the order confirmation step.');
         }
 
-        throw new \RuntimeException('Cannot find capture token, check if you are after proper checkout steps');
+        return $paymentRequest;
     }
 }
