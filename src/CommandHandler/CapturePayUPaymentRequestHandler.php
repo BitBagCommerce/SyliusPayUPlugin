@@ -20,19 +20,21 @@ use Sylius\Component\Payment\Model\GatewayConfigInterface;
 use Sylius\Component\Payment\Model\PaymentRequestInterface;
 use Sylius\Component\Payment\PaymentRequestTransitions;
 use Sylius\Component\Payment\PaymentTransitions;
+use Sylius\Component\Payment\Repository\PaymentRequestRepositoryInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler(bus: 'sylius.payment_request.command_bus')]
-final class CapturePayUPaymentRequestHandler
+final readonly class CapturePayUPaymentRequestHandler
 {
     public function __construct(
-        private readonly PaymentRequestProviderInterface $paymentRequestProvider,
-        private readonly StateMachineInterface $stateMachine,
-        private readonly EntityManagerInterface $entityManager,
-        private readonly PayUClientFactoryInterface $payUClientFactory,
-        private readonly OrderPayloadBuilderInterface $orderPayloadBuilder,
-        private readonly PayUSignatureVerifierInterface $signatureVerifier,
-        private readonly LoggerInterface $logger,
+        private PaymentRequestProviderInterface $paymentRequestProvider,
+        private StateMachineInterface $stateMachine,
+        private EntityManagerInterface $entityManager,
+        private PayUClientFactoryInterface $payUClientFactory,
+        private OrderPayloadBuilderInterface $orderPayloadBuilder,
+        private PayUSignatureVerifierInterface $signatureVerifier,
+        private LoggerInterface $logger,
+        private PaymentRequestRepositoryInterface $paymentRequestRepository,
     ) {
     }
 
@@ -41,6 +43,8 @@ final class CapturePayUPaymentRequestHandler
         $paymentRequest = $this->paymentRequestProvider->provide($command);
 
         if ($paymentRequest->getAction() === PaymentRequestInterface::ACTION_STATUS) {
+            $this->processStatusAction($paymentRequest);
+
             return;
         }
 
@@ -58,6 +62,57 @@ final class CapturePayUPaymentRequestHandler
         }
 
         $this->createPayUOrder($paymentRequest);
+    }
+
+    private function processStatusAction(PaymentRequestInterface $paymentRequest): void
+    {
+        /** @var PaymentInterface $payment */
+        $payment = $paymentRequest->getPayment();
+
+        $capturePaymentRequest = $this->paymentRequestRepository->findOneByActionPaymentAndMethod(
+            PaymentRequestInterface::ACTION_CAPTURE,
+            $payment,
+            $paymentRequest->getMethod(),
+        );
+
+        if ($capturePaymentRequest === null) {
+            return;
+        }
+
+        $payUOrderId = $capturePaymentRequest->getResponseData()['payUOrderId'] ?? null;
+
+        if ($payUOrderId === null) {
+            return;
+        }
+
+        /** @var GatewayConfigInterface $gatewayConfig */
+        $gatewayConfig = $paymentRequest->getMethod()->getGatewayConfig();
+        $config = $gatewayConfig->getConfig();
+
+        $client = $this->payUClientFactory->createForGatewayConfig($config);
+
+        try {
+            $statusResponse = $client->getOrderStatus((string) $payUOrderId);
+        } catch (PayUApiException $exception) {
+            $this->logger->error('PayU status check on return failed', [
+                'paymentRequestId' => $paymentRequest->getId(),
+                'payUOrderId' => $payUOrderId,
+                'error' => $exception->getMessage(),
+            ]);
+
+            return;
+        }
+
+        $status = $statusResponse->status;
+
+        $this->logger->info('PayU status check on return', [
+            'paymentRequestId' => $paymentRequest->getId(),
+            'capturePaymentRequestId' => $capturePaymentRequest->getId(),
+            'payUOrderId' => $payUOrderId,
+            'status' => $status,
+        ]);
+
+        $this->applyStatusTransitions($capturePaymentRequest, $payment, $status);
     }
 
     private function createPayUOrder(PaymentRequestInterface $paymentRequest): void
@@ -169,6 +224,11 @@ final class CapturePayUPaymentRequestHandler
         /** @var PaymentInterface $payment */
         $payment = $paymentRequest->getPayment();
 
+        $this->applyStatusTransitions($paymentRequest, $payment, $status);
+    }
+
+    private function applyStatusTransitions(PaymentRequestInterface $paymentRequest, PaymentInterface $payment, string $status): void
+    {
         if (in_array($status, [PayUGatewayFactory::STATUS_COMPLETED, PayUGatewayFactory::STATUS_WAITING_FOR_CONFIRMATION], true)) {
             if ($this->stateMachine->can($paymentRequest, PaymentRequestTransitions::GRAPH, PaymentRequestTransitions::TRANSITION_COMPLETE)) {
                 $this->stateMachine->apply($paymentRequest, PaymentRequestTransitions::GRAPH, PaymentRequestTransitions::TRANSITION_COMPLETE);
