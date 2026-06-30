@@ -5,7 +5,8 @@
         <defaults public="true" autoconfigure="false" autowire="false"/>
 
         <service id="bitbag.payu_plugin.command_handler.capture"
-                 class="BitBag\SyliusPayUPlugin\CommandHandler\CapturePayUPaymentRequestHandler">
+                 class="BitBag\SyliusPayUPlugin\CommandHandler\CapturePayUPaymentRequestHandler"
+        >
             <argument type="service" id="Sylius\Bundle\PaymentBundle\Provider\PaymentRequestProviderInterface"/>
             <argument type="service" id="Sylius\Abstraction\StateMachine\StateMachineInterface"/>
             <argument type="service" id="doctrine.orm.entity_manager"/>
@@ -13,8 +14,9 @@
             <argument type="service" id="bitbag.payu_plugin.builder.order_payload"/>
             <argument type="service" id="bitbag.payu_plugin.notification.signature_verifier"/>
             <argument type="service" id="logger"/>
+            <argument type="service" id="sylius.repository.payment_request"/>
+
             <tag name="messenger.message_handler" bus="sylius.payment_request.command_bus"/>
         </service>
-
     </services>
 </container>
